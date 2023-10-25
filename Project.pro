@@ -8,19 +8,23 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    authorization.cpp \
-    databases.cpp \
-    main.cpp \
-    mainwindow.cpp
+    src\registration.cpp \
+    src\authorization.cpp \
+    src\databases.cpp \
+    src\main.cpp \
+    src\mainwindow.cpp
 
 HEADERS += \
-    authorization.h \
-    databases.h \
-    mainwindow.h
+    includes/registration.h \
+    includes\authorization.h \
+    includes\databases.h \
+    includes\mainwindow.h \
+
 
 FORMS += \
-    Authorization.ui \
-    mainwindow.ui
+    ui\registration.ui \
+    ui\Authorization.ui \
+    ui\mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

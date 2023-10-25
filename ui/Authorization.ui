@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>10</y>
+      <y>40</y>
       <width>111</width>
       <height>71</height>
      </rect>
@@ -39,7 +39,7 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>100</y>
+      <y>140</y>
       <width>113</width>
       <height>24</height>
      </rect>
@@ -49,17 +49,17 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>150</y>
+      <y>190</y>
       <width>113</width>
       <height>24</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="button_auth">
+   <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>200</y>
+      <y>240</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -68,17 +68,17 @@
      <string>Connect</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="button_registr">
+   <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>260</y>
-      <width>111</width>
-      <height>41</height>
+      <x>20</x>
+      <y>190</y>
+      <width>49</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Registation</string>
+     <string>TextLabel</string>
     </property>
    </widget>
   </widget>

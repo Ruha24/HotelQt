@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 
-#include "authorization.h"
+#include "includes/authorization.h"
+#include "includes/databases.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,7 +26,7 @@ private slots:
 private:
 
     Authorization* authorizationForm;
-
+    Databases db;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

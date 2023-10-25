@@ -14,11 +14,11 @@
    <string>Authorization</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="title">
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>40</y>
+      <y>10</y>
       <width>111</width>
       <height>71</height>
      </rect>
@@ -35,31 +35,31 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="login">
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>140</y>
+      <y>100</y>
       <width>113</width>
       <height>24</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="password">
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>190</y>
+      <y>150</y>
       <width>113</width>
       <height>24</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="button_auth">
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>240</y>
+      <y>200</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -68,17 +68,17 @@
      <string>Connect</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QPushButton" name="button_registr">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>190</y>
-      <width>49</width>
-      <height>16</height>
+      <x>90</x>
+      <y>260</y>
+      <width>111</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>Registation</string>
     </property>
    </widget>
   </widget>
