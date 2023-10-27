@@ -23,9 +23,8 @@ public:
 
 private slots:
     bool connect();
-    void on_button_registr_clicked();
-
-    void on_button_auth_clicked();
+    void on_login_2_clicked();
+    void on_buttonReg_clicked();
 
 private:
     QString login;

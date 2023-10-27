@@ -1,5 +1,5 @@
 #include "includes/authorization.h"
-#include "ui/ui_Authorization.h"
+#include "ui_Authorization.h"
 
 Authorization::Authorization(QWidget *parent) :
     QMainWindow(parent),
@@ -26,6 +26,8 @@ bool Authorization::connect()
     login = ui->login->text();
     password = ui->password->text();
 
+    bool authenticated = false;
+
     QSqlQuery query;
     QList<QPair<QString, QString>> userCredentials;
 
@@ -39,40 +41,40 @@ bool Authorization::connect()
         }
     }
 
-    bool authenticated = false;
     for (const QPair<QString, QString>& credentials : userCredentials)
     {
-        if (credentials.first == login && credentials.second == password)
-        {
-            qDebug() << "connect";
-            authenticated = true;
-            break;
-        }
+
+            if (credentials.first == login && credentials.second == password)
+            {
+                qDebug() << "connect";
+                authenticated = true;
+                break;
+            }
     }
 
     if (authenticated)
     {
-
+            qDebug() << "kaif";
         return true;
     }
 
-    qDebug() << "oh no";
     return false;
 }
 
-void Authorization::on_button_registr_clicked()
-{
-    this->close();
-    Registration* form = new Registration();
-    form->show();
-}
-
-
-void Authorization::on_button_auth_clicked()
+void Authorization::on_login_2_clicked()
 {
     connect();
     this->close();
-    Homepage* form = new Homepage();
+        Homepage* form = new Homepage();
+        form->show();
+
+}
+
+
+void Authorization::on_buttonReg_clicked()
+{
+    this->close();
+    Registration* form = new Registration();
     form->show();
 }
 
