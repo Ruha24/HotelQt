@@ -71,5 +71,8 @@ void Authorization::on_button_registr_clicked()
 void Authorization::on_button_auth_clicked()
 {
     connect();
+    this->close();
+    Homepage* form = new Homepage();
+    form->show();
 }
 

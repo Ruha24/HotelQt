@@ -34,7 +34,6 @@ void Registration::on_buttonReg_clicked()
     {
         if(db.connect()){
             QSqlQuery query;
-            QList<QString> users;
 
             if (query.exec("select name from users")) {
                 bool userExists = false;

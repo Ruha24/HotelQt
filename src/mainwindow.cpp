@@ -17,8 +17,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::openForm()
 {
+    this->close();
     authorizationForm = new Authorization(this);
     authorizationForm->show();
+
 }
 
 void MainWindow::on_pushButton_clicked()
