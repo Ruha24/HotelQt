@@ -39,6 +39,9 @@ INCLUDEPATH += \
 
 LIBS += -L"D:/PostgreSQL/bin" -llibpq
 
+RESOURCES += \
+    resourses/resourse_homepage.qrc
+
 
 
 

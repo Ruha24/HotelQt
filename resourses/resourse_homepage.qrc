@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>icon/close.svg</file>
+        <file>icon/customers-white.svg</file>
+        <file>icon/dashboard.svg</file>
+        <file>icon/Logo.png</file>
+        <file>icon/open.svg</file>
+        <file>icon/orders-white.svg</file>
+        <file>icon/products.svg</file>
+        <file>icon/products-white.svg</file>
+        <file>icon/reports.svg</file>
+        <file>icon/reports-white.svg</file>
+        <file>icon/settings.svg</file>
+        <file>icon/settings-white.svg</file>
+        <file>icon/dashboard-white.svg</file>
+        <file>icon/orders.svg</file>
+        <file>icon/menu.png</file>
+        <file>icon/search.png</file>
+        <file>icon/customers.svg</file>
+    </qresource>
+</RCC>

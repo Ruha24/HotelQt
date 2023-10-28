@@ -15,6 +15,11 @@ public:
     explicit Homepage(QWidget *parent = nullptr);
     ~Homepage();
 
+private slots:
+    void on_search_btn_clicked();
+
+    void on_user_btn_clicked();
+
 private:
     Ui::Homepage *ui;
 };

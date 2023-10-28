@@ -28,6 +28,9 @@ bool Authorization::connect()
 
     bool authenticated = false;
 
+    if(login.isEmpty() || password.isEmpty())
+        return false;
+
     QSqlQuery query;
     QList<QPair<QString, QString>> userCredentials;
 
@@ -54,7 +57,7 @@ bool Authorization::connect()
 
     if (authenticated)
     {
-            qDebug() << "kaif";
+        qDebug() << "kaif";
         return true;
     }
 
@@ -63,11 +66,12 @@ bool Authorization::connect()
 
 void Authorization::on_login_2_clicked()
 {
-    connect();
-    this->close();
+    if(connect())
+    {
+        this->close();
         Homepage* form = new Homepage();
         form->show();
-
+    }
 }
 
 
