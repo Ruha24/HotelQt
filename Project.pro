@@ -1,4 +1,5 @@
-QT       += core gui sql
+QT       += core gui sql core network
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
@@ -24,10 +25,10 @@ HEADERS += \
 
 
 FORMS += \
-    ui/homepage.ui \
-    ui/registration.ui \
-    ui/Authorization.ui \
-    ui/mainwindow.ui
+    design/homepage.ui \
+    design/registration.ui \
+    design/Authorization.ui \
+    design/mainwindow.ui \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

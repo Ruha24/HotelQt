@@ -22,8 +22,6 @@ void Homepage::on_search_btn_clicked()
     {
         ui->label_10->setText(search_text);
     }
-
-
 }
 
 
@@ -33,8 +31,10 @@ void Homepage::on_user_btn_clicked()
 }
 
 
-void Homepage::on_stackedWidget_currentChanged(int arg1)
+void Homepage::on_pushButton_clicked()
 {
-
+    chooseImage();
 }
+
+
 

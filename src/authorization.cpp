@@ -13,14 +13,6 @@ Authorization::~Authorization()
     delete ui;
 }
 
-void Authorization::closeEvent(QCloseEvent *event)
-{
-
-    QMainWindow::closeEvent(event);
-}
-
-
-
 bool Authorization::connect()
 {
     login = ui->login->text();
@@ -28,32 +20,65 @@ bool Authorization::connect()
 
     bool authenticated = false;
 
-    if(login.isEmpty() || password.isEmpty())
+    if (login.isEmpty() || password.isEmpty())
         return false;
 
-    QSqlQuery query;
-    QList<QPair<QString, QString>> userCredentials;
 
-    if (query.exec("SELECT name, password FROM users"))
+    QNetworkAccessManager networkManager;
+    QNetworkRequest request(QUrl("http://localhost:555/select_user"));
+    QNetworkReply* reply = networkManager.get(request);
+
+    QEventLoop loop;
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    if (reply->error() == QNetworkReply::NoError)
     {
-        while (query.next())
+        QByteArray responseData = reply->readAll();
+
+        QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+
+        if (!jsonResponse.isNull())
         {
-            QString name = query.value(0).toString();
-            QString password = query.value(1).toString();
-            userCredentials.push_back(QPair<QString, QString>(name, password));
+            if (jsonResponse.isObject())
+            {
+                QJsonObject jsonObject = jsonResponse.object();
+
+                if (jsonObject.contains("data"))
+                {
+                    QJsonValue dataValue = jsonObject["data"];
+                    if (dataValue.isArray())
+                    {
+                        QJsonArray dataArray = dataValue.toArray();
+
+                        for (const QJsonValue& item : dataArray)
+                        {
+                            QJsonObject itemObject = item.toObject();
+                            QString name = itemObject["name"].toString();
+                            QString jsonPassword = itemObject["password"].toString();
+
+                            if (name == login && jsonPassword == password)
+                            {
+                                qDebug() << "connect";
+                                authenticated = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            qDebug() << "Failed to parse JSON response";
         }
     }
-
-    for (const QPair<QString, QString>& credentials : userCredentials)
+    else
     {
-
-            if (credentials.first == login && credentials.second == password)
-            {
-                qDebug() << "connect";
-                authenticated = true;
-                break;
-            }
+        qDebug() << "Network request error: " << reply->errorString();
     }
+
+    reply->deleteLater();
 
     if (authenticated)
     {
@@ -63,6 +88,7 @@ bool Authorization::connect()
 
     return false;
 }
+
 
 void Authorization::on_login_2_clicked()
 {

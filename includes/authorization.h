@@ -7,6 +7,15 @@
 #include "includes/registration.h"
 #include "includes/homepage.h"
 
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
+
+
+
 namespace Ui {
 class Authorization;
 }
@@ -18,8 +27,6 @@ class Authorization : public QMainWindow
 public:
     explicit Authorization(QWidget *parent = nullptr);
     ~Authorization();
-
-    void closeEvent(QCloseEvent* event);
 
 private slots:
     bool connect();

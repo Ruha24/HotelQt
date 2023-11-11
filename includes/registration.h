@@ -9,6 +9,14 @@
 #include "includes/databases.h"
 #include "includes/authorization.h"
 
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
+
+
 namespace Ui { class registration;}
 
 class Registration : public QMainWindow
@@ -17,6 +25,8 @@ class Registration : public QMainWindow
 public:
     Registration(QWidget *parent = nullptr);
     ~Registration();
+
+    void closeEvent(QCloseEvent *event) override;
 
 private slots:
     void on_buttonReg_clicked();

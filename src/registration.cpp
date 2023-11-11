@@ -13,11 +13,19 @@ Registration::~Registration()
     delete ui;
 }
 
+void Registration::closeEvent(QCloseEvent *event)
+{
+    this->close();
+    Authorization* form = new Authorization();
+    form->show();
+    QMainWindow::closeEvent(event);
+}
+
 void Registration::on_buttonReg_clicked()
 {
-    QString login = ui->lineEdit->text();
-    QString password = ui->password->text();
-    QString currPassword = ui->curpass->text();
+    QString login = ui->login_edit->text();
+    QString password = ui->password_edit->text();
+    QString currPassword = ui->confirmpass_edit->text();
 
     messagebox = new QMessageBox();
 
