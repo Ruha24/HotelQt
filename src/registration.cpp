@@ -29,48 +29,59 @@ void Registration::on_buttonReg_clicked()
 
     messagebox = new QMessageBox();
 
-    if(login.length() < 1)
+    if (login.length() < 1)
         messagebox->critical(this, "Ошибка", "login должен быть больше 1 символа");
-
-
-    else if(!checkPassword(password))
+    else if (!checkPassword(password))
         messagebox->critical(this, "Ошибка", "password не прошёл проверку, наведитесь на ввод (посмотрите что должен содержать)");
-
-    else if(password != currPassword)
-       messagebox->critical(this, "Ошибка", "повторный пароль не совпал");
+    else if (password != currPassword)
+        messagebox->critical(this, "Ошибка", "повторный пароль не совпал");
     else
     {
-        if(db.connect()){
-            QSqlQuery query;
+        QJsonObject registrationData;
+        registrationData["name"] = login;
+        registrationData["password"] = password;
 
-            if (query.exec("select name from users")) {
-                bool userExists = false;
-                while (query.next()) {
-                    QString user = query.value(0).toString();
-                    if (user == login) {
-                        userExists = true;
-                        break;
-                    }
-                }
+        QJsonDocument jsonDoc(registrationData);
+        QByteArray jsonData = jsonDoc.toJson();
 
-                if (userExists) {
-                    messagebox->critical(this, "Ошибка", "Такой пользователь существует");
-                } else {
-                    if (query.exec("insert into users(name, password) values('" + login + "', '" + password + "')")) {
-                        QMessageBox::information(this, "Добавление", "Вы зарегистрировались");
+        QNetworkAccessManager networkManager;
+        QNetworkRequest request(QUrl("http://localhost:555/add_user"));
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-                        this->close();
+        QNetworkReply* reply = networkManager.post(request, jsonData);
 
-                        Authorization *authForm = new Authorization();
-                        authForm->show();
-                    }
-                }
+        QEventLoop loop;
+        connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();
+
+        if (reply->error() == QNetworkReply::NoError)
+        {
+            QByteArray responseData = reply->readAll();
+            QString responseString(responseData);
+
+            if (responseString.contains("User already exists"))
+            {
+                QMessageBox::critical(this, "Registration Error", "Такой пользователь уже существует");
+            }
+            else if (responseString.contains("User registered successfully"))
+            {
+                QMessageBox::information(this, "Registration", "Регистрация успешна");
+                close();
             }
             else
-                messagebox->critical(this, "Ошибка", "Не удалось выполнить запрос: " + query.lastError().text());
+            {
+                QMessageBox::critical(this, "HTTP Request Error", "Неизвестный ответ от сервера");
+            }
         }
+        else
+        {
+            QMessageBox::critical(this, "HTTP Request Error", reply->errorString());
+        }
+
+        reply->deleteLater();
     }
 }
+
 
 bool Registration::checkPassword(const QString &str)
 {

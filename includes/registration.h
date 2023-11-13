@@ -6,7 +6,6 @@
 #include <QRegularExpression>
 
 #include <QSqlQuery>
-#include "includes/databases.h"
 #include "includes/authorization.h"
 
 #include <QNetworkAccessManager>
@@ -33,7 +32,6 @@ private slots:
 
 private:
     bool checkPassword(const QString& str);
-    Databases db;
     QMessageBox* messagebox;
     Ui::registration *ui;
 };

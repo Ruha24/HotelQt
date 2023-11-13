@@ -8,8 +8,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     manager = new QNetworkAccessManager(this);
-
-
 }
 
 MainWindow::~MainWindow()
