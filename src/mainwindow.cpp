@@ -51,25 +51,19 @@ void MainWindow::slotReadyRead()
 {
     socket = qobject_cast<QTcpSocket*>(sender());
     QByteArray requestData = socket->readAll();
-    qDebug() << requestData;
 
-    qDebug() << "read";
     QString requestDataStr(requestData);
 
-    qDebug() << "requestData: " << requestDataStr;
-
     QStringList requestLines = requestDataStr.split("\r\n");
+
     if (requestLines.size() > 0) {
         QStringList requestParts = requestLines[0].split(" ");
-        if (requestParts.size() == 3 && requestParts[0] == "GET") {
-            QString path = requestParts[1];
-            qDebug() << "path: " << path;
 
-            if (path == "/select_user") {
-                handleSelectUserRequest();
-            } else {
-                sendHttp404Response();
-            }
+        if (requestParts.size() == 3) {
+            QString path = requestParts[1];
+            if (path == "/select_user") handleSelectUserRequest();
+            else if(path == "/add_user") addUser(requestLines.last());
+            else sendHttpResponse(404, "Not found");
         }
     }
     else {
@@ -77,9 +71,6 @@ void MainWindow::slotReadyRead()
     }
 }
 
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonDocument>
 void MainWindow::handleSelectUserRequest()
 {
     QSqlQuery query;
@@ -106,10 +97,9 @@ void MainWindow::handleSelectUserRequest()
             httpResponse += "Content-Type: application/json\r\n\r\n";
             httpResponse += jsonDoc.toJson(QJsonDocument::Compact);
 
-            qDebug() << "query: " << httpResponse;
             sendHttpData(httpResponse);
         } else {
-            sendHttp404Response();
+            sendHttpResponse(404, "Not found");
         }
     } else {
         qDebug() << "Query error: " << query.lastError().text();
@@ -117,14 +107,55 @@ void MainWindow::handleSelectUserRequest()
     }
 }
 
-void MainWindow::sendHttp404Response()
+void MainWindow::addUser(const QString& postData)
 {
-    QString httpResponse = "HTTP/1.1 404 Not Found\r\n";
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(postData.toUtf8());
+    if (jsonDoc.isNull() || !jsonDoc.isObject()) {
+        sendHttpResponse(400, "Bad request");
+        return;
+    }
+
+    QJsonObject jsonObject = jsonDoc.object();
+
+    QString login;
+    QString password;
+
+    if (jsonObject.contains("name")) {
+        login = jsonObject["name"].toString();
+    }
+
+    if (jsonObject.contains("password")) {
+        password = jsonObject["password"].toString();
+    }
+
+    QSqlQuery query;
+
+    if (query.exec("Select name, password from users"))
+    {
+        while (query.next())
+        {
+            QString user = query.value(0).toString();
+            if (login == user)
+            {
+                sendHttpData("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nUser already exists");
+                return;
+            }
+        }
+
+        if (query.exec("Insert into users(name, password) values('" + login + "', '" + password + "')"))
+           sendHttpData("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nUser registered successfully");
+    }
+}
+
+void MainWindow::sendHttpResponse(int statusCode, const QString &statusText)
+{
+    QString httpResponse = QString("HTTP/1.1 %1 %2\r\n").arg(statusCode).arg(statusText);
     httpResponse += "Content-Type: text/plain\r\n\r\n";
-    httpResponse += "404 Not Found";
+    httpResponse += QString("%1 %2").arg(statusCode).arg(statusText);
 
     sendHttpData(httpResponse);
 }
+
 
 void MainWindow::sendHttpData(const QString& data)
 {

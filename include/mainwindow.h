@@ -5,6 +5,11 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
+
+
 #include "include/databases.h"
 
 
@@ -34,8 +39,9 @@ private slots:
 
 private:
 
-    void sendHttp404Response();
+    void sendHttpResponse(int statusCode, const QString &statusText);
     void handleSelectUserRequest();
+    void addUser(const QString& postData);
     void sendHttpData(const QString& data);
 
     QVector <QTcpSocket*> Sockets;
