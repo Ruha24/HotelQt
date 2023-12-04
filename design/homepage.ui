@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>968</width>
-    <height>600</height>
+    <width>1067</width>
+    <height>741</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -132,6 +132,12 @@
     </property>
     <item>
      <widget class="QWidget" name="icon_only_widget" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>50</width>
+        <height>0</height>
+       </size>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <property name="spacing">
         <number>0</number>
@@ -164,21 +170,21 @@
           <widget class="QLabel" name="label">
            <property name="minimumSize">
             <size>
-             <width>50</width>
-             <height>50</height>
+             <width>40</width>
+             <height>40</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>50</width>
-             <height>50</height>
+             <width>40</width>
+             <height>40</height>
             </size>
            </property>
            <property name="text">
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="../resourses/resourse_homepage.qrc">:/icon/icon/Logo.png</pixmap>
+            <pixmap resource="../resourses/resourse_homepage.qrc">:/icon/icon/betboom.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -223,13 +229,13 @@
            </property>
            <property name="icon">
             <iconset resource="../resourses/resourse_homepage.qrc">
-             <normaloff>:/icon/icon/products.svg</normaloff>
-             <normalon>:/icon/icon/products-white.svg</normalon>:/icon/icon/products.svg</iconset>
+             <normaloff>:/icon/icon/Key-white.svg</normaloff>
+             <normalon>:/icon/icon/Key.svg</normalon>:/icon/icon/Key-white.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
-             <width>20</width>
-             <height>20</height>
+             <width>15</width>
+             <height>15</height>
             </size>
            </property>
            <property name="checkable">
@@ -365,7 +371,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>40</width>
+             <width>50</width>
              <height>40</height>
             </size>
            </property>
@@ -373,7 +379,7 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="../resourses/resourse_homepage.qrc">:/icon/icon/Logo.png</pixmap>
+            <pixmap resource="../resourses/resourse_homepage.qrc">:/icon/icon/betboom.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -440,8 +446,8 @@
            </property>
            <property name="icon">
             <iconset resource="../resourses/resourse_homepage.qrc">
-             <normaloff>:/icon/icon/products.svg</normaloff>
-             <normalon>:/icon/icon/products-white.svg</normalon>:/icon/icon/products.svg</iconset>
+             <normaloff>:/icon/icon/Key.svg</normaloff>
+             <normalon>:/icon/icon/Key-white.svg</normalon>:/icon/icon/Key.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -720,32 +726,75 @@
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="page">
-          <layout class="QVBoxLayout" name="verticalLayout_7">
+          <layout class="QHBoxLayout" name="horizontalLayout_7">
            <item>
             <widget class="QFrame" name="frame_2">
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_8">
+             <layout class="QVBoxLayout" name="verticalLayout_6">
+              <item>
+               <spacer name="verticalSpacer_4">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
               <item>
                <widget class="QFrame" name="frame_3">
                 <property name="minimumSize">
                  <size>
-                  <width>721</width>
-                  <height>281</height>
+                  <width>0</width>
+                  <height>75</height>
                  </size>
                 </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>741</width>
-                  <height>350</height>
-                 </size>
+                <property name="styleSheet">
+                 <string notr="true">#frame_3
+{
+	background-color: grey;
+}
+
+QFrame QPushButton 
+{
+	color: black;
+	background-color: white;
+	text-align: left;
+	padding: 0 10px;
+}
+
+QPushButton#searchBtn
+{
+	background-color: rgb(231, 0, 0);
+	color: white;
+
+	text-align: center;
+}
+
+
+#label_2 
+{
+	color: black;
+}
+
+</string>
                 </property>
                 <property name="frameShape">
                  <enum>QFrame::StyledPanel</enum>
@@ -753,104 +802,158 @@
                 <property name="frameShadow">
                  <enum>QFrame::Raised</enum>
                 </property>
-                <widget class="QWidget" name="">
-                 <property name="geometry">
-                  <rect>
-                   <x>10</x>
-                   <y>0</y>
-                   <width>731</width>
-                   <height>151</height>
-                  </rect>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_8">
-                  <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_6">
-                    <item>
-                     <widget class="QLabel" name="label_3">
-                      <property name="text">
-                       <string>Куда</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <layout class="QHBoxLayout" name="horizontalLayout_7">
-                      <property name="spacing">
-                       <number>15</number>
-                      </property>
-                      <item>
-                       <widget class="QPushButton" name="wherebutton">
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>150</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true"/>
-                        </property>
-                        <property name="text">
-                         <string>Собираюсь в</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="pushButton_6">
-                        <property name="maximumSize">
-                         <size>
-                          <width>200</width>
-                          <height>150</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>Даты</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="pushButton_5">
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>150</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>Путешественники</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="pushButton_8">
-                        <property name="enabled">
-                         <bool>true</bool>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>100</width>
-                          <height>150</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string>Найти</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                   </layout>
-                  </item>
-                 </layout>
-                </widget>
-                <widget class="QComboBox" name="comboBox">
-                 <property name="geometry">
-                  <rect>
-                   <x>130</x>
-                   <y>190</y>
-                   <width>72</width>
-                   <height>24</height>
-                  </rect>
-                 </property>
-                </widget>
+                <layout class="QGridLayout" name="gridLayout">
+                 <item row="0" column="2">
+                  <spacer name="horizontalSpacer_9">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="0" column="1">
+                  <layout class="QHBoxLayout" name="horizontalLayout_6">
+                   <property name="spacing">
+                    <number>32</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>25</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>25</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="label_2">
+                     <property name="font">
+                      <font>
+                       <pointsize>13</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>БРОНИРОВАНИЕ НОМЕРА</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="startDateBtn">
+                     <property name="minimumSize">
+                      <size>
+                       <width>150</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>200</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="layoutDirection">
+                      <enum>Qt::RightToLeft</enum>
+                     </property>
+                     <property name="text">
+                      <string>Дата</string>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../resourses/resourse_homepage.qrc">
+                       <normaloff>:/icon/icon/search.png</normaloff>:/icon/icon/search.png</iconset>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="endDateBtn">
+                     <property name="minimumSize">
+                      <size>
+                       <width>150</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>200</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="layoutDirection">
+                      <enum>Qt::RightToLeft</enum>
+                     </property>
+                     <property name="text">
+                      <string>Дата</string>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../resourses/resourse_homepage.qrc">
+                       <normaloff>:/icon/icon/search.png</normaloff>:/icon/icon/search.png</iconset>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="searchBtn">
+                     <property name="minimumSize">
+                      <size>
+                       <width>150</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>150</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Найти</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="0" column="0">
+                  <spacer name="horizontalSpacer_8">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>200</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_3">
+                <property name="font">
+                 <font>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Наши номера</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
                </widget>
               </item>
               <item>
@@ -861,20 +964,290 @@
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>20</width>
-                  <height>40</height>
+                  <height>150</height>
                  </size>
                 </property>
                </spacer>
               </item>
               <item>
-               <spacer name="horizontalSpacer_4">
+               <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0" columnstretch="0,0,0,0">
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>35</number>
+                </property>
+                <item row="1" column="3">
+                 <spacer name="horizontalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Preferred</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>300</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QLabel" name="label_12">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>&lt;a href='#stand4' style=&quot;text-decoration:none;&quot;&gt;&lt;font color = red&gt;Двухместный полулюкс&lt;/font&gt;&lt;/a&gt;
+</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QPushButton" name="pushButton_2">
+                  <property name="minimumSize">
+                   <size>
+                    <width>250</width>
+                    <height>200</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>200</width>
+                    <height>300</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton { border-image: url(:/image/image/Room1.jpg)  0 0 0 0 stretch stretch;
+}
+QPushButton:hover
+{
+	border: 5px solid red;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QPushButton" name="pushButton">
+                  <property name="minimumSize">
+                   <size>
+                    <width>250</width>
+                    <height>200</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>250</width>
+                    <height>350</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton { 
+border-image: url(:/image/image/Room1.jpg)  0 0 0 0 stretch stretch;
+}
+QPushButton:hover
+{
+	border: 5px solid red;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <spacer name="horizontalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Preferred</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>300</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QPushButton" name="pushButton_3">
+                  <property name="minimumSize">
+                   <size>
+                    <width>200</width>
+                    <height>200</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>250</width>
+                    <height>300</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton { border-image: url(:/image/image/Room1.jpg)  0 0 0 0 stretch stretch;
+}
+QPushButton:hover
+{
+	border: 5px solid red;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="label_11">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>&lt;a href='#stand3' style=&quot;text-decoration:none;&quot;&gt;&lt;font color = red&gt;Двухместный улучшенный&lt;/font&gt;&lt;/a&gt;
+</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QLabel" name="label_10">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>55</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>1666666</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>&lt;a href='#stand1' style=&quot;text-decoration:none;&quot;&gt;&lt;font color = red&gt;Двухместный стандарт
+&lt;br&gt;с двумя кроватями&lt;/font&gt;&lt;/a&gt;
+</string>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::AutoText</enum>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QPushButton" name="pushButton_4">
+                  <property name="minimumSize">
+                   <size>
+                    <width>250</width>
+                    <height>200</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>200</width>
+                    <height>350</height>
+                   </size>
+                  </property>
+                  <property name="layoutDirection">
+                   <enum>Qt::LeftToRight</enum>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+ border-image: url(:/image/image/Room1.jpg)  0 0 0 0 stretch stretch;
+}
+QPushButton:hover
+{
+	border: 5px solid red;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset theme="media-eject">
+                    <normaloff>.</normaloff>.</iconset>
+                  </property>
+                  <property name="autoRepeatInterval">
+                   <number>100</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="label_4">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>55</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>&lt;a href='#stand1' style=&quot;text-decoration:none;&quot;&gt;&lt;font color = red&gt;Двухместный стандарт &lt;br&gt;с одной кроватью&lt;/font&gt;&lt;/a&gt;
+</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_3">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Expanding</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
-                  <width>40</width>
-                  <height>20</height>
+                  <width>20</width>
+                  <height>449</height>
                  </size>
                 </property>
                </spacer>
@@ -886,22 +1259,2056 @@
          </widget>
          <widget class="QWidget" name="page_2">
           <layout class="QGridLayout" name="gridLayout_3">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_5">
-             <property name="text">
-              <string>Dash</string>
+           <item row="0" column="1">
+            <widget class="QScrollArea" name="scrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
              </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>962</width>
+                <height>963</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_7">
+               <item row="0" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_10">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_11">
+                   <property name="leftMargin">
+                    <number>130</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="HeadName">
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>14</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Номера</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_7">
+                     <property name="sizeConstraint">
+                      <enum>QLayout::SetMinimumSize</enum>
+                     </property>
+                     <property name="rightMargin">
+                      <number>150</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="label_5">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>350</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>14</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Номера</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_14">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>350</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>12</pointsize>
+                         <italic>false</italic>
+                         <underline>false</underline>
+                         <kerning>true</kerning>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>&lt;a href=&quot;#&quot; style=&quot;text-decoration:none; color: rgb(255, 67, 67);&quot;&gt;Двухместный стандарт с одной кроватью&lt;/a&gt;</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_17">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>350</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>Двухместный стандарт с одной кроватью</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_15">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>350</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>Двухместный стандарт с одной кроватью</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_18">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>350</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>Двухместный стандарт с одной кроватью</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_16">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>350</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>Двухместный стандарт с одной кроватью</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="Line" name="line">
+                   <property name="minimumSize">
+                    <size>
+                     <width>255</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>5</height>
+                    </size>
+                   </property>
+                   <property name="acceptDrops">
+                    <bool>true</bool>
+                   </property>
+                   <property name="layoutDirection">
+                    <enum>Qt::LeftToRight</enum>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_13">
+                   <property name="minimumSize">
+                    <size>
+                     <width>10</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <pointsize>14</pointsize>
+                    </font>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QLabel
+{
+	margin-left: 125px
+}</string>
+                   </property>
+                   <property name="text">
+                    <string>№ 1. Двухместный стандарт с двумя кроватями</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="Line" name="line_2">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_8">
+                   <property name="spacing">
+                    <number>50</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>150</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>150</number>
+                   </property>
+                   <item>
+                    <widget class="QPushButton" name="pushButton_5">
+                     <property name="minimumSize">
+                      <size>
+                       <width>250</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>250</width>
+                       <height>200</height>
+                      </size>
+                     </property>
+                     <property name="layoutDirection">
+                      <enum>Qt::RightToLeft</enum>
+                     </property>
+                     <property name="text">
+                      <string>PushButton</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_11">
+                     <property name="spacing">
+                      <number>5</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>10</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>50</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="label_20">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>14</pointsize>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>В номере:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <layout class="QVBoxLayout" name="verticalLayout_9">
+                       <property name="topMargin">
+                        <number>10</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>15</number>
+                       </property>
+                       <item>
+                        <widget class="QLabel" name="label_23">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <pointsize>11</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>телевизор, кондиционер, чайник, холодильник</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_25">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <pointsize>11</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>фен</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_22">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <pointsize>11</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>шкаф-купе</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_19">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <pointsize>11</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>2 односпальные кровати</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_21">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <pointsize>11</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>1 стол, 2 стула</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_24">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <pointsize>11</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>ванная комната</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_26">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <pointsize>11</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>утюг</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="Hoteln1">
+                       <property name="minimumSize">
+                        <size>
+                         <width>150</width>
+                         <height>50</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>150</width>
+                         <height>50</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>11</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">QPushButton
+{
+ 	background-color: rgb(255, 60, 63);
+	border-radius: 5px;
+}</string>
+                       </property>
+                       <property name="text">
+                        <string>Подробнее...</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_9">
+                   <property name="spacing">
+                    <number>50</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>150</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>150</number>
+                   </property>
+                   <item>
+                    <widget class="QPushButton" name="pushButton_7">
+                     <property name="minimumSize">
+                      <size>
+                       <width>250</width>
+                       <height>200</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>250</width>
+                       <height>200</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>PushButton</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_12">
+                     <property name="leftMargin">
+                      <number>10</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>75</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>50</number>
+                     </property>
+                     <item>
+                      <layout class="QVBoxLayout" name="verticalLayout_21">
+                       <property name="bottomMargin">
+                        <number>15</number>
+                       </property>
+                       <item>
+                        <widget class="QLabel" name="label_27">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <pointsize>12</pointsize>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>В номере:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_32">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>фен</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_30">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>шкаф-купе</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_31">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>телевизор, кондиционер, чайник, холодильник</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_28">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>2 односпальные кровати</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_29">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>1 стол, 2 стула</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_33">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>ванная комната</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_34">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>утюг</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="pushButton_8">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>50</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>150</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">QPushButton
+{
+ 	background-color: rgb(255, 60, 63);
+	border-radius: 5px;
+}</string>
+                       </property>
+                       <property name="text">
+                        <string>PushButton</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
             </widget>
            </item>
           </layout>
          </widget>
          <widget class="QWidget" name="page_3">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>980</height>
+           </size>
+          </property>
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="0" column="0">
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>ORDERS</string>
+            <widget class="QScrollArea" name="scrollArea_2">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>980</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QScrollArea
+{
+	border: none;
+}</string>
+             </property>
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents_2">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>859</width>
+                <height>683</height>
+               </rect>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>1200</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QWidget
+{
+	display: block;
+}</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_9">
+               <item row="0" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <property name="spacing">
+                  <number>120</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_8">
+                   <property name="spacing">
+                    <number>6</number>
+                   </property>
+                   <property name="sizeConstraint">
+                    <enum>QLayout::SetMinAndMaxSize</enum>
+                   </property>
+                   <property name="topMargin">
+                    <number>10</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="label_39">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>35</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>35</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>14</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Двухместный стандарт с двумя кроватями</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="Line" name="line_3">
+                     <property name="minimumSize">
+                      <size>
+                       <width>250</width>
+                       <height>1</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>650</width>
+                       <height>1</height>
+                      </size>
+                     </property>
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_40">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>45</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>45</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>№ 1. Двухместный стандарт с двумя кроватями</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="Line" name="line_4">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_12">
+                     <property name="spacing">
+                      <number>12</number>
+                     </property>
+                     <property name="sizeConstraint">
+                      <enum>QLayout::SetMinimumSize</enum>
+                     </property>
+                     <property name="topMargin">
+                      <number>25</number>
+                     </property>
+                     <item>
+                      <widget class="QPushButton" name="room1btn">
+                       <property name="minimumSize">
+                        <size>
+                         <width>250</width>
+                         <height>150</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>250</width>
+                         <height>250</height>
+                        </size>
+                       </property>
+                       <property name="layoutDirection">
+                        <enum>Qt::RightToLeft</enum>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">QPushButton
+{
+	border: none;
+	border-image: url(:/image/image/twoplace1_1.jpg)  0 0 0 0 stretch;
+}
+
+</string>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <layout class="QVBoxLayout" name="verticalLayout_15">
+                       <property name="spacing">
+                        <number>12</number>
+                       </property>
+                       <item>
+                        <layout class="QVBoxLayout" name="verticalLayout_23">
+                         <property name="spacing">
+                          <number>2</number>
+                         </property>
+                         <property name="sizeConstraint">
+                          <enum>QLayout::SetDefaultConstraint</enum>
+                         </property>
+                         <property name="topMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="bottomMargin">
+                          <number>0</number>
+                         </property>
+                         <item>
+                          <widget class="QLabel" name="label_67">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>15</pointsize>
+                             <bold>true</bold>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>В номере:</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_42">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>2 односпальные кровати;</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_41">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>150</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>1 стол, 2 стула;</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_43">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>ванная комната;</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_49">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>утюг.</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="room1_1btn">
+                         <property name="minimumSize">
+                          <size>
+                           <width>150</width>
+                           <height>50</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>150</width>
+                           <height>50</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">QPushButton
+{
+	border-radius: 5px;
+	color: white;
+	background-color: red;
+}
+QPushButton:hover
+{
+	border: 5px solid red;
+}
+</string>
+                         </property>
+                         <property name="text">
+                          <string>Подробнее...</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_44">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>45</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>45</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>№ 2. Двухместный стандарт с двумя кроватями</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="Line" name="line_5">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_17">
+                     <property name="spacing">
+                      <number>12</number>
+                     </property>
+                     <property name="sizeConstraint">
+                      <enum>QLayout::SetMinimumSize</enum>
+                     </property>
+                     <property name="topMargin">
+                      <number>25</number>
+                     </property>
+                     <item>
+                      <widget class="QPushButton" name="room2btn">
+                       <property name="minimumSize">
+                        <size>
+                         <width>250</width>
+                         <height>150</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>250</width>
+                         <height>250</height>
+                        </size>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">QPushButton
+{
+	border: none;
+	border-image: url(:/image/image/twoplace2_1.jpeg);
+}</string>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <layout class="QVBoxLayout" name="verticalLayout_24">
+                       <property name="spacing">
+                        <number>12</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <layout class="QVBoxLayout" name="verticalLayout_25">
+                         <property name="spacing">
+                          <number>2</number>
+                         </property>
+                         <item>
+                          <widget class="QLabel" name="label_66">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>15</pointsize>
+                             <bold>true</bold>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>В номере:</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_45">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>2 односпальные кровати;</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_48">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>1 стол, 2 стула;</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_47">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>ванная комната;</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_65">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>утюг.</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="room2_1btn">
+                         <property name="minimumSize">
+                          <size>
+                           <width>150</width>
+                           <height>50</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>150</width>
+                           <height>50</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">QPushButton
+{
+	border-radius: 5px;
+	color: white;
+	background-color: red;
+}
+QPushButton:hover
+{
+	border: 5px solid red;
+}
+</string>
+                         </property>
+                         <property name="text">
+                          <string>Подробнее...</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <spacer name="verticalSpacer_8">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeType">
+                      <enum>QSizePolicy::Maximum</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>250</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_13">
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_14">
+                     <property name="spacing">
+                      <number>10</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="label_6">
+                       <property name="minimumSize">
+                        <size>
+                         <width>150</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>325</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>14</pointsize>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="layoutDirection">
+                        <enum>Qt::LeftToRight</enum>
+                       </property>
+                       <property name="text">
+                        <string>&lt;html&gt;
+&lt;body&gt;
+  &lt;p&gt;&lt;img style=&quot;color: red;&quot; width=&quot;15&quot; height=&quot;15&quot; src=&quot;:/icon/icon/menu.png&quot;/&gt;&amp;nbsp;&amp;nbsp;Номера&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</string>
+                       </property>
+                       <property name="textFormat">
+                        <enum>Qt::AutoText</enum>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_35">
+                       <property name="minimumSize">
+                        <size>
+                         <width>250</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>325</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true"/>
+                       </property>
+                       <property name="text">
+                        <string>&lt;a href='#'style=&quot;color: rgb(255, 67, 67); text-decoration: none;&quot;&gt;Двухместный стандарт с одной кроватью&lt;/a&gt;</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_37">
+                       <property name="minimumSize">
+                        <size>
+                         <width>250</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>325</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>&lt;a href=&quot;#&quot; style=&quot;text-decoration:none; color: rgb(255, 67, 67);&quot;&gt;Двухместный стандарт с двумя кроватями&lt;/a&gt;</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_38">
+                       <property name="minimumSize">
+                        <size>
+                         <width>250</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>325</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>&lt;a href=&quot;#&quot; style=&quot;text-decoration:none; color: rgb(255, 67, 67);&quot;&gt;Двухместный улучшенный&lt;/a&gt;</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_36">
+                       <property name="minimumSize">
+                        <size>
+                         <width>250</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>325</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>&lt;a href=&quot;#&quot; style=&quot;text-decoration:none; color: rgb(255, 67, 67);&quot;&gt;Двухместный полулюкс&lt;/a&gt;</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <spacer name="verticalSpacer_7">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_9">
+          <layout class="QGridLayout" name="gridLayout_10">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="scrollArea_3">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents_3">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>902</width>
+                <height>667</height>
+               </rect>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_14">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_13">
+                 <property name="spacing">
+                  <number>120</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_16">
+                   <property name="spacing">
+                    <number>4</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="label_54">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>35</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>45</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>16</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>№ 1. Двухместный стандарт с двумя кроватями</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="Line" name="line_6">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_19">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>15</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>30</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="label_56">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>35</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>35</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>16</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>В номере:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <layout class="QVBoxLayout" name="verticalLayout_20">
+                       <property name="spacing">
+                        <number>4</number>
+                       </property>
+                       <property name="leftMargin">
+                        <number>15</number>
+                       </property>
+                       <item>
+                        <widget class="QLabel" name="label_59">
+                         <property name="font">
+                          <font>
+                           <pointsize>11</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>ванная комната;</string>
+                         </property>
+                         <property name="margin">
+                          <number>0</number>
+                         </property>
+                         <property name="openExternalLinks">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_57">
+                         <property name="font">
+                          <font>
+                           <pointsize>11</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>2 односпальные кровати;</string>
+                         </property>
+                         <property name="margin">
+                          <number>0</number>
+                         </property>
+                         <property name="openExternalLinks">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_58">
+                         <property name="font">
+                          <font>
+                           <pointsize>11</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>1 стол, 2 стула;</string>
+                         </property>
+                         <property name="margin">
+                          <number>0</number>
+                         </property>
+                         <property name="openExternalLinks">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_60">
+                         <property name="font">
+                          <font>
+                           <pointsize>11</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>утюг.</string>
+                         </property>
+                         <property name="margin">
+                          <number>0</number>
+                         </property>
+                         <property name="openExternalLinks">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="pushButton_10">
+                     <property name="minimumSize">
+                      <size>
+                       <width>150</width>
+                       <height>45</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>150</width>
+                       <height>70</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>13</pointsize>
+                      </font>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QPushButton
+{
+	border-radius: 5px;
+	color: white;
+    background-color: red;
+}
+
+QPushButton:hover
+{
+	text-decoration: underline;
+}</string>
+                     </property>
+                     <property name="text">
+                      <string>Забронировать</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QGridLayout" name="gridLayout_11">
+                     <property name="leftMargin">
+                      <number>10</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>35</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>10</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="spacing">
+                      <number>18</number>
+                     </property>
+                     <item row="0" column="1">
+                      <widget class="QPushButton" name="pushButton_15">
+                       <property name="minimumSize">
+                        <size>
+                         <width>150</width>
+                         <height>150</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>200</width>
+                         <height>300</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="1">
+                      <widget class="QPushButton" name="pushButton_16">
+                       <property name="minimumSize">
+                        <size>
+                         <width>150</width>
+                         <height>150</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>200</width>
+                         <height>300</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="0">
+                      <widget class="QPushButton" name="pushButton_11">
+                       <property name="minimumSize">
+                        <size>
+                         <width>150</width>
+                         <height>150</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>200</width>
+                         <height>300</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QPushButton" name="pushButton_12">
+                       <property name="minimumSize">
+                        <size>
+                         <width>150</width>
+                         <height>150</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>200</width>
+                         <height>300</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="2">
+                      <widget class="QPushButton" name="pushButton_13">
+                       <property name="minimumSize">
+                        <size>
+                         <width>150</width>
+                         <height>150</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>200</width>
+                         <height>300</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="2">
+                      <widget class="QPushButton" name="pushButton_14">
+                       <property name="minimumSize">
+                        <size>
+                         <width>150</width>
+                         <height>150</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>200</width>
+                         <height>300</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <spacer name="verticalSpacer_10">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_17">
+                   <property name="spacing">
+                    <number>4</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_18">
+                     <item>
+                      <widget class="QLabel" name="label_50">
+                       <property name="minimumSize">
+                        <size>
+                         <width>250</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>325</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>14</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>&lt;html&gt;
+&lt;body&gt;
+  &lt;p&gt;&lt;img style=&quot;color: red;&quot; width=&quot;15&quot; height=&quot;15&quot; src=&quot;:/icon/icon/menu.png&quot;/&gt;&amp;nbsp;&amp;nbsp;Номера&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_46">
+                       <property name="minimumSize">
+                        <size>
+                         <width>250</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>325</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>&lt;a href='#'style=&quot;color: rgb(255, 67, 67); text-decoration: none;&quot;&gt;Двухместный стандарт с одной кроватью&lt;/a&gt;</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_52">
+                       <property name="minimumSize">
+                        <size>
+                         <width>250</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>325</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>&lt;a href=&quot;#&quot; style=&quot;text-decoration:none; color: rgb(255, 67, 67);&quot;&gt;Двухместный стандарт с двумя кроватями&lt;/a&gt;</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_51">
+                       <property name="minimumSize">
+                        <size>
+                         <width>250</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>325</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>&lt;a href=&quot;#&quot; style=&quot;text-decoration:none; color: rgb(255, 67, 67);&quot;&gt;Двухместный улучшенный&lt;/a&gt;</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_53">
+                       <property name="minimumSize">
+                        <size>
+                         <width>250</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>325</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>&lt;a href=&quot;#&quot; style=&quot;text-decoration:none; color: rgb(255, 67, 67);&quot;&gt;Двухместный полулюкс&lt;/a&gt;</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <spacer name="verticalSpacer_9">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeType">
+                      <enum>QSizePolicy::Expanding</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
             </widget>
            </item>
           </layout>
@@ -940,55 +3347,32 @@
           </layout>
          </widget>
          <widget class="QWidget" name="page_7">
-          <widget class="QLabel" name="label_10">
+          <widget class="QPushButton" name="pushButton_9">
            <property name="geometry">
             <rect>
-             <x>9</x>
-             <y>31</y>
-             <width>27</width>
-             <height>16</height>
+             <x>270</x>
+             <y>220</y>
+             <width>80</width>
+             <height>24</height>
             </rect>
-           </property>
-           <property name="text">
-            <string>USER</string>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="pushButton">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>70</y>
-             <width>62</width>
-             <height>16</height>
-            </rect>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton
-{
-	border-radius: 100px;
-}</string>
            </property>
            <property name="text">
             <string>PushButton</string>
            </property>
           </widget>
-          <widget class="QLabel" name="label_2">
+         </widget>
+         <widget class="QWidget" name="page_8">
+          <widget class="QPushButton" name="pushButton_6">
            <property name="geometry">
             <rect>
-             <x>391</x>
-             <y>31</y>
-             <width>49</width>
-             <height>16</height>
+             <x>280</x>
+             <y>260</y>
+             <width>80</width>
+             <height>24</height>
             </rect>
            </property>
-           <property name="styleSheet">
-            <string notr="true">QLabel
-{
-	border-radius: 100px;
-}</string>
-           </property>
            <property name="text">
-            <string>TextLabel</string>
+            <string>8</string>
            </property>
           </widget>
          </widget>
@@ -1026,7 +3410,7 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
+     <x>229</x>
      <y>24</y>
     </hint>
     <hint type="destinationlabel">
@@ -1042,28 +3426,12 @@
    <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
+     <x>229</x>
      <y>25</y>
     </hint>
     <hint type="destinationlabel">
      <x>162</x>
      <y>206</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>home_btn_1</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>home_btn_2</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>37</x>
-     <y>61</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>74</x>
-     <y>73</y>
     </hint>
    </hints>
   </connection>
@@ -1078,8 +3446,8 @@
      <y>152</y>
     </hint>
     <hint type="destinationlabel">
-     <x>92</x>
-     <y>91</y>
+     <x>152</x>
+     <y>146</y>
     </hint>
    </hints>
   </connection>
@@ -1094,8 +3462,8 @@
      <y>202</y>
     </hint>
     <hint type="destinationlabel">
-     <x>187</x>
-     <y>153</y>
+     <x>179</x>
+     <y>197</y>
     </hint>
    </hints>
   </connection>
@@ -1110,8 +3478,8 @@
      <y>252</y>
     </hint>
     <hint type="destinationlabel">
-     <x>164</x>
-     <y>185</y>
+     <x>179</x>
+     <y>248</y>
     </hint>
    </hints>
   </connection>
@@ -1126,8 +3494,104 @@
      <y>302</y>
     </hint>
     <hint type="destinationlabel">
-     <x>149</x>
-     <y>217</y>
+     <x>179</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>shop_btn_2</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>shop_btn_1</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>144</x>
+     <y>146</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>40</x>
+     <y>152</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>orders_btn_2</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>orders_btn_1</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>138</x>
+     <y>197</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>39</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stat_btn_2</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>stat_btn_1</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>179</x>
+     <y>248</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>40</x>
+     <y>252</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setting_btn_2</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>setting_btn_1</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>179</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>30</x>
+     <y>302</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exit_btn_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Homepage</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>731</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>170</x>
+     <y>643</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exit_btn_1</sender>
+   <signal>clicked()</signal>
+   <receiver>Homepage</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>14</x>
+     <y>740</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>119</x>
+     <y>647</y>
     </hint>
    </hints>
   </connection>
@@ -1148,98 +3612,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>shop_btn_2</sender>
+   <sender>home_btn_1</sender>
    <signal>toggled(bool)</signal>
-   <receiver>shop_btn_1</receiver>
+   <receiver>home_btn_2</receiver>
    <slot>setChecked(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>84</x>
-     <y>100</y>
+     <x>37</x>
+     <y>61</y>
     </hint>
     <hint type="destinationlabel">
-     <x>40</x>
-     <y>152</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>orders_btn_2</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>orders_btn_1</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>78</x>
-     <y>123</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>39</x>
-     <y>202</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>stat_btn_2</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>stat_btn_1</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>145</x>
-     <y>185</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>40</x>
-     <y>252</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>setting_btn_2</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>setting_btn_1</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>135</x>
-     <y>217</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>30</x>
-     <y>302</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>exit_btn_2</sender>
-   <signal>clicked()</signal>
-   <receiver>Homepage</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>113</x>
-     <y>573</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>170</x>
-     <y>643</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>exit_btn_1</sender>
-   <signal>clicked()</signal>
-   <receiver>Homepage</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>14</x>
-     <y>580</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>119</x>
-     <y>647</y>
+     <x>74</x>
+     <y>73</y>
     </hint>
    </hints>
   </connection>

@@ -12,16 +12,16 @@ SOURCES += \
     src/homepage.cpp \
     src/registration.cpp \
     src/authorization.cpp \
-    src/databases.cpp \
     src/main.cpp \
-    src/mainwindow.cpp
+    src/mainwindow.cpp \
+    src/testui.cpp
 
 HEADERS += \
     includes/homepage.h \
     includes/registration.h \
     includes/authorization.h \
-    includes/databases.h \
     includes/mainwindow.h \
+    includes/testui.h
 
 
 FORMS += \
@@ -29,6 +29,7 @@ FORMS += \
     design/registration.ui \
     design/Authorization.ui \
     design/mainwindow.ui \
+    design/testui.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

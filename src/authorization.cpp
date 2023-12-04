@@ -18,10 +18,8 @@ bool Authorization::connect()
     login = ui->login->text();
     password = ui->password->text();
 
-    bool authenticated = false;
-
     if (login.isEmpty() || password.isEmpty())
-        return false;
+        return true;
 
 
     QNetworkAccessManager networkManager;
@@ -60,8 +58,7 @@ bool Authorization::connect()
                             if (name == login && jsonPassword == password)
                             {
                                 qDebug() << "connect";
-                                authenticated = true;
-                                break;
+                                return true;
                             }
                         }
                     }
@@ -79,12 +76,6 @@ bool Authorization::connect()
     }
 
     reply->deleteLater();
-
-    if (authenticated)
-    {
-        qDebug() << "kaif";
-        return true;
-    }
 
     return false;
 }

@@ -85,7 +85,7 @@ void Registration::on_buttonReg_clicked()
 
 bool Registration::checkPassword(const QString &str)
 {
-    QRegularExpression passwordPattern("^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$");
+    static QRegularExpression passwordPattern("^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$");
     if(passwordPattern.match(str).hasMatch())
     {
         return true;

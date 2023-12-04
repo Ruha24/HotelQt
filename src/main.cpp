@@ -9,3 +9,8 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
 }
+
+
+
+// сделать, так чтобы все файлы хранились в создаваемой папке appdata|
+//

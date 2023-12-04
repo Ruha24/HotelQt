@@ -5,8 +5,7 @@
 #include <QTcpSocket>
 
 #include "includes/authorization.h"
-#include "includes/databases.h"
-
+#include "includes/testui.h"
 
 // test
 
@@ -38,7 +37,9 @@ private slots:
     void slotDisconnected();
 
     void on_pushButton_3_clicked();
-    void onRequestFinished();
+    void onRequestFinished(QNetworkReply* reply);
+
+    void on_pushButton_4_clicked();
 
 private:
     // test
@@ -46,10 +47,9 @@ private:
     QNetworkAccessManager *manager;
 
 
-    QTcpSocket* socket;
+    QTcpSocket* socket = nullptr;
 
     Authorization* authorizationForm;
-    Databases db;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

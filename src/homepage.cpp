@@ -7,9 +7,7 @@ Homepage::Homepage(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->full_menu_widget->hide();
-
-
-
+    customDialog();
 }
 
 Homepage::~Homepage()
@@ -24,7 +22,7 @@ void Homepage::on_search_btn_clicked()
 
     if(!search_text.isEmpty())
     {
-        ui->label_10->setText(search_text);
+
     }
 }
 
@@ -34,40 +32,22 @@ void Homepage::on_user_btn_clicked()
 }
 
 
-void Homepage::chooseImage()
+void Homepage::customDialog()
 {
-
-}
-
-void Homepage::on_pushButton_clicked()
-{
-    chooseImage();
-}
-
-#include <QMenu>
-#include <QCalendarWidget>
-#include <QDate>
-
-void Homepage::on_pushButton_6_clicked()
-{
-    QDialog menuDialog(this);
     menuDialog.setWindowFlag(Qt::Popup);
 
-
-    QVBoxLayout Vlayout(&menuDialog);
-    QHBoxLayout HlayoutCalendar;
-    QHBoxLayout HlayoutDate;
-
-    QCalendarWidget* startDateCalendar = new QCalendarWidget();
-    QCalendarWidget* endDateCalendar = new QCalendarWidget();
+    startDateCalendar = new QCalendarWidget();
+    endDateCalendar = new QCalendarWidget();
     applyButton = new QPushButton("Apply");
 
     QDateTime date = QDateTime::currentDateTime();
     QDate currentDate = QDate::currentDate();
 
     QString date_format = "MMMM мм";
-    startDate = new QLabel("" + date.toString(date_format));
-    endDate = new QLabel("" + date.addMonths(1).toString(date_format));
+
+
+    startDate = new QLabel(date.toString("ddd") + ", " + date.toString("dd MMM"));
+    endDate = new QLabel(date.toString("ddd") + ", " + date.toString("dd MMM"));
 
     startDateCalendar->setMinimumDate(currentDate);
     endDateCalendar->setSelectedDate(currentDate.addMonths(1));
@@ -78,7 +58,6 @@ void Homepage::on_pushButton_6_clicked()
     HlayoutCalendar.addWidget(startDateCalendar);
     HlayoutCalendar.addWidget(endDateCalendar);
 
-
     Vlayout.addLayout(&HlayoutDate);
     Vlayout.addLayout(&HlayoutCalendar);
     Vlayout.addWidget(applyButton);
@@ -86,6 +65,17 @@ void Homepage::on_pushButton_6_clicked()
     connect(applyButton, &QPushButton::clicked, this, &Homepage::onApplyButtonClicked);
     connect(startDateCalendar, &QCalendarWidget::clicked, this, &Homepage::onDateSelected);
     connect(endDateCalendar, &QCalendarWidget::clicked, this, &Homepage::onDateSelected);
+    menuDialog.setLayout(&Vlayout);
+}
+
+void Homepage::on_endDateBtn_clicked()
+{
+    menuDialog.exec();
+}
+
+
+void Homepage::on_startDateBtn_clicked()
+{
     menuDialog.exec();
 }
 
@@ -95,6 +85,7 @@ void Homepage::onDateSelected(const QDate& date)
     {
         startDate->setText(date.toString("ddd") + ", " + date.toString("dd MMM"));
         isStartDateSelected = false;
+
     }
     else
     {
@@ -103,21 +94,95 @@ void Homepage::onDateSelected(const QDate& date)
     }
 }
 
-
-void Homepage::on_wherebutton_clicked()
+void Homepage::on_home_btn_1_toggled(bool checked)
 {
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
+void Homepage::on_shop_btn_1_toggled(bool checked)
+{
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+void Homepage::on_stat_btn_1_toggled(bool checked)
+{
+    ui->stackedWidget->setCurrentIndex(3);
+}
+
+void Homepage::on_setting_btn_1_toggled(bool checked)
+{
+    ui->stackedWidget->setCurrentIndex(4);
+}
 
 
 void Homepage::onApplyButtonClicked()
 {
     QStringList startDateParts = startDate->text().split(" ");
     QStringList endDateParts = endDate->text().split(" ");
+
     QString startDateText = startDateParts[1] + " " + startDateParts[2];
     QString endDateText = endDateParts[1] + " " + endDateParts[2];
-    QString buttonText = "Dates\n" + startDateText + " -> " + endDateText;
-    ui->pushButton_6->setText(buttonText);
+
+    ui->startDateBtn->setText("Заезд\n" + startDateText);
+
+    ui->endDateBtn->setText("Выезд\n" + endDateText);
+
+    menuDialog.accept();
+}
+
+void Homepage::on_searchBtn_clicked()
+{
+
+}
+
+void Homepage::on_pushButton_4_clicked()
+{
+
+}
+
+void Homepage::links(const QString &link)
+{
+    if(link == "#stand1") ui->stackedWidget->setCurrentIndex(2);
+
+}
+
+void Homepage::on_label_14_linkActivated(const QString &link)
+{
+    links(link);
+}
+
+
+void Homepage::on_label_10_linkActivated(const QString &link)
+{
+    links(link);
+}
+
+void Homepage::on_label_4_linkActivated(const QString &link)
+{
+    links(link);
+}
+
+void Homepage::on_label_12_linkActivated(const QString &link)
+{
+    links(link);
+}
+
+void Homepage::on_label_11_linkActivated(const QString &link)
+{
+    links(link);
+}
+
+
+void Homepage::on_Hoteln1_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
+
+
+void Homepage::on_pushButton_5_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 

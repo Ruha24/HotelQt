@@ -38,3 +38,51 @@ void Homepage::on_pushButton_clicked()
 
 
 
+
+void Homepage::on_home_btn_1_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
+
+void Homepage::on_shop_btn_1_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+
+void Homepage::on_stat_btn_1_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(3);
+}
+
+
+void Homepage::on_setting_btn_1_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(4);
+}
+
+
+void Homepage::on_home_btn_1_toggled(bool checked)
+{
+     ui->stackedWidget->setCurrentIndex(0);
+}
+
+
+void Homepage::on_shop_btn_1_toggled(bool checked)
+{
+     ui->stackedWidget->setCurrentIndex(1);
+}
+
+
+void Homepage::on_stat_btn_1_toggled(bool checked)
+{
+     ui->stackedWidget->setCurrentIndex(3);
+}
+
+
+void Homepage::on_setting_btn_1_toggled(bool checked)
+{
+     ui->stackedWidget->setCurrentIndex(4);
+}
+

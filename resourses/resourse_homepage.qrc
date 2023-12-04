@@ -17,5 +17,16 @@
         <file>icon/menu.png</file>
         <file>icon/search.png</file>
         <file>icon/customers.svg</file>
+        <file>icon/betboom.png</file>
+        <file>icon/Key.svg</file>
+        <file>icon/Key-white.svg</file>
+    </qresource>
+    <qresource prefix="/image">
+        <file>image/Room1.jpg</file>
+        <file>image/twoplace2.jpg</file>
+        <file>image/twoplace1.jpg</file>
+        <file>image/twoplace3.jpg</file>
+        <file>image/twoplace2_1.jpeg</file>
+        <file>image/twoplace1_1.jpg</file>
     </qresource>
 </RCC>
