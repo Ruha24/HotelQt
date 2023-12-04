@@ -10,8 +10,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     server = new QTcpServer(this);
-
     connect(server, &QTcpServer::newConnection, this, &MainWindow::incommingconnection);
+
+    if (server->listen(QHostAddress::LocalHost, 555)) {
+        db.connect();
+    }
+
 }
 
 MainWindow::~MainWindow()
@@ -21,15 +25,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::incommingconnection()
 {
-    qDebug() << "New client connected";
 
-    socket = new QTcpSocket;
-    socket->setSocketDescriptor(server->nextPendingConnection()->socketDescriptor());
-
-    connect(socket, &QTcpSocket::readyRead, this, &MainWindow::slotReadyRead);
-    connect(socket, &QTcpSocket::disconnected, this, &MainWindow::clientDisconnected);
-
-    Sockets.push_back(socket);
+    while(server->hasPendingConnections())
+    {
+        qDebug() << "New client connected";
+        addNewClient(server->nextPendingConnection());
+    }
 }
 
 void MainWindow::clientDisconnected()
@@ -46,10 +47,18 @@ void MainWindow::clientDisconnected()
     }
 }
 
+void MainWindow::addNewClient(QTcpSocket *socket)
+{
+    Sockets.append(socket);
+    connect(socket, &QTcpSocket::readyRead, this, &MainWindow::slotReadyRead);
+    connect(socket, &QTcpSocket::disconnected, this, &MainWindow::clientDisconnected);
+}
+
 
 void MainWindow::slotReadyRead()
 {
     socket = qobject_cast<QTcpSocket*>(sender());
+    qDebug() << socket;
     QByteArray requestData = socket->readAll();
 
     QString requestDataStr(requestData);
@@ -177,9 +186,6 @@ void MainWindow::sendToClient(QString str)
 
 void MainWindow::on_pushButton_clicked()
 {
-    if(server->listen(QHostAddress::LocalHost, 555))
-    {
-        db.connect();
-    }
+
 }
 

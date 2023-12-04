@@ -36,6 +36,7 @@ public slots:
 private slots:
     void on_pushButton_clicked();
     void clientDisconnected();
+    void addNewClient(QTcpSocket* socket);
 
 private:
 
