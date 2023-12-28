@@ -34,24 +34,29 @@ public slots:
 
 
 private slots:
-    void on_pushButton_clicked();
     void clientDisconnected();
     void addNewClient(QTcpSocket* socket);
 
 private:
-
+    void getInformation(const QString& name);
     void sendHttpResponse(int statusCode, const QString &statusText);
     void handleSelectUserRequest();
     void addUser(const QString& postData);
     void sendHttpData(const QString& data);
-
+    void getRole(const QString& name);
+    void getType();
+    void uploadData(const QByteArray& requestData);
+    bool InsertData(const QByteArray& fileData, const QString& fileName);
+    void searchRoom(const QString& data);
+    void search_room(const QString& data);
     QVector <QTcpSocket*> Sockets;
     QByteArray data;
     QTcpServer* server;
 
     void SentToClient();
 
-    Databases db;
+    bool connecting();
+    QSqlDatabase db;
 
     Ui::MainWindow *ui;
 };

@@ -1,4 +1,5 @@
 #include "include/databases.h"
+#include <QMessageBox>
 
 Databases::Databases()
 {
@@ -13,16 +14,16 @@ bool Databases::connect()
 
     db = QSqlDatabase::addDatabase("QPSQL");
     db.setDatabaseName("Hotel");
-    db.setHostName("localhost");
+    db.setHostName("172.20.7.8");
     db.setPort(5432);
-    db.setUserName("postgres");
-    db.setPassword("admin");
+    db.setUserName("st1991");
+    db.setPassword("pwd1991");
+
 
     if (db.open()) {
-        qDebug() << "Database connection established.";
         return true;
     } else {
-        qDebug() << "Failed to connect to the database: " << db.lastError().text();
+
         return false;
     }
 }
