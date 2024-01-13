@@ -6,6 +6,8 @@
 
 #include "includes/authorization.h"
 #include "includes/testui.h"
+#include "includes/checkimage.h"
+
 
 // test
 
@@ -41,6 +43,8 @@ private slots:
 
     void on_pushButton_4_clicked();
 
+    void on_pushButton_5_clicked();
+
 private:
     // test
     void selectUsers();
@@ -49,6 +53,8 @@ private:
 
     QTcpSocket* socket = nullptr;
 
+
+    CheckImage* checkImage;
     Authorization* authorizationForm;
     Ui::MainWindow *ui;
 };

@@ -74,32 +74,6 @@ QPushButton:hover, QPushButton:clicked
        </property>
       </spacer>
      </item>
-     <item row="1" column="0">
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="1">
-      <spacer name="verticalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
      <item row="2" column="1">
       <spacer name="verticalSpacer_3">
        <property name="orientation">
@@ -157,7 +131,7 @@ QPushButton:hover, QPushButton:clicked
               </font>
              </property>
              <property name="text">
-              <string>Username</string>
+              <string>Логин</string>
              </property>
             </widget>
            </item>
@@ -194,7 +168,7 @@ QPushButton:hover, QPushButton:clicked
               </font>
              </property>
              <property name="text">
-              <string>Password</string>
+              <string>Пароль</string>
              </property>
             </widget>
            </item>
@@ -235,7 +209,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </font>
            </property>
            <property name="text">
-            <string>Confirm Password</string>
+            <string>Подтвердить пароль</string>
            </property>
           </widget>
          </item>
@@ -267,11 +241,37 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </font>
          </property>
          <property name="text">
-          <string>Registration</string>
+          <string>Зарегестрироваться</string>
          </property>
         </widget>
        </item>
       </layout>
+     </item>
+     <item row="0" column="1">
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="0">
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </widget>

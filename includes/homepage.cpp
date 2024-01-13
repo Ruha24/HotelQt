@@ -86,3 +86,4 @@ void Homepage::on_setting_btn_1_toggled(bool checked)
      ui->stackedWidget->setCurrentIndex(4);
 }
 
+

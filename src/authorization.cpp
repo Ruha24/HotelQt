@@ -18,6 +18,8 @@ bool Authorization::connect()
     login = ui->login->text();
     password = ui->password->text();
 
+    bool isAuth = false;
+
     if (login.isEmpty() || password.isEmpty())
         return true;
 
@@ -57,9 +59,10 @@ bool Authorization::connect()
 
                             if (name == login && jsonPassword == password)
                             {
-                                qDebug() << "connect";
+                                isAuth = true;
                                 return true;
                             }
+
                         }
                     }
                 }
@@ -75,6 +78,9 @@ bool Authorization::connect()
         qDebug() << "Network request error: " << reply->errorString();
     }
 
+    if(!isAuth)
+        QMessageBox::information(this, "Ошибка" ,"Вы ввели неверные данные");
+
     reply->deleteLater();
 
     return false;
@@ -86,7 +92,7 @@ void Authorization::on_login_2_clicked()
     if(connect())
     {
         this->close();
-        Homepage* form = new Homepage();
+        Homepage* form = new Homepage(nullptr, ui->login->text());
         form->show();
     }
 }

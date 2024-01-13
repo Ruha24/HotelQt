@@ -28,5 +28,17 @@
         <file>image/twoplace3.jpg</file>
         <file>image/twoplace2_1.jpeg</file>
         <file>image/twoplace1_1.jpg</file>
+        <file>image/2place1/image1.jpg</file>
+        <file>image/2place1/image2.jpg</file>
+        <file>image/2place1/image3.jpg</file>
+        <file>image/2place1/image4.jpg</file>
+        <file>image/2place1/image5.jpg</file>
+        <file>image/2place1/image6.jpg</file>
+        <file>image/LuxPlace.jpg</file>
+        <file>image/LuxPlace2.jpg</file>
+        <file>image/oneplace1.jpg</file>
+        <file>image/oneplace2.jpg</file>
+        <file>image/UppPlace.jpg</file>
+        <file>image/UppPlace2.jpg</file>
     </qresource>
 </RCC>

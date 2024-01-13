@@ -184,7 +184,7 @@ QPushButton:hover, QPushButton:clicked
                 </font>
                </property>
                <property name="text">
-                <string>Username</string>
+                <string>Логин</string>
                </property>
               </widget>
              </item>
@@ -218,7 +218,7 @@ QPushButton:hover, QPushButton:clicked
                 </font>
                </property>
                <property name="text">
-                <string>Password</string>
+                <string>Пароль</string>
                </property>
               </widget>
              </item>
@@ -228,6 +228,9 @@ QPushButton:hover, QPushButton:clicked
                 <font>
                  <pointsize>13</pointsize>
                 </font>
+               </property>
+               <property name="echoMode">
+                <enum>QLineEdit::Password</enum>
                </property>
               </widget>
              </item>
@@ -243,7 +246,7 @@ QPushButton:hover, QPushButton:clicked
             </font>
            </property>
            <property name="text">
-            <string>Login</string>
+            <string>Войти</string>
            </property>
           </widget>
          </item>
@@ -255,7 +258,7 @@ QPushButton:hover, QPushButton:clicked
             </font>
            </property>
            <property name="text">
-            <string>Registration</string>
+            <string>Зарегестрироваться</string>
            </property>
           </widget>
          </item>

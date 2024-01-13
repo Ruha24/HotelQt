@@ -107,3 +107,13 @@ void MainWindow::on_pushButton_4_clicked()
       test->show();
 }
 
+
+void MainWindow::on_pushButton_5_clicked()
+{
+      checkImage = new CheckImage(this);
+      checkImage->setImage(":/image/image/2place1/image2.jpg");
+      checkImage->setWindowFlag(Qt::Window);
+      checkImage->show();
+
+}
+
