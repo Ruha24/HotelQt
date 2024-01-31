@@ -27,8 +27,10 @@
 #include <QPainter>
 #include <QFileDialog>
 
-
 #include "includes/checkimage.h"
+
+#include "includes/filterform.h"
+#include "includes/roomdetails.h"
 
 namespace Ui {
 class Homepage;
@@ -49,30 +51,41 @@ private slots:
 
     void on_user_btn_clicked();
 
+    // query
+    void handleServerResponse(QNetworkReply *reply,
+                              const QString &successStatus,
+                              const std::function<void(QJsonObject)> &successCallback);
+
     // User
     void HideElement();
-    void getRole(QString& name);
-    void on_importbtn_clicked();
-    void on_exportbtn_clicked();
-    void uploadFinished();
-    void getInformation(const QString& name);
+    void getRole(QString &name);
+
+    void getInformation(const QString &name);
 
     void setImage(QPushButton* button);
     void onAnyButtonToggled();
-    void getRoomInfo(const QString& text, const QString& type, bool isOccupied);
+    void getRoomInfo(const QString &text, const QString &type, bool isOccupied);
+
+    void setRoomDataForPage(roomdetails *roomDetail, const QString &image, const QString &title);
 
     // Function choose data
     void customDialog();
-    void onApplyButtonClicked();
-    void onDateSelected(const QDate& date);
+    QLabel *createLabelWithDate();
+    void updateDateButtons();
+    void onDateSelected(const QDate &date);
+    QString getFormattedDate(const QDate &date);
     void on_startDateBtn_clicked();
     void on_endDateBtn_clicked();
+    void onApplyButtonClicked();
 
+    QString createButtonStyleSheet(const QString &imagePath);
 
     // transition on link
-    void links(const QString& line);
+    void links(const QString &line);
 
+    void setPageIndex(int index);
     void setPages(int num);
+
     void setInfoRoom();
 
     // trigger on button
@@ -117,9 +130,9 @@ public slots:
     void handleFilterAccepted(const QString& type, bool isOccupied);
 
 private:
-
-    void exportToPDF(const QJsonArray &roomsArray);
-
+    QNetworkAccessManager networkManager;
+    QNetworkRequest commonRequest;
+    QJsonObject commonJsonObject;
 
     bool isStartDateSelected;
     QDialog menuDialog;
@@ -140,7 +153,8 @@ private:
     QString Type;
     bool IsOccupied;
     QString UserRole;
-    QString UserName;
+
+    const QString prefix = ":/image/image/";
 
     Ui::Homepage *ui;
 };

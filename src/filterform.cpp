@@ -24,14 +24,13 @@ void FilterForm::on_acceptbtn_clicked()
     emit filterAccepted(type, isoccupt);
 
     close();
-
 }
 
 void FilterForm::getTypeRoom()
 {
-    QNetworkAccessManager* networkManager = new QNetworkAccessManager(this);
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
     QNetworkRequest request(QUrl("http://localhost:555/getType"));
-    QNetworkReply* reply = networkManager->get(request);
+    QNetworkReply *reply = networkManager->get(request);
 
     connect(reply, &QNetworkReply::finished, [this, reply]() {
         if (reply->error() == QNetworkReply::NoError) {
@@ -45,7 +44,7 @@ void FilterForm::getTypeRoom()
                     QJsonArray roomTypesArray = jsonObject["room_types"].toArray();
                     QStringList roomTypes;
 
-                    for (const QJsonValue& roomTypeValue : roomTypesArray) {
+                    for (const QJsonValue &roomTypeValue : roomTypesArray) {
                         roomTypes << roomTypeValue.toString();
                     }
 
@@ -59,4 +58,3 @@ void FilterForm::getTypeRoom()
         reply->deleteLater();
     });
 }
-

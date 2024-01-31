@@ -11,7 +11,6 @@ CheckImage::CheckImage(QWidget *parent) :
 
     setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
     ui->Imagelbl->setAlignment(Qt::AlignCenter);
-
 }
 
 CheckImage::~CheckImage()
