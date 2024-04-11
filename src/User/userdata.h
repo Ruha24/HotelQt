@@ -21,6 +21,12 @@ public:
     QString getUserName() const;
     void setUserName(const QString &newUserName);
 
+    void updateStats(QString name,
+                     QString lastName,
+                     QString date,
+                     QString email,
+                     std::function<void(bool)> callback);
+
 private:
     bool isValidUser = false;
 

@@ -137,3 +137,41 @@ void UserData::setUserName(const QString &newUserName)
 {
     userName = newUserName;
 }
+
+void UserData::updateStats(
+    QString name, QString lastName, QString date, QString email, std::function<void(bool)> callback)
+{
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    QJsonObject json;
+
+    json["name"] = userName;
+    json["firstName"] = name;
+    json["lastName"] = lastName;
+    json["date"] = date;
+    json["email"] = email;
+
+    QJsonDocument jsonDoc(json);
+
+    QNetworkRequest request(QUrl("http://localhost:555/updateStats"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = networkManager->post(request, jsonDoc.toJson());
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray response = reply->readAll();
+
+            if (response.contains("update")) {
+                callback(true);
+            } else {
+                callback(false);
+            }
+        } else {
+            callback(false);
+        }
+
+        reply->deleteLater();
+        networkManager->deleteLater();
+    });
+}

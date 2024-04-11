@@ -354,3 +354,25 @@ void HomePage::on_Profile_3_clicked()
 {
     authorizationUser();
 }
+
+void HomePage::on_saveDataUser_clicked()
+{
+    if (ui->userNametxt->text() == "" || ui->lastnametxt->text() == ""
+        || ui->birthdaytxt->text() == "" || ui->emailtxt->text() == "")
+        return;
+
+    qDebug() << userData->getUserName();
+
+    userData->updateStats(ui->userNametxt->text(),
+                          ui->lastnametxt->text(),
+                          ui->birthdaytxt->text(),
+                          ui->emailtxt->text(),
+                          [&](bool success) {
+                              if (success)
+                                  QMessageBox::information(this, "", "Данные успешно обновлены");
+                              else
+                                  QMessageBox::information(this,
+                                                           "Ошибка",
+                                                           "Данные не были обновлены");
+                          });
+}

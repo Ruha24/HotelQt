@@ -72,6 +72,8 @@ private slots:
 
     void on_Profile_3_clicked();
 
+    void on_saveDataUser_clicked();
+
 private:
     void connectionElement();
     void CreateElementMenu();

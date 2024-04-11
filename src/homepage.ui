@@ -45,7 +45,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -966,8 +966,6 @@ QToolButton::menu-indicator
     border-radius: 3px;
     padding: 1px 18px 1px 3px;
     min-width: 6em;
-
-	visible: false;
 }
 
 QComboBox:editable {
@@ -1453,8 +1451,6 @@ QComboBox::down-arrow:on {
     border-radius: 3px;
     padding: 1px 18px 1px 3px;
     min-width: 6em;
-
-	visible: false;
 }
 
 QComboBox:editable {
@@ -1613,7 +1609,6 @@ QLineEdit
 	
 	font: 14pt &quot;Montserrat&quot;;
 	height: 50px;
-	width-max: 297px;
 	border-radius: 5px;
 	border: 2px solid #ccc;
 }
@@ -2037,7 +2032,7 @@ QComboBox::down-arrow:on {
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLineEdit" name="lineEdit"/>
+                       <widget class="QLineEdit" name="userNametxt"/>
                       </item>
                      </layout>
                     </item>
@@ -2066,7 +2061,7 @@ QComboBox::down-arrow:on {
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLineEdit" name="lineEdit_2"/>
+                       <widget class="QLineEdit" name="lastnametxt"/>
                       </item>
                      </layout>
                     </item>
@@ -2108,7 +2103,7 @@ QComboBox::down-arrow:on {
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLineEdit" name="lineEdit_3"/>
+                       <widget class="QLineEdit" name="birthdaytxt"/>
                       </item>
                      </layout>
                     </item>
@@ -2137,7 +2132,7 @@ QComboBox::down-arrow:on {
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLineEdit" name="lineEdit_4"/>
+                       <widget class="QLineEdit" name="emailtxt"/>
                       </item>
                      </layout>
                     </item>
@@ -2221,7 +2216,7 @@ QComboBox::down-arrow:on {
                    </spacer>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="pushButton">
+                   <widget class="QPushButton" name="saveDataUser">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
