@@ -175,3 +175,48 @@ void UserData::updateStats(
         networkManager->deleteLater();
     });
 }
+
+void UserData::updatePassword(QString pass, std::function<void(bool)> callback)
+{
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    QJsonObject json;
+
+    json["password"] = pass;
+    json["name"] = userName;
+
+    QJsonDocument jsonDoc(json);
+
+    QNetworkRequest request(QUrl("http://localhost:555/updatePass"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = networkManager->post(request, jsonDoc.toJson());
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray response = reply->readAll();
+
+            if (response.contains("update")) {
+                callback(true);
+            } else {
+                callback(false);
+            }
+
+        } else {
+            callback(false);
+        }
+
+        reply->deleteLater();
+        networkManager->deleteLater();
+    });
+}
+
+QString UserData::getPassword() const
+{
+    return password;
+}
+
+void UserData::setPassword(const QString &newPassword)
+{
+    password = newPassword;
+}

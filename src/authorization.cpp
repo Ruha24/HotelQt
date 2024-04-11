@@ -38,9 +38,10 @@ void Authorization::on_login_2_clicked()
     if (userName.isEmpty() || password.isEmpty())
         return;
 
-    m_userData->checkUser(userName, password, [&, userName](bool isValidUser) {
+    m_userData->checkUser(userName, password, [&, userName, password](bool isValidUser) {
         if (isValidUser) {
             m_userData->setUserName(userName);
+            m_userData->setPassword(password);
             emit userAuthenticated(m_userData);
             QMessageBox::information(this, "", "Данные успешны");
         } else {

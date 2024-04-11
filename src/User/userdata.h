@@ -27,10 +27,17 @@ public:
                      QString email,
                      std::function<void(bool)> callback);
 
+    void updatePassword(QString pass, std::function<void(bool)> callback);
+
+    QString getPassword() const;
+    void setPassword(const QString &newPassword);
+
 private:
     bool isValidUser = false;
 
     QString userName = "";
+    QString password = "";
+
     int idUser = -1;
 };
 

@@ -33,8 +33,6 @@ void HomePage::setUserData(UserData *data)
 {
     userData = data;
 
-    qDebug() << userData->getUserName();
-
     if (userData->getUserName() != "")
         SetVisibleUser();
 }
@@ -361,8 +359,6 @@ void HomePage::on_saveDataUser_clicked()
         || ui->birthdaytxt->text() == "" || ui->emailtxt->text() == "")
         return;
 
-    qDebug() << userData->getUserName();
-
     userData->updateStats(ui->userNametxt->text(),
                           ui->lastnametxt->text(),
                           ui->birthdaytxt->text(),
@@ -375,4 +371,22 @@ void HomePage::on_saveDataUser_clicked()
                                                            "Ошибка",
                                                            "Данные не были обновлены");
                           });
+}
+
+void HomePage::on_savePasswordbtn_clicked()
+{
+    if (ui->currentPasswordtxt->text() == "" || ui->newPasswordtxt->text() == "")
+        return;
+
+    if (ui->currentPasswordtxt->text() != userData->getPassword()) {
+        QMessageBox::information(this, "Ошибка", "Введённый пароль не совпадает с нынешним");
+        return;
+    }
+
+    userData->updatePassword(ui->newPasswordtxt->text(), [&](bool success) {
+        if (success)
+            QMessageBox::information(this, "", "Пароль успешно изменён");
+        else
+            QMessageBox::information(this, "Ошибка", "Пароль не изменён");
+    });
 }

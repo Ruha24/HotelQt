@@ -74,6 +74,8 @@ private slots:
 
     void on_saveDataUser_clicked();
 
+    void on_savePasswordbtn_clicked();
+
 private:
     void connectionElement();
     void CreateElementMenu();
