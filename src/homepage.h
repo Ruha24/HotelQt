@@ -17,6 +17,7 @@
 #include "CustomWidget/customcalendar.h"
 #include "User/userdata.h"
 #include "authorization.h"
+#include "recoverypassword.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class HomePage; }
@@ -75,6 +76,8 @@ private slots:
     void on_saveDataUser_clicked();
 
     void on_savePasswordbtn_clicked();
+
+    void on_whatPasswordlbl_linkActivated(const QString &link);
 
 private:
     void connectionElement();

@@ -220,3 +220,49 @@ void UserData::setPassword(const QString &newPassword)
 {
     password = newPassword;
 }
+
+QString UserData::getEmail() const
+{
+    return email;
+}
+
+void UserData::setEmail(const QString &newEmail)
+{
+    email = newEmail;
+}
+
+void UserData::checkEmail(std::function<void(bool)> callback)
+{
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    QJsonObject json;
+
+    json["name"] = userName;
+
+    QJsonDocument jsonDoc(json);
+
+    QNetworkRequest request(QUrl("http://localhost:555/checkEmail"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = networkManager->post(request, jsonDoc.toJson());
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray response = reply->readAll();
+            QString responseStr(response);
+
+            int emailIndex = responseStr.indexOf("email: ");
+
+            if (emailIndex != -1) {
+                QString email = responseStr.mid(emailIndex + QString("email: ").length());
+                setEmail(email);
+                callback(true);
+            } else {
+                qDebug() << "Адрес электронной почты не найден в ответе сервера";
+                callback(false);
+            }
+        } else {
+            callback(false);
+        }
+    });
+}

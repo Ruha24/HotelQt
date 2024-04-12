@@ -359,6 +359,8 @@ void HomePage::on_saveDataUser_clicked()
         || ui->birthdaytxt->text() == "" || ui->emailtxt->text() == "")
         return;
 
+    userData->setEmail(ui->emailtxt->text());
+
     userData->updateStats(ui->userNametxt->text(),
                           ui->lastnametxt->text(),
                           ui->birthdaytxt->text(),
@@ -389,4 +391,12 @@ void HomePage::on_savePasswordbtn_clicked()
         else
             QMessageBox::information(this, "Ошибка", "Пароль не изменён");
     });
+}
+
+void HomePage::on_whatPasswordlbl_linkActivated(const QString &link)
+{
+    if (link == "1") {
+        RecoveryPassword *recPass = new RecoveryPassword(this);
+        recPass->show();
+    }
 }

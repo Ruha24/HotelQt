@@ -45,7 +45,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -740,7 +740,7 @@ QToolButton::menu-indicator
              <x>0</x>
              <y>0</y>
              <width>1637</width>
-             <height>732</height>
+             <height>724</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_7">
@@ -1228,8 +1228,8 @@ QComboBox::down-arrow:on {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1366</width>
-             <height>746</height>
+             <width>1319</width>
+             <height>183</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_6">
@@ -1593,7 +1593,7 @@ QComboBox::down-arrow:on {
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>-305</y>
+             <y>0</y>
              <width>1352</width>
              <height>1051</height>
             </rect>
@@ -2455,7 +2455,7 @@ QComboBox::down-arrow:on {
                          </font>
                         </property>
                         <property name="text">
-                         <string>Не помню пароль</string>
+                         <string>&lt;a href='1' style=&quot;text-decoration:none; color: black&quot;&gt;Не помню пароль&lt;/a&gt;</string>
                         </property>
                         <property name="alignment">
                          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>

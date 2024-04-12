@@ -32,11 +32,15 @@ public:
     QString getPassword() const;
     void setPassword(const QString &newPassword);
 
+    QString getEmail() const;
+    void setEmail(const QString &newEmail);
+
 private:
     bool isValidUser = false;
 
     QString userName = "";
     QString password = "";
+    QString email;
 
     int idUser = -1;
 };
