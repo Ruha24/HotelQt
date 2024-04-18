@@ -80,23 +80,20 @@ void UserData::checkUser(QString name, QString password, std::function<void(bool
     QNetworkReply *reply = networkManager->post(request, jsonDoc.toJson());
 
     bool isValidUser = false;
-    QObject::connect(reply, &QNetworkReply::finished, [=, &isValidUser]() mutable {
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray responseData = reply->readAll();
 
             if (responseData.startsWith("200") && responseData.contains("true"))
-                isValidUser = true;
+                callback(true);
             else
-                isValidUser = false;
+                callback(false);
         } else {
             qDebug() << "Error:" << reply->errorString();
         }
 
         reply->deleteLater();
         networkManager->deleteLater();
-
-        if (callback)
-            callback(isValidUser);
     });
 }
 
@@ -237,7 +234,7 @@ void UserData::checkEmail(std::function<void(bool)> callback)
 
     QJsonObject json;
 
-    json["name"] = userName;
+    json["email"] = email;
 
     QJsonDocument jsonDoc(json);
 
@@ -249,20 +246,68 @@ void UserData::checkEmail(std::function<void(bool)> callback)
     QObject::connect(reply, &QNetworkReply::finished, [=]() {
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray response = reply->readAll();
-            QString responseStr(response);
 
-            int emailIndex = responseStr.indexOf("email: ");
-
-            if (emailIndex != -1) {
-                QString email = responseStr.mid(emailIndex + QString("email: ").length());
-                setEmail(email);
+            if (response.contains("success")) {
                 callback(true);
             } else {
-                qDebug() << "Адрес электронной почты не найден в ответе сервера";
-                callback(false);
+                callback(true);
             }
         } else {
-            callback(false);
+            callback(true);
         }
     });
+}
+
+void UserData::getUserRecovery(std::function<void(bool)> callback)
+{
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    QJsonObject json;
+
+    json["userId"] = idUser;
+
+    QJsonDocument jsonDoc(json);
+
+    QNetworkRequest request(QUrl("http://localhost:555/getRecovery"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = networkManager->post(request, jsonDoc.toJson());
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            QJsonDocument responseDoc = QJsonDocument::fromJson(responseData);
+
+            QJsonObject response = responseDoc.object();
+            QJsonArray jsonArray;
+
+            if (response.contains("data")) {
+                listRecovery.clear();
+                jsonArray = response["data"].toArray();
+
+                for (const QJsonValue &roomValue : jsonArray) {
+                    QString startDateString = roomValue["startDate"].toString();
+                    QDate startDate = QDate::fromString(startDateString, "yyyy-MM-dd");
+
+                    QString lastDateString = roomValue["lastDate"].toString();
+                    QDate lastDate = QDate::fromString(startDateString, "yyyy-MM-dd");
+
+                    RecoveryData recovery = RecoveryData(roomValue["roomName"].toString(),
+                                                         roomValue["description"].toString(),
+                                                         startDate,
+                                                         lastDate);
+
+                    listRecovery.append(recovery);
+                }
+
+                callback(true);
+            }
+        } else
+            callback(false);
+    });
+}
+
+QList<RecoveryData> UserData::getListRecovery() const
+{
+    return listRecovery;
 }

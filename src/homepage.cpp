@@ -20,6 +20,7 @@ HomePage::HomePage(QWidget *parent)
     initActionUser(ui->actionUser_2);
     initActionUser(ui->actionUser_3);
     initActionUser(ui->actionUser_4);
+    initActionUser(ui->actionUser_6);
 
     SetVisibleUser();
 }
@@ -33,8 +34,10 @@ void HomePage::setUserData(UserData *data)
 {
     userData = data;
 
-    if (userData->getUserName() != "")
+    if (userData->getUserName() != "") {
+        userData->getUserStats(userData->getUserName());
         SetVisibleUser();
+    }
 }
 
 void HomePage::on_startTimebtn_clicked()
@@ -154,12 +157,13 @@ void HomePage::SetVisibleUser()
     ui->Profile_2->setVisible(!isVisible);
     ui->Profile_3->setVisible(!isVisible);
     ui->Profile_5->setVisible(!isVisible);
+    ui->Profile_6->setVisible(!isVisible);
 
     ui->actionUser->setVisible(isVisible);
     ui->actionUser_2->setVisible(isVisible);
     ui->actionUser_3->setVisible(isVisible);
     ui->actionUser_4->setVisible(isVisible);
-
+    ui->actionUser_6->setVisible(isVisible);
     isVisible = !isVisible;
 }
 
@@ -172,10 +176,10 @@ void HomePage::initActionUser(QComboBox *cmb)
     connect(cmb, QOverload<int>::of(&QComboBox::activated), this, [=](int index) {
         switch (index) {
         case 0:
-            ui->stackedWidget->setCurrentIndex(3);
+            ui->stackedWidget->setCurrentIndex(4);
             break;
         case 1:
-            ui->stackedWidget->setCurrentIndex(1);
+            setRecovery();
             break;
         case 2:
             SetVisibleUser();
@@ -184,6 +188,95 @@ void HomePage::initActionUser(QComboBox *cmb)
         }
     });
 }
+
+void clearLayout(QLayout *layout)
+{
+    QLayoutItem *child;
+    while ((child = layout->takeAt(0)) != nullptr) {
+        if (auto widget = child->widget()) {
+            delete widget;
+        }
+        delete child;
+    }
+}
+
+void HomePage::setRecovery()
+{
+    clearLayout(ui->verticalLayout_14);
+
+    userData->getUserRecovery([&](bool success) {
+        if (success) {
+            recList = userData->getListRecovery();
+            for (const auto &recovery : recList) {
+                QWidget *roomWidget = new QWidget();
+                roomWidget->setFixedSize(900, 100);
+                roomWidget->setStyleSheet(
+                    "QWidget { background-color: #DCDCDC; border-radius: 10px}");
+
+                QHBoxLayout *layout = new QHBoxLayout(roomWidget);
+                layout->setAlignment(Qt::AlignCenter);
+
+                QLabel *roomLabel = new QLabel(recovery.getRoomName());
+                roomLabel->setStyleSheet("QLabel { font-size: 24px}");
+
+                QLocale russianLocale(QLocale::Russian);
+
+                QString startDate = russianLocale.toString(recovery.getStartDate(), "d MMMM yyyy");
+                QString lastDate = russianLocale.toString(recovery.getLastDate(), "d MMMM yyyy");
+
+                QLabel *dateLabel = new QLabel(QString("%1 - %2").arg(startDate).arg(lastDate));
+
+                dateLabel->setStyleSheet("QLabel { font-size: 24px}");
+                QPushButton *infoButton = new QPushButton("Подробнее");
+                infoButton->setStyleSheet("QPushButton { border-radius: 10px;  color: white; "
+                                          "background-color: #8C8C8C; font-size: 24px}");
+                infoButton->setFixedSize(135, 55);
+
+                QPushButton *cancelButton = new QPushButton("Отменить");
+                cancelButton->setStyleSheet(""
+                                            "QPushButton { border-radius: 10px;  color: white; "
+                                            "background-color: #B60000; font-size: 24px}");
+                cancelButton->setFixedSize(135, 55);
+
+                layout->addWidget(roomLabel);
+                layout->addWidget(dateLabel);
+                layout->addWidget(infoButton);
+                layout->addWidget(cancelButton);
+
+                ui->verticalLayout_14->addWidget(roomWidget);
+                connect(cancelButton, &QPushButton::clicked, this, [&]() {
+                    cancelRecovery(recovery);
+                });
+
+                connect(infoButton, &QPushButton::clicked, this, [&]() {
+                    showDetailedInfo(recovery);
+                });
+            }
+
+            if (recList.isEmpty()) {
+                ui->label_15->setVisible(true);
+            } else {
+                ui->label_15->setVisible(false);
+            }
+
+            ui->stackedWidget->setCurrentIndex(1);
+        }
+    });
+}
+
+void HomePage::showDetailedInfo(const RecoveryData &recovery)
+{
+    RecoveryData *rec = new RecoveryData(recovery.getRoomName(),
+                                         recovery.getDescription(),
+                                         recovery.getStartDate(),
+                                         recovery.getLastDate());
+
+    InfoReserv *infoReserv = new InfoReserv(this, rec);
+
+    infoReserv->show();
+}
+
+void HomePage::cancelRecovery(const RecoveryData &recovery) {}
 
 void HomePage::changedMinusChild()
 {
@@ -391,12 +484,4 @@ void HomePage::on_savePasswordbtn_clicked()
         else
             QMessageBox::information(this, "Ошибка", "Пароль не изменён");
     });
-}
-
-void HomePage::on_whatPasswordlbl_linkActivated(const QString &link)
-{
-    if (link == "1") {
-        RecoveryPassword *recPass = new RecoveryPassword(this);
-        recPass->show();
-    }
 }

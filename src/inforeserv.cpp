@@ -1,11 +1,21 @@
 #include "inforeserv.h"
 #include "ui_inforeserv.h"
 
-InfoReserv::InfoReserv(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::InfoReserv)
+#include <QApplication>
+#include <QScreen>
+
+InfoReserv::InfoReserv(QWidget *parent, RecoveryData *rec)
+    : QWidget(parent)
+    , m_recovery(rec)
+    , ui(new Ui::InfoReserv)
 {
+    setWindowFlags(Qt::Popup);
     ui->setupUi(this);
+
+    ui->label_3->setText(m_recovery->getDescription());
+
+    QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
+    move(screenGeometry.center() - rect().center());
 }
 
 InfoReserv::~InfoReserv()

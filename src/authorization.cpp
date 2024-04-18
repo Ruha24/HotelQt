@@ -50,3 +50,12 @@ void Authorization::on_login_2_clicked()
         }
     });
 }
+
+void Authorization::on_label_4_linkActivated(const QString &link)
+{
+    if (link == "1") {
+        RecoveryPassword *recPass = new RecoveryPassword(this);
+        recPass->show();
+        this->close();
+    }
+}

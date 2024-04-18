@@ -14,10 +14,13 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
+#include <QtNetwork>
+
 #include "CustomWidget/customcalendar.h"
-#include "User/userdata.h"
+#include "Data/recoverydata.h"
+#include "Data/userdata.h"
 #include "authorization.h"
-#include "recoverypassword.h"
+#include "inforeserv.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class HomePage; }
@@ -77,17 +80,20 @@ private slots:
 
     void on_savePasswordbtn_clicked();
 
-    void on_whatPasswordlbl_linkActivated(const QString &link);
-
 private:
     void connectionElement();
     void CreateElementMenu();
     void SetVisibleUser();
     void initActionUser(QComboBox *cmb);
+    void setRecovery();
+    void showDetailedInfo(const RecoveryData &recovery);
+    void cancelRecovery(const RecoveryData &recovery);
 
     CustomCalendar *customCalendar;
 
     UserData *userData;
+
+    QList<RecoveryData> recList;
 
     QPushButton *minusButton;
     QPushButton *addButton;

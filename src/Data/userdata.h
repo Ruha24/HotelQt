@@ -1,7 +1,11 @@
 #ifndef USERDATA_H
 #define USERDATA_H
 
+#include <QJsonArray>
+#include <QList>
 #include <QString>
+
+#include "recoverydata.h"
 
 class UserData
 {
@@ -34,6 +38,11 @@ public:
 
     QString getEmail() const;
     void setEmail(const QString &newEmail);
+    void checkEmail(std::function<void(bool)> callback);
+
+    void getUserRecovery(std::function<void(bool)> callback);
+
+    QList<RecoveryData> getListRecovery() const;
 
 private:
     bool isValidUser = false;
@@ -41,6 +50,8 @@ private:
     QString userName = "";
     QString password = "";
     QString email;
+
+    QList<RecoveryData> listRecovery;
 
     int idUser = -1;
 };

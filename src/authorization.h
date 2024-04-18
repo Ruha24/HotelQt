@@ -4,7 +4,8 @@
 #include <QWidget>
 
 #include <QMessageBox>
-#include "User/userdata.h"
+#include "Data/userdata.h"
+#include "recoverypassword.h"
 #include "registration.h"
 
 namespace Ui {
@@ -28,6 +29,8 @@ private slots:
     void on_buttonReg_clicked();
 
     void on_login_2_clicked();
+
+    void on_label_4_linkActivated(const QString &link);
 
 private:
     UserData *m_userData;

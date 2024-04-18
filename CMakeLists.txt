@@ -32,12 +32,19 @@ set(PROJECT_SOURCES
         src/inforeserv.ui
         src/registration.h
         src/registration.ui
-        src/User/userdata.h
-        src/User/userdata.cpp
         src/authorization.h
+        src/Data/recoverydata.h
+        src/Data/recoverydata.cpp
+        src/Data/userdata.h
+        src/Data/userdata.cpp
+        src/recoverypassword.cpp
+        src/recoverypassword.h
+        src/recoverypassword.ui
         src/CustomWidget/customcalendar.cpp
         src/CustomWidget/customcalendar.h
         src/resours/resourses.qrc
+        src/smtp.h
+        src/smtp.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
