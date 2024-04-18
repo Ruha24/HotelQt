@@ -20,7 +20,7 @@ public:
 
     void getUserStats(QString name);
     void checkUser(QString name, QString password, std::function<void(bool)> callback);
-    void addUser(QString name, QString password);
+    void addUser(QString name, QString password, QString email);
 
     QString getUserName() const;
     void setUserName(const QString &newUserName);

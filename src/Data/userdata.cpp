@@ -97,13 +97,14 @@ void UserData::checkUser(QString name, QString password, std::function<void(bool
     });
 }
 
-void UserData::addUser(QString name, QString password)
+void UserData::addUser(QString name, QString password, QString email)
 {
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
 
     QJsonObject json;
     json["name"] = name;
     json["password"] = password;
+    json["email"] = email;
     QJsonDocument jsonDoc(json);
 
     QNetworkRequest request(QUrl("http://localhost:555/addUser"));
@@ -117,6 +118,7 @@ void UserData::addUser(QString name, QString password)
 
             if (response.contains("User")) {
                 setUserName(name);
+                setEmail(email);
             }
         }
 
