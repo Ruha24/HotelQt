@@ -7,14 +7,17 @@
 class RecoveryData
 {
 public:
-    RecoveryData(QString nameRoom, QString description, QDate date1, QDate date2);
+    RecoveryData(int recId, QString nameRoom, QString description, QDate date1, QDate date2);
 
     QString getRoomName() const;
     QString getDescription() const;
     QDate getStartDate() const;
     QDate getLastDate() const;
 
+    int getId() const;
+
 private:
+    int id;
     QString roomName;
     QDate startDate;
     QDate lastDate;

@@ -35,8 +35,10 @@ void HomePage::setUserData(UserData *data)
     userData = data;
 
     if (userData->getUserName() != "") {
-        userData->getUserStats(userData->getUserName());
-        SetVisibleUser();
+        userData->getIdUser(userData->getUserName(), [&](bool success) {
+            if (success)
+                SetVisibleUser();
+        });
     }
 }
 
@@ -176,7 +178,7 @@ void HomePage::initActionUser(QComboBox *cmb)
     connect(cmb, QOverload<int>::of(&QComboBox::activated), this, [=](int index) {
         switch (index) {
         case 0:
-            ui->stackedWidget->setCurrentIndex(4);
+            getUserData();
             break;
         case 1:
             setRecovery();
@@ -266,7 +268,8 @@ void HomePage::setRecovery()
 
 void HomePage::showDetailedInfo(const RecoveryData &recovery)
 {
-    RecoveryData *rec = new RecoveryData(recovery.getRoomName(),
+    RecoveryData *rec = new RecoveryData(recovery.getId(),
+                                         recovery.getRoomName(),
                                          recovery.getDescription(),
                                          recovery.getStartDate(),
                                          recovery.getLastDate());
@@ -276,7 +279,45 @@ void HomePage::showDetailedInfo(const RecoveryData &recovery)
     infoReserv->show();
 }
 
-void HomePage::cancelRecovery(const RecoveryData &recovery) {}
+void HomePage::cancelRecovery(const RecoveryData &recovery)
+{
+    /* if (QDate::currentDate() > recovery.getStartDate()) {
+        QMessageBox::information(
+            this, "Ошибка", "Вы не можете отменить бронирование, потому что оно уже началось.");
+        return;
+    } */
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this,
+                                  "Отмена",
+                                  "Вы точно хотите отменить бронирование?",
+                                  QMessageBox::Ok | QMessageBox::Cancel);
+
+    if (reply == QMessageBox::Ok) {
+        userData->deleteRecovery(recovery, [&](bool success) {
+            qDebug() << success;
+
+            if (success) {
+                QMessageBox::information(this, "Успешно", "Вы успешно отменили бронь");
+                setRecovery();
+            }
+        });
+    }
+}
+
+void HomePage::getUserData()
+{
+    userData->getUserStats(userData->getUserName(), [&](bool success) {
+        if (success) {
+            ui->userNametxt->setText(userData->getName());
+            ui->lastnametxt->setText(userData->getLastName());
+            ui->birthdaytxt->setText(userData->getBdate());
+            ui->emailtxt->setText(userData->getEmail());
+        }
+    });
+
+    ui->stackedWidget->setCurrentIndex(4);
+}
 
 void HomePage::changedMinusChild()
 {
@@ -448,11 +489,24 @@ void HomePage::on_Profile_3_clicked()
 
 void HomePage::on_saveDataUser_clicked()
 {
-    if (ui->userNametxt->text() == "" || ui->lastnametxt->text() == ""
-        || ui->birthdaytxt->text() == "" || ui->emailtxt->text() == "")
+    if (ui->userNametxt->text().trimmed().isEmpty() || ui->lastnametxt->text().trimmed().isEmpty()
+        || ui->birthdaytxt->text().trimmed().isEmpty()
+        || ui->emailtxt->text().trimmed().isEmpty()) {
+        QMessageBox::warning(this, "", "Все поля должны быть заполнены");
         return;
+    }
 
-    userData->setEmail(ui->emailtxt->text());
+    QRegularExpression dateRegex("^\\d{2}\\.\\d{2}\\.\\d{4}$");
+    if (!dateRegex.match(ui->birthdaytxt->text()).hasMatch()) {
+        QMessageBox::warning(this, "", "Формат даты должен быть 10.10.1000");
+        return;
+    }
+
+    QRegularExpression emailRegex("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}");
+    if (!emailRegex.match(ui->emailtxt->text()).hasMatch()) {
+        QMessageBox::warning(this, "", "Некорректный адрес электронной почты");
+        return;
+    }
 
     userData->updateStats(ui->userNametxt->text(),
                           ui->lastnametxt->text(),
@@ -475,6 +529,17 @@ void HomePage::on_savePasswordbtn_clicked()
 
     if (ui->currentPasswordtxt->text() != userData->getPassword()) {
         QMessageBox::information(this, "Ошибка", "Введённый пароль не совпадает с нынешним");
+        return;
+    }
+
+    QString password = ui->newPasswordtxt->text();
+    static QRegularExpression passwordRegex("^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$");
+    if (!passwordRegex.match(password).hasMatch()) {
+        QMessageBox::warning(
+            this,
+            "",
+            "Некорректный пароль\nПароль должен состоять из:\n- Минимум 8 символов\n- Хотя бы "
+            "одной заглавной буквы\n- Хотя бы одного специального символа\n- Хотя бы одной цифры");
         return;
     }
 

@@ -1,6 +1,8 @@
 #ifndef RECOVERYPASSWORD_H
 #define RECOVERYPASSWORD_H
 
+#include <QRandomGenerator>
+#include <QString>
 #include <QWidget>
 #include "Data/userdata.h"
 
@@ -31,6 +33,8 @@ signals:
     void emailSent();
 
 private:
+    QString generateRandomCode();
+    QString recoveryCode = "";
     UserData *m_userData;
 
     Ui::RecoveryPassword *ui;

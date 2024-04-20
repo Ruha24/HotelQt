@@ -1,7 +1,8 @@
 #include "recoverydata.h"
 
-RecoveryData::RecoveryData(QString nameRoom, QString description, QDate date1, QDate date2)
+RecoveryData::RecoveryData(int recId, QString nameRoom, QString description, QDate date1, QDate date2)
 {
+    this->id = recId;
     this->roomName = nameRoom;
     this->description = description;
     this->lastDate = date2;
@@ -26,4 +27,9 @@ QDate RecoveryData::getStartDate() const
 QDate RecoveryData::getLastDate() const
 {
     return lastDate;
+}
+
+int RecoveryData::getId() const
+{
+    return id;
 }

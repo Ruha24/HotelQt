@@ -45,7 +45,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -95,8 +95,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1319</width>
-             <height>418</height>
+             <width>1366</width>
+             <height>746</height>
             </rect>
            </property>
            <property name="maximumSize">
@@ -1969,9 +1969,9 @@ QComboBox::down-arrow:on {
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>0</y>
-             <width>1319</width>
-             <height>1051</height>
+             <y>-211</y>
+             <width>1352</width>
+             <height>957</height>
             </rect>
            </property>
            <property name="styleSheet">
@@ -2531,67 +2531,6 @@ QComboBox::down-arrow:on {
                    </spacer>
                   </item>
                   <item>
-                   <layout class="QHBoxLayout" name="horizontalLayout_13">
-                    <property name="spacing">
-                     <number>55</number>
-                    </property>
-                    <item>
-                     <widget class="QCheckBox" name="checkBox">
-                      <property name="font">
-                       <font>
-                        <family>Montserrat</family>
-                        <pointsize>18</pointsize>
-                       </font>
-                      </property>
-                      <property name="layoutDirection">
-                       <enum>Qt::LeftToRight</enum>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true"/>
-                      </property>
-                      <property name="text">
-                       <string>Мужчина</string>
-                      </property>
-                      <property name="iconSize">
-                       <size>
-                        <width>40</width>
-                        <height>40</height>
-                       </size>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QCheckBox" name="checkBox_2">
-                      <property name="font">
-                       <font>
-                        <family>Montserrat</family>
-                        <pointsize>18</pointsize>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>Женщина</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item>
-                   <spacer name="verticalSpacer_2">
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                     <enum>QSizePolicy::Fixed</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>20</width>
-                      <height>32</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                  <item>
                    <widget class="QPushButton" name="saveDataUser">
                     <property name="minimumSize">
                      <size>
@@ -2709,7 +2648,11 @@ QComboBox::down-arrow:on {
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLineEdit" name="currentPasswordtxt"/>
+                       <widget class="QLineEdit" name="currentPasswordtxt">
+                        <property name="echoMode">
+                         <enum>QLineEdit::Password</enum>
+                        </property>
+                       </widget>
                       </item>
                      </layout>
                     </item>
@@ -2738,7 +2681,11 @@ QComboBox::down-arrow:on {
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLineEdit" name="newPasswordtxt"/>
+                       <widget class="QLineEdit" name="newPasswordtxt">
+                        <property name="echoMode">
+                         <enum>QLineEdit::Password</enum>
+                        </property>
+                       </widget>
                       </item>
                      </layout>
                     </item>

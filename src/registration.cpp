@@ -38,14 +38,14 @@ void Registration::on_buttonReg_clicked()
         return;
 
     QString email = ui->email_edit->text();
-    QRegularExpression emailRegex("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b");
+    static QRegularExpression emailRegex("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b");
     if (!emailRegex.match(email).hasMatch()) {
         QMessageBox::warning(this, "", "Некорректный адрес электронной почты");
         return;
     }
 
     QString password = ui->password_edit->text();
-    QRegularExpression passwordRegex("^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$");
+    static QRegularExpression passwordRegex("^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$");
     if (!passwordRegex.match(password).hasMatch()) {
         QMessageBox::warning(
             this,

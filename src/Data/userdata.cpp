@@ -10,27 +10,7 @@
 
 UserData::UserData() {}
 
-int UserData::getUserId() const
-{
-    return idUser;
-}
-
-void UserData::setUserId(int id)
-{
-    idUser = id;
-}
-
-void UserData::setValidUser(bool isValid)
-{
-    isValidUser = isValid;
-}
-
-bool UserData::getValidUser()
-{
-    return isValidUser;
-}
-
-void UserData::getUserStats(QString userName)
+void UserData::getIdUser(QString userName, std::function<void(bool)> callback)
 {
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
 
@@ -47,16 +27,23 @@ void UserData::getUserStats(QString userName)
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray responseData = reply->readAll();
 
-            bool ok;
-            int userId = responseData.toInt(&ok);
+            QStringList parts = QString(responseData).split(' ');
 
-            if (ok) {
-                setUserId(userId);
+            if (parts.size() == 2 && parts[0] == "200") {
+                bool ok;
+                int userId = parts[1].toInt(&ok);
+
+                if (ok) {
+                    setUserId(userId);
+                    callback(true);
+                } else {
+                    callback(false);
+                }
             } else {
-                qDebug() << "Error parsing userId from response";
-                qDebug() << "Response Data:" << responseData;
+                callback(false);
             }
         } else {
+            callback(false);
             qDebug() << "Error:" << reply->errorString();
         }
 
@@ -127,22 +114,17 @@ void UserData::addUser(QString name, QString password, QString email)
     });
 }
 
-QString UserData::getUserName() const
-{
-    return userName;
-}
-
-void UserData::setUserName(const QString &newUserName)
-{
-    userName = newUserName;
-}
-
 void UserData::updateStats(
     QString name, QString lastName, QString date, QString email, std::function<void(bool)> callback)
 {
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
 
     QJsonObject json;
+
+    setName(userName);
+    setLastName(lastName);
+    setBdate(date);
+    setEmail(email);
 
     json["name"] = userName;
     json["firstName"] = name;
@@ -210,26 +192,6 @@ void UserData::updatePassword(QString pass, std::function<void(bool)> callback)
     });
 }
 
-QString UserData::getPassword() const
-{
-    return password;
-}
-
-void UserData::setPassword(const QString &newPassword)
-{
-    password = newPassword;
-}
-
-QString UserData::getEmail() const
-{
-    return email;
-}
-
-void UserData::setEmail(const QString &newEmail)
-{
-    email = newEmail;
-}
-
 void UserData::checkEmail(std::function<void(bool)> callback)
 {
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
@@ -294,7 +256,10 @@ void UserData::getUserRecovery(std::function<void(bool)> callback)
                     QString lastDateString = roomValue["lastDate"].toString();
                     QDate lastDate = QDate::fromString(startDateString, "yyyy-MM-dd");
 
-                    RecoveryData recovery = RecoveryData(roomValue["roomName"].toString(),
+                    qDebug() << roomValue["recoveryId"].toInt();
+
+                    RecoveryData recovery = RecoveryData(roomValue["recoveryId"].toInt(),
+                                                         roomValue["roomName"].toString(),
                                                          roomValue["description"].toString(),
                                                          startDate,
                                                          lastDate);
@@ -309,7 +274,158 @@ void UserData::getUserRecovery(std::function<void(bool)> callback)
     });
 }
 
+void UserData::getUserStats(QString userName, std::function<void(bool)> callback)
+{
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    QJsonObject json;
+
+    json["name"] = userName;
+
+    QJsonDocument jsonDoc(json);
+
+    QNetworkRequest request(QUrl("http://localhost:555/getUserStats"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = networkManager->post(request, jsonDoc.toJson());
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            {
+                QByteArray response = reply->readAll();
+
+                QString responseString(response);
+
+                QStringList dataList = responseString.split(", ");
+                if (dataList.size() == 4) {
+                    QString name = dataList[0];
+                    QString email = dataList[1];
+                    QString lastname = dataList[2];
+                    QString bdate = dataList[3];
+
+                    setName(name);
+                    setEmail(email);
+                    setLastName(lastname);
+                    setBdate(bdate);
+                    callback(true);
+                } else {
+                    callback(false);
+                }
+            };
+        }
+    });
+}
+
+void UserData::deleteRecovery(const RecoveryData &recovery, std::function<void(bool)> callback)
+{
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    QJsonObject json;
+
+    json["idRecovery"] = recovery.getId();
+
+    QJsonDocument jsonDoc(json);
+
+    QNetworkRequest request(QUrl("http://localhost:555/deleteRecovery"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = networkManager->post(request, jsonDoc.toJson());
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            {
+                QByteArray response = reply->readAll();
+
+                if (response.contains("success")) {
+                    callback(true);
+                }
+            }
+        } else {
+            callback(false);
+        }
+    });
+}
+
 QList<RecoveryData> UserData::getListRecovery() const
 {
     return listRecovery;
+}
+
+QString UserData::getName() const
+{
+    return name;
+}
+
+void UserData::setName(const QString &newName)
+{
+    name = newName;
+}
+
+QString UserData::getLastName() const
+{
+    return lastName;
+}
+
+void UserData::setLastName(const QString &newLastName)
+{
+    lastName = newLastName;
+}
+
+QString UserData::getBdate() const
+{
+    return bdate;
+}
+
+void UserData::setBdate(const QString &newBdate)
+{
+    bdate = newBdate;
+}
+
+int UserData::getUserId() const
+{
+    return idUser;
+}
+
+void UserData::setUserId(int id)
+{
+    idUser = id;
+}
+QString UserData::getUserName() const
+{
+    return userName;
+}
+
+void UserData::setUserName(const QString &newUserName)
+{
+    userName = newUserName;
+}
+
+void UserData::setValidUser(bool isValid)
+{
+    isValidUser = isValid;
+}
+
+bool UserData::getValidUser()
+{
+    return isValidUser;
+}
+
+QString UserData::getPassword() const
+{
+    return password;
+}
+
+void UserData::setPassword(const QString &newPassword)
+{
+    password = newPassword;
+}
+
+QString UserData::getEmail() const
+{
+    return email;
+}
+
+void UserData::setEmail(const QString &newEmail)
+{
+    email = newEmail;
 }

@@ -13,8 +13,6 @@ RecoveryPassword::RecoveryPassword(QWidget *parent)
 
     m_userData = new UserData();
 
-    setWindowFlags(Qt::Popup);
-
     ui->stackedWidget->setCurrentIndex(0);
 
     QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
@@ -30,22 +28,39 @@ void RecoveryPassword::send(QString to)
 {
     Smtp *smtp = new Smtp("rusikaid50@gmail.com", "awzebgrcalfudrci", "smtp.gmail.com", 465);
     connect(smtp, SIGNAL(status(QString)), this, SLOT(mailSent(QString)));
-    smtp->sendMail("rusikaid50@gmail.com", to, "Hi", "hello");
+    recoveryCode = generateRandomCode();
+    smtp->sendMail("rusikaid50@gmail.com",
+                   to,
+                   "Luxury Hotel",
+                   "Добрый день! Ваш проверочный код для доступа к сервису: " + recoveryCode
+                       + " . Пожалуйста, введите этот "
+                         "код в соответствующее поле. Если вы не запрашивали код, проигнорируйте "
+                         "это сообщение.");
 }
 
 void RecoveryPassword::mailSent(QString status)
 {
     if (status == "Message sent") {
         ui->stackedWidget->setCurrentIndex(1);
+    } else {
+        QMessageBox::information(this, "Ошибка", "Не верно указаная почта");
     }
 }
 
 void RecoveryPassword::on_sendEmailbtn_clicked()
 {
-    if (ui->emaitxt->text() == "")
+    if (ui->emailtxt_2->text() == "")
         return;
 
-    m_userData->setEmail(ui->emaitxt->text());
+    QString email = ui->emailtxt_2->text();
+
+    QRegularExpression emailRegex("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}");
+    if (!emailRegex.match(email).hasMatch()) {
+        QMessageBox::warning(this, "", "Некорректный адрес электронной почты");
+        return;
+    }
+
+    m_userData->setEmail(ui->emailtxt_2->text());
 
     m_userData->checkEmail([=](bool haveEmail) {
         if (haveEmail) {
@@ -61,6 +76,11 @@ void RecoveryPassword::on_acceptbtn_clicked()
     QString pass = ui->passwordtxt->text();
     QString confPass = ui->confirmpasstxt->text();
 
+    if (ui->emailtxt->text() != recoveryCode) {
+        QMessageBox::information(this, "Ошибка", "Вы ввели неправильный код подтверджения");
+        return;
+    }
+
     if (pass == "" || confPass == "") {
         QMessageBox::information(this, "Ошибка", "Введите пароли");
         return;
@@ -70,4 +90,13 @@ void RecoveryPassword::on_acceptbtn_clicked()
         QMessageBox::information(this, "Ошибка", "Вы ввели не одинаковые пароли");
         return;
     }
+}
+
+QString RecoveryPassword::generateRandomCode()
+{
+    QRandomGenerator *generator = QRandomGenerator::global();
+
+    int code = generator->bounded(10000);
+
+    return QString("%1").arg(code, 4, 10, QChar('0'));
 }

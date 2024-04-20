@@ -88,6 +88,7 @@ private:
     void setRecovery();
     void showDetailedInfo(const RecoveryData &recovery);
     void cancelRecovery(const RecoveryData &recovery);
+    void getUserData();
 
     CustomCalendar *customCalendar;
 
