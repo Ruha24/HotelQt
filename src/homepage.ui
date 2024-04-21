@@ -45,7 +45,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -95,8 +95,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1319</width>
-             <height>418</height>
+             <width>1366</width>
+             <height>746</height>
             </rect>
            </property>
            <property name="maximumSize">
@@ -739,8 +739,8 @@ QToolButton::menu-indicator
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1317</width>
-             <height>410</height>
+             <width>1366</width>
+             <height>746</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_11">
@@ -1166,7 +1166,7 @@ QComboBox::down-arrow:on {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1319</width>
+             <width>1352</width>
              <height>848</height>
             </rect>
            </property>
@@ -1992,7 +1992,7 @@ QComboBox::down-arrow:on {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1319</width>
+             <width>1352</width>
              <height>957</height>
             </rect>
            </property>

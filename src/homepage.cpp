@@ -649,7 +649,16 @@ void HomePage::on_Title_6_linkActivated(const QString &link)
     ui->stackedWidget->setCurrentIndex(0);
 }
 
-void HomePage::registerRoom(Roomdata room)
+void HomePage::registerRoom(const Roomdata &room)
 {
-    qDebug() << "оформление комнаты: " << room.getTypeRoom();
+    if (userData->getUserName() == "") {
+        QMessageBox::information(this, "Ошибка", "Чтобы забронировать, войдите в свой аккаунт");
+        return;
+    }
+
+    Roomdata *r = new Roomdata(room);
+
+    Booking *booking = new Booking(this, r);
+
+    booking->show();
 }

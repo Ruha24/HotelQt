@@ -20,6 +20,7 @@
 #include "Data/recoverydata.h"
 #include "Data/userdata.h"
 #include "authorization.h"
+#include "booking.h"
 #include "inforeserv.h"
 
 QT_BEGIN_NAMESPACE
@@ -88,7 +89,7 @@ private slots:
 
     void on_Title_6_linkActivated(const QString &link);
 
-    void registerRoom(Roomdata room);
+    void registerRoom(const Roomdata &room);
 
 private:
     void connectionElement();
