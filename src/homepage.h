@@ -80,6 +80,16 @@ private slots:
 
     void on_savePasswordbtn_clicked();
 
+    void on_aboutlbl_6_linkActivated(const QString &link);
+
+    void on_placelbl_6_linkActivated(const QString &link);
+
+    void on_bronlbl_6_linkActivated(const QString &link);
+
+    void on_Title_6_linkActivated(const QString &link);
+
+    void registerRoom(Roomdata room);
+
 private:
     void connectionElement();
     void CreateElementMenu();
@@ -89,6 +99,7 @@ private:
     void showDetailedInfo(const RecoveryData &recovery);
     void cancelRecovery(const RecoveryData &recovery);
     void getUserData();
+    void setInformationRoom();
 
     CustomCalendar *customCalendar;
 

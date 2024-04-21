@@ -210,12 +210,12 @@ void HomePage::setRecovery()
         if (success) {
             recList = userData->getListRecovery();
             for (const auto &recovery : recList) {
-                QWidget *roomWidget = new QWidget();
-                roomWidget->setFixedSize(900, 100);
-                roomWidget->setStyleSheet(
+                QWidget *recoveryWidget = new QWidget();
+                recoveryWidget->setFixedSize(900, 100);
+                recoveryWidget->setStyleSheet(
                     "QWidget { background-color: #DCDCDC; border-radius: 10px}");
 
-                QHBoxLayout *layout = new QHBoxLayout(roomWidget);
+                QHBoxLayout *layout = new QHBoxLayout(recoveryWidget);
                 layout->setAlignment(Qt::AlignCenter);
 
                 QLabel *roomLabel = new QLabel(recovery.getRoomName());
@@ -245,7 +245,7 @@ void HomePage::setRecovery()
                 layout->addWidget(infoButton);
                 layout->addWidget(cancelButton);
 
-                ui->verticalLayout_14->addWidget(roomWidget);
+                ui->verticalLayout_14->addWidget(recoveryWidget);
                 connect(cancelButton, &QPushButton::clicked, this, [&]() {
                     cancelRecovery(recovery);
                 });
@@ -281,11 +281,11 @@ void HomePage::showDetailedInfo(const RecoveryData &recovery)
 
 void HomePage::cancelRecovery(const RecoveryData &recovery)
 {
-    /* if (QDate::currentDate() > recovery.getStartDate()) {
+    if (QDate::currentDate() > recovery.getStartDate()) {
         QMessageBox::information(
             this, "Ошибка", "Вы не можете отменить бронирование, потому что оно уже началось.");
         return;
-    } */
+    }
 
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this,
@@ -317,6 +317,84 @@ void HomePage::getUserData()
     });
 
     ui->stackedWidget->setCurrentIndex(4);
+}
+
+void HomePage::setInformationRoom()
+{
+    clearLayout(ui->verticalLayout_4);
+
+    ui->verticalLayout_4->setAlignment(Qt::AlignCenter);
+
+    userData->getRooms([&](bool success) {
+        if (success) {
+            QList<Roomdata> roomList = userData->getListRooms();
+
+            for (const auto &room : roomList) {
+                QWidget *roomWidget = new QWidget();
+
+                roomWidget->setFixedSize(900, 200);
+                roomWidget->setStyleSheet(
+                    "QWidget { background-color: #DCDCDC; border-radius: 10px}");
+
+                QHBoxLayout *layout = new QHBoxLayout(roomWidget);
+                layout->setAlignment(Qt::AlignCenter);
+
+                layout->addSpacing(150);
+
+                QFrame *line = new QFrame();
+                line->setFrameShape(QFrame::HLine);
+                line->setLineWidth(2);
+                line->setMidLineWidth(0);
+                line->setStyleSheet("QFrame{color: #d3d3d3}");
+
+                QLabel *imageLabel = new QLabel("XDXD");
+
+                QVBoxLayout *infoLayout = new QVBoxLayout();
+
+                QLabel *nameRoom = new QLabel(room.getTypeRoom());
+
+                nameRoom->setStyleSheet("QLabel { color: #A70303; font-size: 22px;}");
+
+                QHBoxLayout *recLayout = new QHBoxLayout();
+
+                QPushButton *recoverybtn = new QPushButton("Забронировать");
+                QLabel *price = new QLabel("от " + QString::number(room.getStartPrice())
+                                           + " руб/сутки");
+
+                recoverybtn->setStyleSheet(
+                    "QPushButton{ color: white; background-color: #B50404; "
+                    "border-radius: 10px; font-size: 20px;height: 45px; width:200px; }");
+                price->setStyleSheet("QLabel{ color: #050505; font-size: 20px;}");
+
+                recLayout->addWidget(recoverybtn);
+                recLayout->addWidget(price);
+
+                QLabel *description = new QLabel(room.getDescription());
+
+                description->setStyleSheet(
+                    "QLabel{ color: #050505; font-size: 20px; width: 250px;}");
+
+                QLabel *more = new QLabel("Подробнее");
+
+                more->setStyleSheet("QLabel{ color: #A70303; font-size: 18px;}");
+
+                infoLayout->addWidget(nameRoom);
+                infoLayout->addLayout(recLayout);
+                infoLayout->addWidget(description);
+                infoLayout->addWidget(more);
+
+                layout->addWidget(imageLabel);
+                layout->addLayout(infoLayout);
+
+                connect(recoverybtn, &QPushButton::clicked, this, [=]() { registerRoom(room); });
+
+                ui->verticalLayout_4->addWidget(line);
+                ui->verticalLayout_4->addWidget(roomWidget);
+            }
+        }
+    });
+
+    ui->stackedWidget->setCurrentIndex(3);
 }
 
 void HomePage::changedMinusChild()
@@ -397,17 +475,17 @@ void HomePage::on_searchbtn_clicked()
 
 void HomePage::on_bronlbl_linkActivated(const QString &link)
 {
-    ui->stackedWidget->setCurrentIndex(3);
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 void HomePage::on_placelbl_linkActivated(const QString &link)
 {
-    ui->stackedWidget->setCurrentIndex(2);
+    setInformationRoom();
 }
 
 void HomePage::on_aboutlbl_linkActivated(const QString &link)
 {
-    ui->stackedWidget->setCurrentIndex(1);
+    ui->stackedWidget->setCurrentIndex(2);
 }
 
 void HomePage::on_Title_linkActivated(const QString &link)
@@ -427,12 +505,12 @@ void HomePage::on_Title_3_linkActivated(const QString &link)
 
 void HomePage::on_aboutlbl_2_linkActivated(const QString &link)
 {
-    ui->stackedWidget->setCurrentIndex(1);
+    ui->stackedWidget->setCurrentIndex(2);
 }
 
 void HomePage::on_placelbl_3_linkActivated(const QString &link)
 {
-    ui->stackedWidget->setCurrentIndex(2);
+    setInformationRoom();
 }
 
 void HomePage::on_bronlbl_3_linkActivated(const QString &link)
@@ -474,12 +552,12 @@ void HomePage::on_bronlbl_5_linkActivated(const QString &link)
 
 void HomePage::on_placelbl_5_linkActivated(const QString &link)
 {
-    ui->stackedWidget->setCurrentIndex(2);
+    setInformationRoom();
 }
 
 void HomePage::on_aboutlbl_5_linkActivated(const QString &link)
 {
-    ui->stackedWidget->setCurrentIndex(1);
+    ui->stackedWidget->setCurrentIndex(2);
 }
 
 void HomePage::on_Profile_3_clicked()
@@ -549,4 +627,29 @@ void HomePage::on_savePasswordbtn_clicked()
         else
             QMessageBox::information(this, "Ошибка", "Пароль не изменён");
     });
+}
+
+void HomePage::on_aboutlbl_6_linkActivated(const QString &link)
+{
+    ui->stackedWidget->setCurrentIndex(2);
+}
+
+void HomePage::on_placelbl_6_linkActivated(const QString &link)
+{
+    setInformationRoom();
+}
+
+void HomePage::on_bronlbl_6_linkActivated(const QString &link)
+{
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
+void HomePage::on_Title_6_linkActivated(const QString &link)
+{
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
+void HomePage::registerRoom(Roomdata room)
+{
+    qDebug() << "оформление комнаты: " << room.getTypeRoom();
 }

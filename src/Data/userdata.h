@@ -12,6 +12,7 @@
 #include <QString>
 
 #include "recoverydata.h"
+#include "roomdata.h"
 
 class UserData
 {
@@ -66,6 +67,10 @@ public:
 
     void deleteRecovery(const RecoveryData &recovery, std::function<void(bool)> callback);
 
+    void getRooms(std::function<void(bool)> callback);
+
+    QList<Roomdata> getListRooms() const;
+
 private:
     bool isValidUser = false;
 
@@ -77,6 +82,7 @@ private:
     QString email = "";
 
     QList<RecoveryData> listRecovery;
+    QList<Roomdata> listRooms;
 
     int idUser = -1;
 };

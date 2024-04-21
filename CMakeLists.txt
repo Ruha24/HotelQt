@@ -45,6 +45,8 @@ set(PROJECT_SOURCES
         src/resours/resourses.qrc
         src/smtp.h
         src/smtp.cpp
+        src/Data/roomdata.h
+        src/Data/roomdata.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

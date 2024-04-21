@@ -256,8 +256,6 @@ void UserData::getUserRecovery(std::function<void(bool)> callback)
                     QString lastDateString = roomValue["lastDate"].toString();
                     QDate lastDate = QDate::fromString(startDateString, "yyyy-MM-dd");
 
-                    qDebug() << roomValue["recoveryId"].toInt();
-
                     RecoveryData recovery = RecoveryData(roomValue["recoveryId"].toInt(),
                                                          roomValue["roomName"].toString(),
                                                          roomValue["description"].toString(),
@@ -291,27 +289,25 @@ void UserData::getUserStats(QString userName, std::function<void(bool)> callback
 
     QObject::connect(reply, &QNetworkReply::finished, [=]() {
         if (reply->error() == QNetworkReply::NoError) {
-            {
-                QByteArray response = reply->readAll();
+            QByteArray response = reply->readAll();
 
-                QString responseString(response);
+            QString responseString(response);
 
-                QStringList dataList = responseString.split(", ");
-                if (dataList.size() == 4) {
-                    QString name = dataList[0];
-                    QString email = dataList[1];
-                    QString lastname = dataList[2];
-                    QString bdate = dataList[3];
+            QStringList dataList = responseString.split(", ");
+            if (dataList.size() == 4) {
+                QString name = dataList[0];
+                QString email = dataList[1];
+                QString lastname = dataList[2];
+                QString bdate = dataList[3];
 
-                    setName(name);
-                    setEmail(email);
-                    setLastName(lastname);
-                    setBdate(bdate);
-                    callback(true);
-                } else {
-                    callback(false);
-                }
-            };
+                setName(name);
+                setEmail(email);
+                setLastName(lastname);
+                setBdate(bdate);
+                callback(true);
+            }
+        } else {
+            callback(false);
         }
     });
 }
@@ -333,17 +329,58 @@ void UserData::deleteRecovery(const RecoveryData &recovery, std::function<void(b
 
     QObject::connect(reply, &QNetworkReply::finished, [=]() {
         if (reply->error() == QNetworkReply::NoError) {
-            {
-                QByteArray response = reply->readAll();
+            QByteArray response = reply->readAll();
 
-                if (response.contains("success")) {
-                    callback(true);
+            if (response.contains("success")) {
+                callback(true);
+            }
+
+        } else {
+            callback(false);
+        }
+    });
+}
+
+void UserData::getRooms(std::function<void(bool)> callback)
+{
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    QNetworkRequest request(QUrl("http://localhost:555/getRooms"));
+
+    QNetworkReply *reply = networkManager->get(request);
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            QJsonDocument responseDoc = QJsonDocument::fromJson(responseData);
+
+            QJsonObject response = responseDoc.object();
+            QJsonArray jsonArray;
+
+            if (response.contains("data")) {
+                listRooms.clear();
+                jsonArray = response["data"].toArray();
+
+                for (const QJsonValue &room : jsonArray) {
+                    Roomdata roomD = Roomdata(room["idRoom"].toInt(),
+                                              room["typeRoom"].toString(),
+                                              room["price"].toInt(),
+                                              room["count"].toInt(),
+                                              room["description"].toString());
+
+                    listRooms.append(roomD);
                 }
+                callback(true);
             }
         } else {
             callback(false);
         }
     });
+}
+
+QList<Roomdata> UserData::getListRooms() const
+{
+    return listRooms;
 }
 
 QList<RecoveryData> UserData::getListRecovery() const
