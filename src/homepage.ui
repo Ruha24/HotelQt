@@ -45,7 +45,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -326,16 +326,27 @@
                  <widget class="QComboBox" name="actionUser_2">
                   <property name="minimumSize">
                    <size>
-                    <width>119</width>
-                    <height>0</height>
+                    <width>135</width>
+                    <height>30</height>
                    </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>180</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>10</pointsize>
+                   </font>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QComboBox {
     border: 1px solid gray;
-    border-radius: 3px;
+    border-radius: 5px;
     padding: 1px 18px 1px 3px;
-    min-width: 6em;
+    min-width: 7em;
 }
 
 QComboBox:editable {
@@ -947,8 +958,8 @@ QToolButton::menu-indicator
                <widget class="QComboBox" name="actionUser_6">
                 <property name="minimumSize">
                  <size>
-                  <width>119</width>
-                  <height>0</height>
+                  <width>135</width>
+                  <height>30</height>
                  </size>
                 </property>
                 <property name="styleSheet">
@@ -956,7 +967,7 @@ QToolButton::menu-indicator
     border: 1px solid gray;
     border-radius: 3px;
     padding: 1px 18px 1px 3px;
-    min-width: 6em;
+    min-width: 7em;
 }
 
 QComboBox:editable {
@@ -1396,8 +1407,8 @@ QComboBox::down-arrow:on {
                  <widget class="QComboBox" name="actionUser_3">
                   <property name="minimumSize">
                    <size>
-                    <width>119</width>
-                    <height>0</height>
+                    <width>135</width>
+                    <height>30</height>
                    </size>
                   </property>
                   <property name="styleSheet">
@@ -1405,7 +1416,7 @@ QComboBox::down-arrow:on {
     border: 1px solid gray;
     border-radius: 3px;
     padding: 1px 18px 1px 3px;
-    min-width: 6em;
+    min-width: 7em;
 }
 
 QComboBox:editable {
@@ -1832,8 +1843,8 @@ QComboBox::down-arrow:on {
                  <widget class="QComboBox" name="actionUser_4">
                   <property name="minimumSize">
                    <size>
-                    <width>119</width>
-                    <height>0</height>
+                    <width>135</width>
+                    <height>30</height>
                    </size>
                   </property>
                   <property name="styleSheet">
@@ -1841,7 +1852,7 @@ QComboBox::down-arrow:on {
     border: 1px solid gray;
     border-radius: 3px;
     padding: 1px 18px 1px 3px;
-    min-width: 6em;
+    min-width: 7em;
 }
 
 QComboBox:editable {
@@ -2254,8 +2265,8 @@ QCheckBox::indicator {
                  <widget class="QComboBox" name="actionUser">
                   <property name="minimumSize">
                    <size>
-                    <width>119</width>
-                    <height>0</height>
+                    <width>135</width>
+                    <height>30</height>
                    </size>
                   </property>
                   <property name="styleSheet">
@@ -2263,7 +2274,7 @@ QCheckBox::indicator {
     border: 1px solid gray;
     border-radius: 3px;
     padding: 1px 18px 1px 3px;
-    min-width: 6em;
+    min-width: 7em;
 }
 
 QComboBox:editable {

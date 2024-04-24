@@ -19,6 +19,12 @@ public:
     QString getEndDate();
     QString getStartDate();
 
+    QDate getDate() const;
+    void setDate(const QDate &newDate);
+
+    QDate getLastDate() const;
+    void setLastDate(const QDate &newLastDate);
+
 private slots:
     void onDateSelected(const QDate &date);
     void onApplyButtonClicked();
@@ -42,6 +48,9 @@ private:
     QVBoxLayout *Vlayout;
     QHBoxLayout *HlayoutCalendar;
     QHBoxLayout *HlayoutDate;
+
+    QDate date;
+    QDate lastDate;
 };
 
 #endif // CUSTOMCALENDAR_H

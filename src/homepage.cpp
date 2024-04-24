@@ -658,7 +658,7 @@ void HomePage::registerRoom(const Roomdata &room)
 
     Roomdata *r = new Roomdata(room);
 
-    Booking *booking = new Booking(this, r);
+    Booking *booking = new Booking(nullptr, r, userData);
 
     booking->show();
 }

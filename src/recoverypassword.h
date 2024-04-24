@@ -6,8 +6,6 @@
 #include <QWidget>
 #include "Data/userdata.h"
 
-#include "SmtpClient-for-Qt/src/SmtpMime"
-
 #include "smtp.h"
 
 namespace Ui {

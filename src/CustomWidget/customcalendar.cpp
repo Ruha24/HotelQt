@@ -61,6 +61,26 @@ void CustomCalendar::getStyleSheetForDateRangeHighlight(const QDate &start, cons
     endDateCalendar->setStyleSheet(styleSheet);
 }
 
+QDate CustomCalendar::getLastDate() const
+{
+    return lastDate;
+}
+
+void CustomCalendar::setLastDate(const QDate &newLastDate)
+{
+    lastDate = newLastDate;
+}
+
+QDate CustomCalendar::getDate() const
+{
+    return date;
+}
+
+void CustomCalendar::setDate(const QDate &newDate)
+{
+    date = newDate;
+}
+
 void CustomCalendar::updateEndDateMinimumDate() {}
 
 QLabel *CustomCalendar::createLabelWithDate()
@@ -93,15 +113,14 @@ void CustomCalendar::onDateSelected(const QDate &date)
 
     if (isStartDateSelected) {
         startDateCalendar->setSelectedDate(date);
+        setDate(date);
         isStartDateSelected = false;
     } else {
         if (date >= startDateCalendar->selectedDate()) {
+            setLastDate(date);
             endDateCalendar->setSelectedDate(date);
             endDate->setText(getFormattedDate(date));
             getStyleSheetForDateRangeHighlight(startDateCalendar->selectedDate(), date);
-        } else {
-            endDateCalendar->setSelectedDate(startDateCalendar->selectedDate());
-            endDate->setText(getFormattedDate(startDateCalendar->selectedDate()));
         }
         isStartDateSelected = true;
     }

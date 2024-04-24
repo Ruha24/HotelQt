@@ -383,6 +383,40 @@ QList<Roomdata> UserData::getListRooms() const
     return listRooms;
 }
 
+void UserData::recoveryRoom(Roomdata *room, RecoveryData *data, std::function<void(bool)> callback)
+{
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    QJsonObject json;
+
+    json["idUser"] = idUser;
+    json["idRoom"] = room->getId();
+    json["startDate"] = data->getStartDate().toString();
+    json["lastDate"] = data->getLastDate().toString();
+
+    QJsonDocument jsonDoc(json);
+
+    QNetworkRequest request(QUrl("http://localhost:555/addRecovery"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = networkManager->post(request, jsonDoc.toJson());
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray response = reply->readAll();
+
+            qDebug() << response;
+
+            if (response.contains("success")) {
+                callback(true);
+            }
+
+        } else {
+            callback(false);
+        }
+    });
+}
+
 QList<RecoveryData> UserData::getListRecovery() const
 {
     return listRecovery;

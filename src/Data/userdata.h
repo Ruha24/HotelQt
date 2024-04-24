@@ -71,6 +71,8 @@ public:
 
     QList<Roomdata> getListRooms() const;
 
+    void recoveryRoom(Roomdata *room, RecoveryData *data, std::function<void(bool)> callback);
+
 private:
     bool isValidUser = false;
 
