@@ -108,6 +108,7 @@ private:
 
     QList<RecoveryData> recList;
 
+    QSpacerItem *spacer;
     QPushButton *minusButton;
     QPushButton *addButton;
     QPushButton *minusButton2;

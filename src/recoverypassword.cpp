@@ -34,7 +34,7 @@ void RecoveryPassword::send(QString to)
                    "Luxury Hotel",
                    "Добрый день! Ваш проверочный код для доступа к сервису: " + recoveryCode
                        + " . Пожалуйста, введите этот "
-                         "код в соответствующее поле. Если вы не запрашивали код, проигнорируйте "
+                         "код в соответствующее поле.\n Если вы не запрашивали код, проигнорируйте "
                          "это сообщение.");
 }
 
@@ -54,7 +54,7 @@ void RecoveryPassword::on_sendEmailbtn_clicked()
 
     QString email = ui->emailtxt_2->text();
 
-    QRegularExpression emailRegex("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}");
+    QRegularExpression emailRegex("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}");
     if (!emailRegex.match(email).hasMatch()) {
         QMessageBox::warning(this, "", "Некорректный адрес электронной почты");
         return;
@@ -90,6 +90,13 @@ void RecoveryPassword::on_acceptbtn_clicked()
         QMessageBox::information(this, "Ошибка", "Вы ввели не одинаковые пароли");
         return;
     }
+
+    m_userData->updatePasswordonEmail(pass, [&](bool success) {
+        if (success) {
+            QMessageBox::information(this, "Пароль", "Пароль успешно изменён");
+            this->close();
+        }
+    });
 }
 
 QString RecoveryPassword::generateRandomCode()

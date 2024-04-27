@@ -192,6 +192,41 @@ void UserData::updatePassword(QString pass, std::function<void(bool)> callback)
     });
 }
 
+void UserData::updatePasswordonEmail(QString pass, std::function<void(bool)> callback)
+{
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    QJsonObject json;
+
+    json["password"] = pass;
+    json["email"] = email;
+
+    QJsonDocument jsonDoc(json);
+
+    QNetworkRequest request(QUrl("http://localhost:555/updatePassOnEmail"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = networkManager->post(request, jsonDoc.toJson());
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray response = reply->readAll();
+
+            if (response.contains("success")) {
+                callback(true);
+            } else {
+                callback(false);
+            }
+
+        } else {
+            callback(false);
+        }
+
+        reply->deleteLater();
+        networkManager->deleteLater();
+    });
+}
+
 void UserData::checkEmail(std::function<void(bool)> callback)
 {
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();

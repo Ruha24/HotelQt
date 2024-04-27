@@ -45,7 +45,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -1113,7 +1113,7 @@ QComboBox::down-arrow:on {
                  <number>12</number>
                 </property>
                 <property name="leftMargin">
-                 <number>450</number>
+                 <number>520</number>
                 </property>
                 <property name="rightMargin">
                  <number>0</number>

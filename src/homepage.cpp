@@ -216,7 +216,7 @@ void HomePage::setRecovery()
                     "QWidget { background-color: #DCDCDC; border-radius: 10px}");
 
                 QHBoxLayout *layout = new QHBoxLayout(recoveryWidget);
-                layout->setAlignment(Qt::AlignCenter);
+                // layout->setAlignment(Qt::AlignCenter);
 
                 QLabel *roomLabel = new QLabel(recovery.getRoomName());
                 roomLabel->setStyleSheet("QLabel { font-size: 24px}");
@@ -229,6 +229,17 @@ void HomePage::setRecovery()
                 QLabel *dateLabel = new QLabel(QString("%1 - %2").arg(startDate).arg(lastDate));
 
                 dateLabel->setStyleSheet("QLabel { font-size: 24px}");
+
+                QSpacerItem *spacer = new QSpacerItem(20,
+                                                      20,
+                                                      QSizePolicy::Expanding,
+                                                      QSizePolicy::Expanding);
+
+                QSpacerItem *spacer2 = new QSpacerItem(20,
+                                                       20,
+                                                       QSizePolicy::Expanding,
+                                                       QSizePolicy::Expanding);
+
                 QPushButton *infoButton = new QPushButton("Подробнее");
                 infoButton->setStyleSheet("QPushButton { border-radius: 10px;  color: white; "
                                           "background-color: #8C8C8C; font-size: 24px}");
@@ -241,7 +252,9 @@ void HomePage::setRecovery()
                 cancelButton->setFixedSize(135, 55);
 
                 layout->addWidget(roomLabel);
+                layout->addSpacerItem(spacer);
                 layout->addWidget(dateLabel);
+                layout->addSpacerItem(spacer2);
                 layout->addWidget(infoButton);
                 layout->addWidget(cancelButton);
 
@@ -249,7 +262,6 @@ void HomePage::setRecovery()
                 connect(cancelButton, &QPushButton::clicked, this, [&]() {
                     cancelRecovery(recovery);
                 });
-
                 connect(infoButton, &QPushButton::clicked, this, [&]() {
                     showDetailedInfo(recovery);
                 });
@@ -374,14 +386,9 @@ void HomePage::setInformationRoom()
                 description->setStyleSheet(
                     "QLabel{ color: #050505; font-size: 20px; width: 250px;}");
 
-                QLabel *more = new QLabel("Подробнее");
-
-                more->setStyleSheet("QLabel{ color: #A70303; font-size: 18px;}");
-
                 infoLayout->addWidget(nameRoom);
-                infoLayout->addLayout(recLayout);
                 infoLayout->addWidget(description);
-                infoLayout->addWidget(more);
+                infoLayout->addLayout(recLayout);
 
                 layout->addWidget(imageLabel);
                 layout->addLayout(infoLayout);

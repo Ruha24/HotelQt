@@ -100,6 +100,7 @@ void Booking::on_pushButton_clicked()
         qDebug() << success;
         if (success) {
             QMessageBox::information(this, "", "Вы забронировали место");
+            this->close();
         }
     });
 }
