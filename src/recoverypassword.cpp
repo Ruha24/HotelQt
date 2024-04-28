@@ -91,6 +91,25 @@ void RecoveryPassword::on_acceptbtn_clicked()
         return;
     }
 
+    static QRegularExpression passwordRegex("^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$");
+    if (!passwordRegex.match(pass).hasMatch()) {
+        QMessageBox::warning(
+            this,
+            "",
+            "Некорректный пароль\nПароль должен состоять из:\n- Минимум 8 символов\n- Хотя бы "
+            "одной заглавной буквы\n- Хотя бы одного специального символа\n- Хотя бы одной цифры");
+        return;
+    }
+
+    if (!passwordRegex.match(confPass).hasMatch()) {
+        QMessageBox::warning(
+            this,
+            "",
+            "Некорректный пароль\nПароль должен состоять из:\n- Минимум 8 символов\n- Хотя бы "
+            "одной заглавной буквы\n- Хотя бы одного специального символа\n- Хотя бы одной цифры");
+        return;
+    }
+
     m_userData->updatePasswordonEmail(pass, [&](bool success) {
         if (success) {
             QMessageBox::information(this, "Пароль", "Пароль успешно изменён");

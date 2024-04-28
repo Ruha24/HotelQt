@@ -307,8 +307,7 @@ void HomePage::cancelRecovery(const RecoveryData &recovery)
 
     if (reply == QMessageBox::Ok) {
         userData->deleteRecovery(recovery, [&](bool success) {
-            qDebug() << success;
-
+     
             if (success) {
                 QMessageBox::information(this, "Успешно", "Вы успешно отменили бронь");
                 setRecovery();
@@ -467,6 +466,8 @@ void HomePage::setTextGuest()
         break;
     }
 
+    countPlacesRoom = countChild + countGrown;
+
     ui->questtlb->setText(text);
 }
 
@@ -477,7 +478,74 @@ void HomePage::on_searchbtn_clicked()
         return;
     }
 
-    ui->stackedWidget->setCurrentIndex(4);
+    room->getRooms(countPlacesRoom, [=](bool success) {
+        if (success) {
+            clearLayout(ui->verticalLayout_4);
+
+            ui->verticalLayout_4->setAlignment(Qt::AlignCenter);
+
+            QList<Roomdata> roomList = room->getListRooms();
+            for (const auto &room : roomList) {
+                QWidget *roomWidget = new QWidget();
+
+                roomWidget->setFixedSize(900, 200);
+                roomWidget->setStyleSheet(
+                    "QWidget { background-color: #DCDCDC; border-radius: 10px}");
+
+                QHBoxLayout *layout = new QHBoxLayout(roomWidget);
+                layout->setAlignment(Qt::AlignCenter);
+
+                layout->addSpacing(150);
+
+                QFrame *line = new QFrame();
+                line->setFrameShape(QFrame::HLine);
+                line->setLineWidth(2);
+                line->setMidLineWidth(0);
+                line->setStyleSheet("QFrame{color: #d3d3d3}");
+
+                QLabel *imageLabel = new QLabel("XDXD");
+
+                QVBoxLayout *infoLayout = new QVBoxLayout();
+
+                QLabel *nameRoom = new QLabel(room.getTypeRoom());
+
+                nameRoom->setStyleSheet("QLabel { color: #A70303; font-size: 22px;}");
+
+                QHBoxLayout *recLayout = new QHBoxLayout();
+
+                QPushButton *recoverybtn = new QPushButton("Забронировать");
+                QLabel *price = new QLabel("от " + QString::number(room.getStartPrice())
+                                           + " руб/сутки");
+
+                recoverybtn->setStyleSheet(
+                    "QPushButton{ color: white; background-color: #B50404; "
+                    "border-radius: 10px; font-size: 20px;height: 45px; width:200px; }");
+                price->setStyleSheet("QLabel{ color: #050505; font-size: 20px;}");
+
+                recLayout->addWidget(recoverybtn);
+                recLayout->addWidget(price);
+
+                QLabel *description = new QLabel(room.getDescription());
+
+                description->setStyleSheet(
+                    "QLabel{ color: #050505; font-size: 20px; width: 250px;}");
+
+                infoLayout->addWidget(nameRoom);
+                infoLayout->addWidget(description);
+                infoLayout->addLayout(recLayout);
+
+                layout->addWidget(imageLabel);
+                layout->addLayout(infoLayout);
+
+                connect(recoverybtn, &QPushButton::clicked, this, [=]() { registerRoom(room); });
+
+                ui->verticalLayout_4->addWidget(line);
+                ui->verticalLayout_4->addWidget(roomWidget);
+            }
+
+            ui->stackedWidget->setCurrentIndex(3);
+        }
+    });
 }
 
 void HomePage::on_bronlbl_linkActivated(const QString &link)

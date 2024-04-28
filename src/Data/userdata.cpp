@@ -440,8 +440,6 @@ void UserData::recoveryRoom(Roomdata *room, RecoveryData *data, std::function<vo
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray response = reply->readAll();
 
-            qDebug() << response;
-
             if (response.contains("success")) {
                 callback(true);
             }

@@ -108,7 +108,9 @@ private:
 
     QList<RecoveryData> recList;
 
-    QSpacerItem *spacer;
+    int countPlacesRoom = 2;
+
+    Roomdata *room = new Roomdata();
     QPushButton *minusButton;
     QPushButton *addButton;
     QPushButton *minusButton2;

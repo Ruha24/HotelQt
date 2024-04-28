@@ -97,7 +97,6 @@ void Booking::on_pushButton_clicked()
     }
 
     m_userData->recoveryRoom(m_room, m_recovery, [&](bool success) {
-        qDebug() << success;
         if (success) {
             QMessageBox::information(this, "", "Вы забронировали место");
             this->close();
