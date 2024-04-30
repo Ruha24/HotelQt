@@ -396,12 +396,29 @@ void UserData::getRooms(std::function<void(bool)> callback)
                 listRooms.clear();
                 jsonArray = response["data"].toArray();
 
-                for (const QJsonValue &room : jsonArray) {
-                    Roomdata roomD = Roomdata(room["idRoom"].toInt(),
-                                              room["typeRoom"].toString(),
-                                              room["price"].toInt(),
-                                              room["count"].toInt(),
-                                              room["description"].toString());
+                for (const QJsonValue &room : qAsConst(jsonArray)) {
+                    QJsonObject roomObject = room.toObject();
+
+                    int idRoom = roomObject["idRoom"].toInt();
+                    QString typeRoom = roomObject["typeRoom"].toString();
+                    int price = roomObject["price"].toInt();
+                    int count = roomObject["count"].toInt();
+                    QString description = roomObject["description"].toString();
+
+                    QByteArray imageData = QByteArray::fromBase64(
+                        roomObject["imageData"].toString().toUtf8());
+
+                    QString imagePath = "src/" + QString::number(idRoom) + ".jpg";
+                    QFile imageFile(imagePath);
+                    if (imageFile.open(QIODevice::WriteOnly)) {
+                        imageFile.write(imageData);
+                        imageFile.close();
+                    } else {
+                        qDebug() << "Failed to save image file: " << imagePath;
+                        continue;
+                    }
+
+                    Roomdata roomD = Roomdata(idRoom, typeRoom, price, count, description, imagePath);
 
                     listRooms.append(roomD);
                 }

@@ -80,6 +80,7 @@ void Booking::setPriceText(const QDate &startDate, const QDate &lastDate)
                                   startDate,
                                   lastDate);
 
+    qDebug() << "Цена поставилась";
     ui->pricelbl->setText(
         QString("Цена: %1 руб за %2 %3").arg(totalPrice).arg(daysDifference).arg(dayWord));
 }

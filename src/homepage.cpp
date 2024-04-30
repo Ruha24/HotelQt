@@ -226,7 +226,7 @@ void HomePage::setRecovery()
                 QString startDate = russianLocale.toString(recovery.getStartDate(), "d MMMM yyyy");
                 QString lastDate = russianLocale.toString(recovery.getLastDate(), "d MMMM yyyy");
 
-                QLabel *dateLabel = new QLabel(QString("%1 - %2").arg(startDate).arg(lastDate));
+                QLabel *dateLabel = new QLabel(QString("%1 - %2").arg(startDate, lastDate));
 
                 dateLabel->setStyleSheet("QLabel { font-size: 24px}");
 
@@ -358,7 +358,13 @@ void HomePage::setInformationRoom()
                 line->setMidLineWidth(0);
                 line->setStyleSheet("QFrame{color: #d3d3d3}");
 
-                QLabel *imageLabel = new QLabel("XDXD");
+                QPixmap pixmap(room.getImage());
+
+                QLabel *imageLabel = new QLabel();
+
+                if (!pixmap.isNull()) {
+                    imageLabel->setPixmap(pixmap);
+                }
 
                 QVBoxLayout *infoLayout = new QVBoxLayout();
 
@@ -503,7 +509,13 @@ void HomePage::on_searchbtn_clicked()
                 line->setMidLineWidth(0);
                 line->setStyleSheet("QFrame{color: #d3d3d3}");
 
-                QLabel *imageLabel = new QLabel("XDXD");
+                QPixmap pixmap(room.getImage());
+
+                QLabel *imageLabel = new QLabel();
+
+                if (!pixmap.isNull()) {
+                    imageLabel->setPixmap(pixmap);
+                }
 
                 QVBoxLayout *infoLayout = new QVBoxLayout();
 

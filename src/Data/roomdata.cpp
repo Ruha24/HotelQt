@@ -1,12 +1,13 @@
 #include "roomdata.h"
 
-Roomdata::Roomdata(int id, QString type, int price, int count, QString description)
+Roomdata::Roomdata(int id, QString type, int price, int count, QString description, QString image)
 {
     this->id = id;
     this->typeRoom = type;
     this->startPrice = price;
     this->countRoom = count;
     this->description = description;
+    this->image = image;
 }
 
 Roomdata::Roomdata() {}
@@ -64,11 +65,27 @@ void Roomdata::getRooms(int countPlace, std::function<void(bool)> callback)
                 jsonArray = response["data"].toArray();
 
                 for (const QJsonValue &room : qAsConst(jsonArray)) {
-                    Roomdata roomD = Roomdata(room["idRoom"].toInt(),
-                                              room["typeRoom"].toString(),
-                                              room["price"].toInt(),
-                                              room["count"].toInt(),
-                                              room["description"].toString());
+                    QJsonObject roomObject = room.toObject();
+
+                    int idRoom = roomObject["idRoom"].toInt();
+                    QString typeRoom = roomObject["typeRoom"].toString();
+                    int price = roomObject["price"].toInt();
+                    int count = roomObject["count"].toInt();
+                    QString description = roomObject["description"].toString();
+
+                    QByteArray imageData = QByteArray::fromBase64(
+                        roomObject["imageData"].toString().toUtf8());
+
+                    QString imagePath = "src/" + QString::number(idRoom) + ".jpg";
+                    QFile imageFile(imagePath);
+                    if (imageFile.open(QIODevice::WriteOnly)) {
+                        imageFile.write(imageData);
+                        imageFile.close();
+                    } else {
+                        qDebug() << "Failed to save image file: " << imagePath;
+                        continue;
+                    }
+                    Roomdata roomD = Roomdata(idRoom, typeRoom, price, count, description, imagePath);
 
                     listRooms.append(roomD);
                 }
@@ -84,4 +101,9 @@ void Roomdata::getRooms(int countPlace, std::function<void(bool)> callback)
 QList<Roomdata> Roomdata::getListRooms() const
 {
     return listRooms;
+}
+
+QString Roomdata::getImage() const
+{
+    return image;
 }
