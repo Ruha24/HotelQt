@@ -101,6 +101,7 @@ private:
     void cancelRecovery(const RecoveryData &recovery);
     void getUserData();
     void setInformationRoom();
+    void initAction();
 
     CustomCalendar *customCalendar;
 

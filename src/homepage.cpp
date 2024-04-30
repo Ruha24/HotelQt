@@ -12,15 +12,8 @@ HomePage::HomePage(QWidget *parent)
     ui->setupUi(this);
 
     CreateElementMenu();
-    connectionElement();
 
     ui->stackedWidget->setCurrentIndex(0);
-
-    initActionUser(ui->actionUser);
-    initActionUser(ui->actionUser_2);
-    initActionUser(ui->actionUser_3);
-    initActionUser(ui->actionUser_4);
-    initActionUser(ui->actionUser_6);
 
     SetVisibleUser();
 }
@@ -36,8 +29,10 @@ void HomePage::setUserData(UserData *data)
 
     if (userData->getUserName() != "") {
         userData->getIdUser(userData->getUserName(), [&](bool success) {
-            if (success)
+            if (success) {
+                initAction();
                 SetVisibleUser();
+            }
         });
     }
 }
@@ -173,6 +168,11 @@ void HomePage::initActionUser(QComboBox *cmb)
 {
     cmb->addItem("Профиль");
     cmb->addItem("Бронирования");
+
+    bool role = userData->getRole() == "Админ";
+    if (role) {
+        cmb->addItem("Просмотр");
+    }
     cmb->addItem("Выход");
 
     connect(cmb, QOverload<int>::of(&QComboBox::activated), this, [=](int index) {
@@ -184,6 +184,14 @@ void HomePage::initActionUser(QComboBox *cmb)
             setRecovery();
             break;
         case 2:
+            if (!role) {
+                SetVisibleUser();
+                ui->stackedWidget->setCurrentIndex(0);
+            } else {
+                qDebug() << "работает";
+            }
+            break;
+        case 3:
             SetVisibleUser();
             ui->stackedWidget->setCurrentIndex(0);
             break;
@@ -216,7 +224,7 @@ void HomePage::setRecovery()
                     "QWidget { background-color: #DCDCDC; border-radius: 10px}");
 
                 QHBoxLayout *layout = new QHBoxLayout(recoveryWidget);
-                // layout->setAlignment(Qt::AlignCenter);
+                layout->setAlignment(Qt::AlignCenter);
 
                 QLabel *roomLabel = new QLabel(recovery.getRoomName());
                 roomLabel->setStyleSheet("QLabel { font-size: 24px}");
@@ -284,7 +292,8 @@ void HomePage::showDetailedInfo(const RecoveryData &recovery)
                                          recovery.getRoomName(),
                                          recovery.getDescription(),
                                          recovery.getStartDate(),
-                                         recovery.getLastDate());
+                                         recovery.getLastDate(),
+                                         recovery.getImage());
 
     InfoReserv *infoReserv = new InfoReserv(this, rec);
 
@@ -348,9 +357,8 @@ void HomePage::setInformationRoom()
                     "QWidget { background-color: #DCDCDC; border-radius: 10px}");
 
                 QHBoxLayout *layout = new QHBoxLayout(roomWidget);
-                layout->setAlignment(Qt::AlignCenter);
 
-                layout->addSpacing(150);
+                layout->setAlignment(Qt::AlignCenter);
 
                 QFrame *line = new QFrame();
                 line->setFrameShape(QFrame::HLine);
@@ -365,6 +373,10 @@ void HomePage::setInformationRoom()
                 if (!pixmap.isNull()) {
                     imageLabel->setPixmap(pixmap);
                 }
+
+                imageLabel->setFixedSize(300, 150);
+
+                imageLabel->setScaledContents(true);
 
                 QVBoxLayout *infoLayout = new QVBoxLayout();
 
@@ -387,15 +399,22 @@ void HomePage::setInformationRoom()
                 recLayout->addWidget(price);
 
                 QLabel *description = new QLabel(room.getDescription());
+                description->setWordWrap(true);
 
                 description->setStyleSheet(
-                    "QLabel{ color: #050505; font-size: 20px; width: 250px;}");
+                    "QLabel{ color: #050505; font-size: 18px; width: 250px;}");
 
                 infoLayout->addWidget(nameRoom);
                 infoLayout->addWidget(description);
                 infoLayout->addLayout(recLayout);
 
+                QSpacerItem *spacer = new QSpacerItem(20,
+                                                      20,
+                                                      QSizePolicy::Fixed,
+                                                      QSizePolicy::Fixed);
+
                 layout->addWidget(imageLabel);
+                layout->addSpacerItem(spacer);
                 layout->addLayout(infoLayout);
 
                 connect(recoverybtn, &QPushButton::clicked, this, [=]() { registerRoom(room); });
@@ -407,6 +426,15 @@ void HomePage::setInformationRoom()
     });
 
     ui->stackedWidget->setCurrentIndex(3);
+}
+
+void HomePage::initAction()
+{
+    initActionUser(ui->actionUser);
+    initActionUser(ui->actionUser_2);
+    initActionUser(ui->actionUser_3);
+    initActionUser(ui->actionUser_4);
+    initActionUser(ui->actionUser_6);
 }
 
 void HomePage::changedMinusChild()
@@ -516,6 +544,8 @@ void HomePage::on_searchbtn_clicked()
                 if (!pixmap.isNull()) {
                     imageLabel->setPixmap(pixmap);
                 }
+
+                imageLabel->setScaledContents(true);
 
                 QVBoxLayout *infoLayout = new QVBoxLayout();
 
@@ -661,13 +691,13 @@ void HomePage::on_saveDataUser_clicked()
         return;
     }
 
-    QRegularExpression dateRegex("^\\d{2}\\.\\d{2}\\.\\d{4}$");
+    static QRegularExpression dateRegex("^\\d{2}\\.\\d{2}\\.\\d{4}$");
     if (!dateRegex.match(ui->birthdaytxt->text()).hasMatch()) {
         QMessageBox::warning(this, "", "Формат даты должен быть 10.10.1000");
         return;
     }
 
-    QRegularExpression emailRegex("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}");
+    static QRegularExpression emailRegex("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}");
     if (!emailRegex.match(ui->emailtxt->text()).hasMatch()) {
         QMessageBox::warning(this, "", "Некорректный адрес электронной почты");
         return;

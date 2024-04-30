@@ -1,12 +1,14 @@
 #include "recoverydata.h"
 
-RecoveryData::RecoveryData(int recId, QString nameRoom, QString description, QDate date1, QDate date2)
+RecoveryData::RecoveryData(
+    int recId, QString nameRoom, QString description, QDate date1, QDate date2, QString image)
 {
     this->id = recId;
     this->roomName = nameRoom;
     this->description = description;
     this->lastDate = date2;
     this->startDate = date1;
+    this->image = image;
 }
 
 QString RecoveryData::getRoomName() const
@@ -32,4 +34,9 @@ QDate RecoveryData::getLastDate() const
 int RecoveryData::getId() const
 {
     return id;
+}
+
+QString RecoveryData::getImage() const
+{
+    return image;
 }

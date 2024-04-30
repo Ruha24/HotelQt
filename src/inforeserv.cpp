@@ -16,6 +16,14 @@ InfoReserv::InfoReserv(QWidget *parent, RecoveryData *rec)
 
     QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
     move(screenGeometry.center() - rect().center());
+
+    QPixmap pixmap(rec->getImage());
+
+    if (!pixmap.isNull()) {
+        ui->label->setPixmap(pixmap);
+    }
+
+    ui->label->setScaledContents(true);
 }
 
 InfoReserv::~InfoReserv()

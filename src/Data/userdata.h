@@ -75,6 +75,9 @@ public:
 
     void updatePasswordonEmail(QString pass, std::function<void(bool)> callback);
 
+    QString getRole() const;
+    void setRole(const QString &newRole);
+
 private:
     bool isValidUser = false;
 
@@ -84,6 +87,7 @@ private:
     QString userName = "";
     QString password = "";
     QString email = "";
+    QString role;
 
     QList<RecoveryData> listRecovery;
     QList<Roomdata> listRooms;

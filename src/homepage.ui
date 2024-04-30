@@ -45,7 +45,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -1569,6 +1569,9 @@ QComboBox::down-arrow:on {
                   <property name="text">
                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Добро пожаловать в Luxury Hotel - истинное воплощение роскоши и изысканности. &lt;br/&gt;Расположенный в самом сердце исторического центра.&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Наши номера представляют собой оазис роскоши, &lt;br/&gt;где каждая деталь продумана до мельчайших нюансов. &lt;br/&gt;Просторные номера и люксы украшены изысканным дизайном, &lt;br/&gt;мягкой мебелью и изысканными предметами интерьера,&lt;br/&gt;чтобы каждый гость чувствовал себя как дома, окруженный роскошью.&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;&lt;br/&gt;Наш шеф-повар приготовит для вас шедевры кулинарии в нашем ресторане, &lt;br/&gt;где каждое блюдо - это искусство, а каждый вкус - незабываемый опыт.&lt;br/&gt;Погрузитесь в мир изысканных вкусов и утоньте в атмосфере утонченности.&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Приезжайте в Luxury Hotel и погрузитесь в мир роскоши,&lt;br/&gt;где каждый момент наполнен неповторимым очарованием и изысканностью.&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
+                  <property name="scaledContents">
+                   <bool>false</bool>
+                  </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
                   </property>
@@ -1898,7 +1901,7 @@ QComboBox::down-arrow:on {
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0,0">
                 <property name="spacing">
                  <number>0</number>
                 </property>
@@ -1937,6 +1940,9 @@ QComboBox::down-arrow:on {
                   </property>
                   <property name="text">
                    <string>Номера и цены</string>
+                  </property>
+                  <property name="scaledContents">
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>
@@ -2032,7 +2038,7 @@ QComboBox::down-arrow:on {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1335</width>
+             <width>1352</width>
              <height>957</height>
             </rect>
            </property>

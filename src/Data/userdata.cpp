@@ -26,15 +26,15 @@ void UserData::getIdUser(QString userName, std::function<void(bool)> callback)
     QObject::connect(reply, &QNetworkReply::finished, [=]() {
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray responseData = reply->readAll();
+            QJsonDocument responseDoc = QJsonDocument::fromJson(responseData);
 
-            QStringList parts = QString(responseData).split(' ');
+            QJsonObject response = responseDoc.object();
 
-            if (parts.size() == 2 && parts[0] == "200") {
-                bool ok;
-                int userId = parts[1].toInt(&ok);
-
-                if (ok) {
-                    setUserId(userId);
+            if (response.contains("data")) {
+                QJsonObject data = response["data"].toObject();
+                if (data.contains("id") && data.contains("nameRole")) {
+                    setUserId(data["id"].toInt());
+                    setRole(data["nameRole"].toString());
                     callback(true);
                 } else {
                     callback(false);
@@ -227,6 +227,16 @@ void UserData::updatePasswordonEmail(QString pass, std::function<void(bool)> cal
     });
 }
 
+QString UserData::getRole() const
+{
+    return role;
+}
+
+void UserData::setRole(const QString &newRole)
+{
+    role = newRole;
+}
+
 void UserData::checkEmail(std::function<void(bool)> callback)
 {
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
@@ -291,11 +301,27 @@ void UserData::getUserRecovery(std::function<void(bool)> callback)
                     QString lastDateString = roomValue["lastDate"].toString();
                     QDate lastDate = QDate::fromString(startDateString, "yyyy-MM-dd");
 
-                    RecoveryData recovery = RecoveryData(roomValue["recoveryId"].toInt(),
+                    QByteArray imageData = QByteArray::fromBase64(
+                        roomValue["imageData"].toString().toUtf8());
+
+                    int idRec = roomValue["recoveryId"].toInt();
+
+                    QString imagePath = "src/" + QString::number(idRec) + ".jpg";
+                    QFile imageFile(imagePath);
+                    if (imageFile.open(QIODevice::WriteOnly)) {
+                        imageFile.write(imageData);
+                        imageFile.close();
+                    } else {
+                        qDebug() << "Failed to save image file: " << imagePath;
+                        continue;
+                    }
+
+                    RecoveryData recovery = RecoveryData(idRec,
                                                          roomValue["roomName"].toString(),
                                                          roomValue["description"].toString(),
                                                          startDate,
-                                                         lastDate);
+                                                         lastDate,
+                                                         imagePath);
 
                     listRecovery.append(recovery);
                 }
@@ -410,12 +436,14 @@ void UserData::getRooms(std::function<void(bool)> callback)
 
                     QString imagePath = "src/" + QString::number(idRoom) + ".jpg";
                     QFile imageFile(imagePath);
-                    if (imageFile.open(QIODevice::WriteOnly)) {
-                        imageFile.write(imageData);
-                        imageFile.close();
-                    } else {
-                        qDebug() << "Failed to save image file: " << imagePath;
-                        continue;
+
+                    if (!imageFile.exists()) {
+                        if (imageFile.open(QIODevice::WriteOnly)) {
+                            imageFile.write(imageData);
+                            imageFile.close();
+                        } else {
+                            qDebug() << "Failed to save image file: " << imagePath;
+                        }
                     }
 
                     Roomdata roomD = Roomdata(idRoom, typeRoom, price, count, description, imagePath);
