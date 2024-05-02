@@ -155,12 +155,14 @@ void HomePage::SetVisibleUser()
     ui->Profile->setVisible(!isVisible);
     ui->Profile_2->setVisible(!isVisible);
     ui->Profile_3->setVisible(!isVisible);
+    ui->Profile_4->setVisible(!isVisible);
     ui->Profile_5->setVisible(!isVisible);
     ui->Profile_6->setVisible(!isVisible);
 
     ui->actionUser->setVisible(isVisible);
     ui->actionUser_2->setVisible(isVisible);
     ui->actionUser_3->setVisible(isVisible);
+    ui->actionUser_5->setVisible(isVisible);
     ui->actionUser_4->setVisible(isVisible);
     ui->actionUser_6->setVisible(isVisible);
     isVisible = !isVisible;
@@ -191,7 +193,7 @@ void HomePage::initActionUser(QComboBox *cmb)
                 break;
             case 2:
                 if (isAdmin) {
-                    qDebug() << "работает для админа";
+                    getAllUsers();
                 } else {
                     SetVisibleUser();
                     ui->stackedWidget->setCurrentIndex(0);
@@ -446,7 +448,91 @@ void HomePage::initAction()
     initActionUser(ui->actionUser_2);
     initActionUser(ui->actionUser_3);
     initActionUser(ui->actionUser_4);
+    initActionUser(ui->actionUser_5);
     initActionUser(ui->actionUser_6);
+}
+
+void HomePage::getAllUsers()
+{
+    ui->tabWidget->clear();
+
+    userData->getUsers([&](bool success) {
+        if (success) {
+            for (UserData *user : userData->getListUsers()) {
+                user->getUserRecovery([&](bool success) {});
+
+                QWidget *userWidget = createUserWidget(user);
+                QWidget *recoveryWidget = createRecoveryWidget(user);
+                QWidget *combinedWidget = new QWidget();
+
+                QVBoxLayout *mainLayout = new QVBoxLayout();
+                QHBoxLayout *layout = new QHBoxLayout();
+
+                QSpacerItem *spacer = new QSpacerItem(20,
+                                                      20,
+                                                      QSizePolicy::Fixed,
+                                                      QSizePolicy::Fixed);
+
+                QFrame *line = new QFrame();
+                line->setFrameShape(QFrame::HLine);
+                line->setLineWidth(2);
+                line->setMidLineWidth(0);
+                line->setStyleSheet("QFrame{color: black;}");
+
+                QFrame *line2 = new QFrame();
+                line2->setFrameShape(QFrame::VLine);
+                line2->setLineWidth(2);
+                line2->setMidLineWidth(0);
+                line2->setStyleSheet("QFrame{color: black;}");
+
+                mainLayout->addSpacerItem(spacer);
+                mainLayout->addWidget(line);
+                layout->addWidget(userWidget);
+                layout->addWidget(line2);
+                layout->addWidget(recoveryWidget);
+
+                mainLayout->addLayout(layout);
+                mainLayout->setSpacing(0);
+
+                combinedWidget->setLayout(mainLayout);
+
+                ui->tabWidget->addTab(combinedWidget, user->getUserName());
+            }
+            ui->stackedWidget->setCurrentIndex(5);
+        }
+    });
+}
+
+QWidget *HomePage::createUserWidget(UserData *user)
+{
+    QWidget *uWidget = new QWidget();
+
+    QPushButton *saveButton = new QPushButton();
+
+    QHBoxLayout *layout = new QHBoxLayout();
+
+    layout->addWidget(saveButton);
+
+    uWidget->setLayout(layout);
+
+    return uWidget;
+}
+
+QWidget *HomePage::createRecoveryWidget(UserData *user)
+{
+    QWidget *rWidget = new QWidget();
+
+    QVBoxLayout *layout = new QVBoxLayout();
+
+    QLabel *text = new QLabel("У пользователя нету забронированных мест");
+
+    text->setAlignment(Qt::AlignCenter);
+
+    layout->addWidget(text);
+
+    rWidget->setLayout(layout);
+
+    return rWidget;
 }
 
 void HomePage::changedMinusChild()
@@ -795,4 +881,24 @@ void HomePage::registerRoom(const Roomdata &room)
     Booking *booking = new Booking(nullptr, r, userData);
 
     booking->show();
+}
+
+void HomePage::on_aboutlbl_4_linkActivated(const QString &link)
+{
+    ui->stackedWidget->setCurrentIndex(2);
+}
+
+void HomePage::on_placelbl_4_linkActivated(const QString &link)
+{
+    setInformationRoom();
+}
+
+void HomePage::on_bronlbl_4_linkActivated(const QString &link)
+{
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
+void HomePage::on_Title_4_linkActivated(const QString &link)
+{
+    ui->stackedWidget->setCurrentIndex(0);
 }

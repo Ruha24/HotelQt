@@ -18,6 +18,13 @@ Booking::Booking(QWidget *parent, Roomdata *data, UserData *user)
     move(screenGeometry.center() - rect().center());
 
     ui->infolbl->setText(data->getDescription());
+
+    QPixmap pixmap(data->getImage());
+
+    if (!pixmap.isNull()) {
+        ui->imagelbl->setPixmap(pixmap);
+    }
+    ui->imagelbl->setScaledContents(true);
 }
 
 Booking::~Booking()
@@ -32,8 +39,8 @@ void Booking::on_startTimebtn_clicked()
     QPoint buttonPos = ui->startTimebtn->mapTo(this, QPoint(0, 0));
 
     m_customCalendar = new CustomCalendar(this,
-                                          buttonCenter.x() + ui->startTimebtn->width(),
-                                          buttonPos.y() + ui->startTimebtn->height());
+                                          buttonCenter.x() + this->pos().x() / 2,
+                                          buttonPos.y() + this->pos().y());
 
     ui->startTimebtn->setText(m_customCalendar->getStartDate());
     ui->endTimeBtn->setText(m_customCalendar->getEndDate());
@@ -48,8 +55,8 @@ void Booking::on_endTimeBtn_clicked()
     QPoint buttonPos = ui->endTimeBtn->mapTo(this, QPoint(0, 0));
 
     m_customCalendar = new CustomCalendar(this,
-                                          buttonCenter.x() + ui->endTimeBtn->width(),
-                                          buttonPos.y() + ui->endTimeBtn->height());
+                                          buttonCenter.x() + this->pos().x() / 2,
+                                          buttonPos.y() + this->pos().y());
 
     ui->startTimebtn->setText(m_customCalendar->getStartDate());
     ui->endTimeBtn->setText(m_customCalendar->getEndDate());
@@ -99,7 +106,10 @@ void Booking::on_pushButton_clicked()
 
     m_userData->recoveryRoom(m_room, m_recovery, [&](bool success) {
         if (success) {
-            QMessageBox::information(this, "", "Вы забронировали место");
+            QMessageBox::information(this, "Бронь", "Вы забронировали место");
+            this->close();
+        } else {
+            QMessageBox::information(this, "Ошибка", "Вы не можете забронировать то же самое место");
             this->close();
         }
     });

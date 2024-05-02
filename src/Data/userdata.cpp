@@ -10,6 +10,23 @@
 
 UserData::UserData() {}
 
+UserData::UserData(int idUser,
+                   QString login,
+                   QString password,
+                   QString bdate,
+                   QString name,
+                   QString lastName,
+                   QString email)
+{
+    this->idUser = idUser;
+    this->name = login;
+    this->password = password;
+    this->bdate = bdate;
+    this->userName = name;
+    this->lastName = lastName;
+    this->email = email;
+}
+
 void UserData::getIdUser(QString userName, std::function<void(bool)> callback)
 {
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
@@ -227,15 +244,6 @@ void UserData::updatePasswordonEmail(QString pass, std::function<void(bool)> cal
     });
 }
 
-QString UserData::getRole() const
-{
-    return role;
-}
-
-void UserData::setRole(const QString &newRole)
-{
-    role = newRole;
-}
 
 void UserData::checkEmail(std::function<void(bool)> callback)
 {
@@ -470,10 +478,6 @@ void UserData::getRooms(std::function<void(bool)> callback)
     });
 }
 
-QList<Roomdata> UserData::getListRooms() const
-{
-    return listRooms;
-}
 
 void UserData::recoveryRoom(Roomdata *room, RecoveryData *data, std::function<void(bool)> callback)
 {
@@ -501,6 +505,10 @@ void UserData::recoveryRoom(Roomdata *room, RecoveryData *data, std::function<vo
                 callback(true);
             }
 
+            if (response.contains("Booking")) {
+                callback(false);
+            }
+
         } else {
             callback(false);
         }
@@ -508,6 +516,74 @@ void UserData::recoveryRoom(Roomdata *room, RecoveryData *data, std::function<vo
         reply->deleteLater();
         networkManager->deleteLater();
     });
+}
+
+void UserData::getUsers(std::function<void(bool)> callback)
+{
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    QNetworkRequest request(QUrl("http://localhost:555/getUsers"));
+
+    QNetworkReply *reply = networkManager->get(request);
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            QJsonDocument responseDoc = QJsonDocument::fromJson(responseData);
+
+            QJsonObject response = responseDoc.object();
+            QJsonArray jsonArray;
+
+            if (response.contains("status") && response["status"].toString() == "success") {
+                listUsers.clear();
+
+                jsonArray = response["data"].toArray();
+
+                for (const QJsonValue &user : qAsConst(jsonArray)) {
+                    int idUser = user["id"].toInt();
+                    QString name = user["name"].toString();
+                    QString lastName = user["lastName"].toString();
+                    QString login = user["login"].toString();
+                    QString password = user["password"].toString();
+                    QString email = user["email"].toString();
+                    QString bdate = user["date"].toString();
+
+                    UserData *dataUser
+                        = new UserData(idUser, login, password, bdate, name, lastName, email);
+
+                    listUsers.append(dataUser);
+                }
+                callback(true);
+            } else {
+                callback(false);
+            }
+        } else {
+            callback(false);
+        }
+
+        reply->deleteLater();
+        networkManager->deleteLater();
+    });
+}
+
+QList<UserData *> UserData::getListUsers() const
+{
+    return listUsers;
+}
+
+QString UserData::getRole() const
+{
+    return role;
+}
+
+void UserData::setRole(const QString &newRole)
+{
+    role = newRole;
+}
+
+QList<Roomdata> UserData::getListRooms() const
+{
+    return listRooms;
 }
 
 QList<RecoveryData> UserData::getListRecovery() const

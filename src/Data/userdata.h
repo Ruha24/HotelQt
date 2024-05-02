@@ -19,6 +19,13 @@ class UserData
 {
 public:
     UserData();
+    UserData(int idUser,
+             QString login,
+             QString password,
+             QString bdate,
+             QString name,
+             QString lastName,
+             QString email);
 
     int getUserId() const;
     void setUserId(int id);
@@ -79,6 +86,10 @@ public:
     QString getRole() const;
     void setRole(const QString &newRole);
 
+    void getUsers(std::function<void(bool)> callback);
+
+    QList<UserData *> getListUsers() const;
+
 private:
     bool isValidUser = false;
 
@@ -92,6 +103,7 @@ private:
 
     QList<RecoveryData> listRecovery;
     QList<Roomdata> listRooms;
+    QList<UserData *> listUsers;
 
     int idUser = -1;
 };

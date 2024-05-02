@@ -91,6 +91,14 @@ private slots:
 
     void registerRoom(const Roomdata &room);
 
+    void on_aboutlbl_4_linkActivated(const QString &link);
+
+    void on_placelbl_4_linkActivated(const QString &link);
+
+    void on_bronlbl_4_linkActivated(const QString &link);
+
+    void on_Title_4_linkActivated(const QString &link);
+
 private:
     void connectionElement();
     void CreateElementMenu();
@@ -102,6 +110,10 @@ private:
     void getUserData();
     void setInformationRoom();
     void initAction();
+    void getAllUsers();
+
+    QWidget *createUserWidget(UserData *user);
+    QWidget *createRecoveryWidget(UserData *user);
 
     CustomCalendar *customCalendar;
 
