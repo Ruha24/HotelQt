@@ -95,6 +95,9 @@ void Roomdata::getRooms(int countPlace, std::function<void(bool)> callback)
         } else {
             callback(false);
         }
+
+        reply->deleteLater();
+        networkManager->deleteLater();
     });
 }
 

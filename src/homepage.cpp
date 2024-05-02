@@ -25,6 +25,10 @@ HomePage::~HomePage()
 
 void HomePage::setUserData(UserData *data)
 {
+    if (userData != nullptr) {
+        delete userData;
+    }
+
     userData = data;
 
     if (userData->getUserName() != "") {
@@ -148,8 +152,6 @@ void HomePage::CreateElementMenu()
 
 void HomePage::SetVisibleUser()
 {
-    static bool isVisible = false;
-
     ui->Profile->setVisible(!isVisible);
     ui->Profile_2->setVisible(!isVisible);
     ui->Profile_3->setVisible(!isVisible);
@@ -166,35 +168,45 @@ void HomePage::SetVisibleUser()
 
 void HomePage::initActionUser(QComboBox *cmb)
 {
+    cmb->clear();
+    disconnect(cmb, &QComboBox::activated, this, nullptr);
+
     cmb->addItem("Профиль");
     cmb->addItem("Бронирования");
 
-    bool role = userData->getRole() == "Админ";
-    if (role) {
+    bool isAdmin = userData->getRole() == "Админ";
+    if (isAdmin) {
         cmb->addItem("Просмотр");
     }
     cmb->addItem("Выход");
 
     connect(cmb, QOverload<int>::of(&QComboBox::activated), this, [=](int index) {
-        switch (index) {
-        case 0:
-            getUserData();
-            break;
-        case 1:
-            setRecovery();
-            break;
-        case 2:
-            if (!role) {
+        if (userData != nullptr) {
+            switch (index) {
+            case 0:
+                getUserData();
+                break;
+            case 1:
+                setRecovery();
+                break;
+            case 2:
+                if (isAdmin) {
+                    qDebug() << "работает для админа";
+                } else {
+                    SetVisibleUser();
+                    ui->stackedWidget->setCurrentIndex(0);
+                    delete userData;
+                    userData = nullptr;
+                }
+                break;
+            case 3:
                 SetVisibleUser();
                 ui->stackedWidget->setCurrentIndex(0);
-            } else {
-                qDebug() << "работает";
+                delete userData;
+                userData = nullptr;
+
+                break;
             }
-            break;
-        case 3:
-            SetVisibleUser();
-            ui->stackedWidget->setCurrentIndex(0);
-            break;
         }
     });
 }
@@ -529,8 +541,6 @@ void HomePage::on_searchbtn_clicked()
                 QHBoxLayout *layout = new QHBoxLayout(roomWidget);
                 layout->setAlignment(Qt::AlignCenter);
 
-                layout->addSpacing(150);
-
                 QFrame *line = new QFrame();
                 line->setFrameShape(QFrame::HLine);
                 line->setLineWidth(2);
@@ -569,14 +579,21 @@ void HomePage::on_searchbtn_clicked()
 
                 QLabel *description = new QLabel(room.getDescription());
 
+                description->setWordWrap(true);
                 description->setStyleSheet(
-                    "QLabel{ color: #050505; font-size: 20px; width: 250px;}");
+                    "QLabel{ color: #050505; font-size: 18px; width: 250px;}");
+
+                QSpacerItem *spacer = new QSpacerItem(20,
+                                                      20,
+                                                      QSizePolicy::Fixed,
+                                                      QSizePolicy::Fixed);
 
                 infoLayout->addWidget(nameRoom);
                 infoLayout->addWidget(description);
                 infoLayout->addLayout(recLayout);
 
                 layout->addWidget(imageLabel);
+                layout->addSpacerItem(spacer);
                 layout->addLayout(infoLayout);
 
                 connect(recoverybtn, &QPushButton::clicked, this, [=]() { registerRoom(room); });

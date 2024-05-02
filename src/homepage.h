@@ -111,6 +111,8 @@ private:
 
     int countPlacesRoom = 2;
 
+    bool isVisible = false;
+
     Roomdata *room = new Roomdata();
     QPushButton *minusButton;
     QPushButton *addButton;

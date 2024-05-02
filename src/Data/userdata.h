@@ -10,6 +10,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QString>
+#include <QtAlgorithms>
 
 #include "recoverydata.h"
 #include "roomdata.h"

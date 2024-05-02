@@ -59,9 +59,9 @@ void Booking::on_endTimeBtn_clicked()
 
 void Booking::setPriceText(const QDate &startDate, const QDate &lastDate)
 {
-    if (!startDate.isValid() || !lastDate.isValid() || startDate > lastDate)
+    if (!startDate.isValid() || !lastDate.isValid() || startDate > lastDate) {
         return;
-
+    }
     int daysDifference = startDate.daysTo(lastDate);
 
     int totalPrice = m_room->getStartPrice() * daysDifference;

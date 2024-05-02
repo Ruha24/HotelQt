@@ -264,6 +264,9 @@ void UserData::checkEmail(std::function<void(bool)> callback)
         } else {
             callback(true);
         }
+
+        reply->deleteLater();
+        networkManager->deleteLater();
     });
 }
 
@@ -284,6 +287,7 @@ void UserData::getUserRecovery(std::function<void(bool)> callback)
 
     QObject::connect(reply, &QNetworkReply::finished, [=]() {
         if (reply->error() == QNetworkReply::NoError) {
+            listRecovery.clear();
             QByteArray responseData = reply->readAll();
             QJsonDocument responseDoc = QJsonDocument::fromJson(responseData);
 
@@ -291,10 +295,9 @@ void UserData::getUserRecovery(std::function<void(bool)> callback)
             QJsonArray jsonArray;
 
             if (response.contains("data")) {
-                listRecovery.clear();
                 jsonArray = response["data"].toArray();
 
-                for (const QJsonValue &roomValue : jsonArray) {
+                for (const QJsonValue &roomValue : qAsConst(jsonArray)) {
                     QString startDateString = roomValue["startDate"].toString();
                     QDate startDate = QDate::fromString(startDateString, "yyyy-MM-dd");
 
@@ -325,11 +328,13 @@ void UserData::getUserRecovery(std::function<void(bool)> callback)
 
                     listRecovery.append(recovery);
                 }
-
                 callback(true);
             }
         } else
             callback(false);
+
+        reply->deleteLater();
+        networkManager->deleteLater();
     });
 }
 
@@ -370,6 +375,8 @@ void UserData::getUserStats(QString userName, std::function<void(bool)> callback
         } else {
             callback(false);
         }
+        reply->deleteLater();
+        networkManager->deleteLater();
     });
 }
 
@@ -399,6 +406,8 @@ void UserData::deleteRecovery(const RecoveryData &recovery, std::function<void(b
         } else {
             callback(false);
         }
+        reply->deleteLater();
+        networkManager->deleteLater();
     });
 }
 
@@ -455,6 +464,9 @@ void UserData::getRooms(std::function<void(bool)> callback)
         } else {
             callback(false);
         }
+
+        reply->deleteLater();
+        networkManager->deleteLater();
     });
 }
 
@@ -492,6 +504,9 @@ void UserData::recoveryRoom(Roomdata *room, RecoveryData *data, std::function<vo
         } else {
             callback(false);
         }
+
+        reply->deleteLater();
+        networkManager->deleteLater();
     });
 }
 
