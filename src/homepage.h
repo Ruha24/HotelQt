@@ -107,13 +107,14 @@ private:
     void setRecovery();
     void showDetailedInfo(const RecoveryData &recovery);
     void cancelRecovery(const RecoveryData &recovery);
+    void cancelAdminRecovery(const RecoveryData &recovery, UserData *user, QWidget *recoveryWidget);
     void getUserData();
     void setInformationRoom();
     void initAction();
     void getAllUsers();
 
     QWidget *createUserWidget(UserData *user);
-    QWidget *createRecoveryWidget(UserData *user);
+    void createRecoveryWidget(UserData *user, QWidget *recoveryWidget);
 
     CustomCalendar *customCalendar;
 

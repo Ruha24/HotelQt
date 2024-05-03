@@ -339,6 +339,37 @@ void HomePage::cancelRecovery(const RecoveryData &recovery)
     }
 }
 
+void HomePage::cancelAdminRecovery(const RecoveryData &recovery,
+                                   UserData *user,
+                                   QWidget *recoveryWidget)
+{
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this,
+                                  "Отмена",
+                                  "Вы точно хотите отменить бронирование?",
+                                  QMessageBox::Ok | QMessageBox::Cancel);
+
+    if (reply == QMessageBox::Ok) {
+        user->deleteRecovery(recovery, [=](bool success) {
+            if (success) {
+                QMessageBox::information(this, "Успешно", "Вы успешно отменили бронь");
+
+                QLayout *layout = recoveryWidget->layout();
+                if (layout) {
+                    QLayoutItem *child;
+                    while ((child = layout->takeAt(0)) != nullptr) {
+                        delete child->widget();
+                        delete child;
+                    }
+                    delete layout;
+                }
+
+                createRecoveryWidget(user, recoveryWidget);
+            }
+        });
+    }
+}
+
 void HomePage::getUserData()
 {
     userData->getUserStats(userData->getUserName(), [&](bool success) {
@@ -459,10 +490,9 @@ void HomePage::getAllUsers()
     userData->getUsers([&](bool success) {
         if (success) {
             for (UserData *user : userData->getListUsers()) {
-                user->getUserRecovery([&](bool success) {});
-
                 QWidget *userWidget = createUserWidget(user);
-                QWidget *recoveryWidget = createRecoveryWidget(user);
+                QWidget *recoveryWidget = new QWidget();
+
                 QWidget *combinedWidget = new QWidget();
 
                 QVBoxLayout *mainLayout = new QVBoxLayout();
@@ -496,6 +526,8 @@ void HomePage::getAllUsers()
 
                 combinedWidget->setLayout(mainLayout);
 
+                createRecoveryWidget(user, recoveryWidget);
+
                 ui->tabWidget->addTab(combinedWidget, user->getUserName());
             }
             ui->stackedWidget->setCurrentIndex(5);
@@ -507,9 +539,36 @@ QWidget *HomePage::createUserWidget(UserData *user)
 {
     QWidget *uWidget = new QWidget();
 
+    QFrame *line = new QFrame();
+    line->setFrameShape(QFrame::HLine);
+    line->setLineWidth(2);
+    line->setMidLineWidth(0);
+    line->setStyleSheet("QFrame{color: black;}");
+
+    QHBoxLayout *textLayout = new QHBoxLayout();
+
+    QLabel *mainText = new QLabel("Личные данные");
+
+    mainText->setFixedSize(250, 40);
+    mainText->setStyleSheet("font-size: 18px;");
+
+    mainText->setAlignment(Qt::AlignHCenter);
+
+    QSpacerItem *spacer = new QSpacerItem(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    QSpacerItem *spacer2 = new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Fixed);
+
     QPushButton *saveButton = new QPushButton();
 
-    QHBoxLayout *layout = new QHBoxLayout();
+    QVBoxLayout *layout = new QVBoxLayout();
+
+    textLayout->addSpacerItem(spacer2);
+    textLayout->addWidget(mainText);
+    textLayout->addSpacerItem(spacer2);
+
+    layout->addLayout(textLayout);
+    layout->addWidget(line);
+    layout->addSpacerItem(spacer);
 
     layout->addWidget(saveButton);
 
@@ -518,21 +577,91 @@ QWidget *HomePage::createUserWidget(UserData *user)
     return uWidget;
 }
 
-QWidget *HomePage::createRecoveryWidget(UserData *user)
+void HomePage::createRecoveryWidget(UserData *user, QWidget *recoveryWidget)
 {
-    QWidget *rWidget = new QWidget();
+    QVBoxLayout *recoveryLayout = new QVBoxLayout(recoveryWidget);
+    recoveryLayout->setContentsMargins(0, 0, 0, 0);
+    recoveryLayout->setSpacing(0);
 
-    QVBoxLayout *layout = new QVBoxLayout();
+    QFrame *line = new QFrame();
+    line->setFrameShape(QFrame::HLine);
+    line->setLineWidth(2);
+    line->setMidLineWidth(0);
+    line->setStyleSheet("QFrame{color: black;}");
 
-    QLabel *text = new QLabel("У пользователя нету забронированных мест");
+    QHBoxLayout *textLayout = new QHBoxLayout();
 
-    text->setAlignment(Qt::AlignCenter);
+    QLabel *mainText = new QLabel("Бронирования");
+    mainText->setFixedSize(250, 40);
+    mainText->setAlignment(Qt::AlignHCenter);
+    mainText->setStyleSheet("font-size: 18px;");
 
-    layout->addWidget(text);
+    QSpacerItem *spacer2 = new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    QSpacerItem *spacer = new QSpacerItem(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    rWidget->setLayout(layout);
+    textLayout->addSpacerItem(spacer2);
+    textLayout->addWidget(mainText);
+    textLayout->addSpacerItem(spacer2);
 
-    return rWidget;
+    recoveryLayout->addLayout(textLayout);
+    recoveryLayout->addWidget(line);
+    recoveryLayout->addSpacerItem(spacer);
+
+    user->getUserRecovery([=](bool success) {
+        if (success) {
+            const QList<RecoveryData> recList = user->getListRecovery();
+
+            for (const auto &recovery : recList) {
+                QWidget *recoveryItemWidget = new QWidget();
+                recoveryItemWidget->setFixedSize(700, 100);
+                recoveryItemWidget->setStyleSheet(
+                    "QWidget { background-color: #DCDCDC; border-radius: 10px}");
+
+                QHBoxLayout *recoveryItemLayout = new QHBoxLayout(recoveryItemWidget);
+
+                QLabel *roomLabel = new QLabel(recovery.getRoomName());
+                roomLabel->setStyleSheet("QLabel { font-size: 24px}");
+
+                QLocale russianLocale(QLocale::Russian);
+                QString startDate = russianLocale.toString(recovery.getStartDate(), "d MMMM yyyy");
+                QString lastDate = russianLocale.toString(recovery.getLastDate(), "d MMMM yyyy");
+                QLabel *dateLabel = new QLabel(QString("%1 - %2").arg(startDate, lastDate));
+                dateLabel->setStyleSheet("QLabel { font-size: 24px}");
+
+                QSpacerItem *spacer = new QSpacerItem(20,
+                                                      20,
+                                                      QSizePolicy::Expanding,
+                                                      QSizePolicy::Expanding);
+                QSpacerItem *spacer2 = new QSpacerItem(20,
+                                                       20,
+                                                       QSizePolicy::Expanding,
+                                                       QSizePolicy::Expanding);
+
+                QPushButton *cancelButton = new QPushButton("Отменить");
+                cancelButton->setStyleSheet("QPushButton { border-radius: 10px; color: white; "
+                                            "background-color: #B60000; font-size: 24px}");
+                cancelButton->setFixedSize(135, 55);
+
+                recoveryItemLayout->addWidget(roomLabel);
+                recoveryItemLayout->addSpacerItem(spacer);
+                recoveryItemLayout->addWidget(dateLabel);
+                recoveryItemLayout->addSpacerItem(spacer2);
+                recoveryItemLayout->addWidget(cancelButton);
+
+                recoveryLayout->addWidget(recoveryItemWidget);
+
+                connect(cancelButton, &QPushButton::clicked, this, [=]() {
+                    cancelAdminRecovery(recovery, user, recoveryWidget);
+                });
+            }
+
+            if (recList.size() == 0) {
+                QLabel *text = new QLabel("У пользователя нет забронированных мест");
+                text->setAlignment(Qt::AlignCenter);
+                recoveryLayout->addWidget(text);
+            }
+        }
+    });
 }
 
 void HomePage::changedMinusChild()
