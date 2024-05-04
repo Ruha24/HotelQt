@@ -496,7 +496,10 @@ void HomePage::getAllUsers()
                 QWidget *combinedWidget = new QWidget();
 
                 QVBoxLayout *mainLayout = new QVBoxLayout();
+                mainLayout->setAlignment(Qt::AlignCenter);
+
                 QHBoxLayout *layout = new QHBoxLayout();
+                layout->setAlignment(Qt::AlignCenter);
 
                 QSpacerItem *spacer = new QSpacerItem(20,
                                                       20,
@@ -515,6 +518,10 @@ void HomePage::getAllUsers()
                 line2->setMidLineWidth(0);
                 line2->setStyleSheet("QFrame{color: black;}");
 
+                mainLayout->setContentsMargins(0, 0, 0, 0);
+                layout->setContentsMargins(0, 0, 0, 0);
+                layout->setSpacing(0);
+
                 mainLayout->addSpacerItem(spacer);
                 mainLayout->addWidget(line);
                 layout->addWidget(userWidget);
@@ -522,7 +529,6 @@ void HomePage::getAllUsers()
                 layout->addWidget(recoveryWidget);
 
                 mainLayout->addLayout(layout);
-                mainLayout->setSpacing(0);
 
                 combinedWidget->setLayout(mainLayout);
 
@@ -558,7 +564,7 @@ QWidget *HomePage::createUserWidget(UserData *user)
 
     QSpacerItem *spacer2 = new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    QPushButton *saveButton = new QPushButton();
+    // QPushButton *saveButton = new QPushButton();
 
     QVBoxLayout *layout = new QVBoxLayout();
 
@@ -570,7 +576,7 @@ QWidget *HomePage::createUserWidget(UserData *user)
     layout->addWidget(line);
     layout->addSpacerItem(spacer);
 
-    layout->addWidget(saveButton);
+    // layout->addWidget(saveButton);
 
     uWidget->setLayout(layout);
 
@@ -580,8 +586,6 @@ QWidget *HomePage::createUserWidget(UserData *user)
 void HomePage::createRecoveryWidget(UserData *user, QWidget *recoveryWidget)
 {
     QVBoxLayout *recoveryLayout = new QVBoxLayout(recoveryWidget);
-    recoveryLayout->setContentsMargins(0, 0, 0, 0);
-    recoveryLayout->setSpacing(0);
 
     QFrame *line = new QFrame();
     line->setFrameShape(QFrame::HLine);
@@ -607,12 +611,23 @@ void HomePage::createRecoveryWidget(UserData *user, QWidget *recoveryWidget)
     recoveryLayout->addWidget(line);
     recoveryLayout->addSpacerItem(spacer);
 
+    QHBoxLayout *recovery = new QHBoxLayout();
+
+    QVBoxLayout *recoveryList = new QVBoxLayout();
+
+    recovery->addSpacerItem(spacer);
+    recovery->addLayout(recoveryList);
+    recovery->addSpacerItem(spacer);
+
+    recoveryLayout->addLayout(recovery);
+
     user->getUserRecovery([=](bool success) {
         if (success) {
             const QList<RecoveryData> recList = user->getListRecovery();
 
             for (const auto &recovery : recList) {
                 QWidget *recoveryItemWidget = new QWidget();
+
                 recoveryItemWidget->setFixedSize(700, 100);
                 recoveryItemWidget->setStyleSheet(
                     "QWidget { background-color: #DCDCDC; border-radius: 10px}");
@@ -648,7 +663,7 @@ void HomePage::createRecoveryWidget(UserData *user, QWidget *recoveryWidget)
                 recoveryItemLayout->addSpacerItem(spacer2);
                 recoveryItemLayout->addWidget(cancelButton);
 
-                recoveryLayout->addWidget(recoveryItemWidget);
+                recoveryList->addWidget(recoveryItemWidget);
 
                 connect(cancelButton, &QPushButton::clicked, this, [=]() {
                     cancelAdminRecovery(recovery, user, recoveryWidget);
@@ -657,9 +672,12 @@ void HomePage::createRecoveryWidget(UserData *user, QWidget *recoveryWidget)
 
             if (recList.size() == 0) {
                 QLabel *text = new QLabel("У пользователя нет забронированных мест");
+                text->setStyleSheet("font-size: 18px;");
                 text->setAlignment(Qt::AlignCenter);
-                recoveryLayout->addWidget(text);
+                recoveryList->addWidget(text);
             }
+
+            recoveryLayout->addSpacerItem(spacer);
         }
     });
 }
