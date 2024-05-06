@@ -311,7 +311,7 @@ void UserData::getUserRecovery(std::function<void(bool)> callback)
                     QDate startDate = QDate::fromString(startDateString, "yyyy-MM-dd");
 
                     QString lastDateString = roomValue["lastDate"].toString();
-                    QDate lastDate = QDate::fromString(startDateString, "yyyy-MM-dd");
+                    QDate lastDate = QDate::fromString(lastDateString, "yyyy-MM-dd");
 
                     QByteArray imageData = QByteArray::fromBase64(
                         roomValue["imageData"].toString().toUtf8());

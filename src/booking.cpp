@@ -69,9 +69,17 @@ void Booking::setPriceText(const QDate &startDate, const QDate &lastDate)
     if (!startDate.isValid() || !lastDate.isValid() || startDate > lastDate) {
         return;
     }
-    int daysDifference = startDate.daysTo(lastDate);
 
-    int totalPrice = m_room->getStartPrice() * daysDifference;
+    int daysDifference = startDate.daysTo(lastDate);
+    int monthsDifference = lastDate.month() - startDate.month();
+    int daysInMonth = startDate.daysInMonth();
+
+    if (startDate.year() == lastDate.year() && lastDate.month() > startDate.month()) {
+        monthsDifference++;
+        daysDifference += daysInMonth - startDate.day();
+    }
+
+    int totalPrice = m_room->getStartPrice() * (monthsDifference * daysInMonth + daysDifference);
 
     QString dayWord;
     if (daysDifference == 1)
@@ -80,6 +88,9 @@ void Booking::setPriceText(const QDate &startDate, const QDate &lastDate)
         dayWord = "дня";
     else
         dayWord = "дней";
+
+    qDebug() << startDate;
+    qDebug() << lastDate;
 
     m_recovery = new RecoveryData(1,
                                   m_room->getTypeRoom(),
