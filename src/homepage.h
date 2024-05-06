@@ -112,6 +112,12 @@ private:
     void setInformationRoom();
     void initAction();
     void getAllUsers();
+    void saveStatsUser(UserData *user,
+                       QString name,
+                       QString lastName,
+                       QString bdate,
+                       QString email,
+                       QString newPassword);
 
     QWidget *createUserWidget(UserData *user);
     void createRecoveryWidget(UserData *user, QWidget *recoveryWidget);

@@ -93,7 +93,7 @@ public:
 private:
     bool isValidUser = false;
 
-    QString name = "";
+    QString user = "";
     QString lastName = " ";
     QString bdate = "";
     QString userName = "";

@@ -30,7 +30,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -2890,8 +2890,8 @@ QComboBox::down-arrow:on {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1348</width>
-             <height>728</height>
+             <width>1333</width>
+             <height>197</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_18">

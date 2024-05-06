@@ -354,17 +354,7 @@ void HomePage::cancelAdminRecovery(const RecoveryData &recovery,
             if (success) {
                 QMessageBox::information(this, "Успешно", "Вы успешно отменили бронь");
 
-                QLayout *layout = recoveryWidget->layout();
-                if (layout) {
-                    QLayoutItem *child;
-                    while ((child = layout->takeAt(0)) != nullptr) {
-                        delete child->widget();
-                        delete child;
-                    }
-                    delete layout;
-                }
-
-                createRecoveryWidget(user, recoveryWidget);
+                getAllUsers();
             }
         });
     }
@@ -496,10 +486,8 @@ void HomePage::getAllUsers()
                 QWidget *combinedWidget = new QWidget();
 
                 QVBoxLayout *mainLayout = new QVBoxLayout();
-                mainLayout->setAlignment(Qt::AlignCenter);
 
                 QHBoxLayout *layout = new QHBoxLayout();
-                layout->setAlignment(Qt::AlignCenter);
 
                 QSpacerItem *spacer = new QSpacerItem(20,
                                                       20,
@@ -541,9 +529,67 @@ void HomePage::getAllUsers()
     });
 }
 
+void HomePage::saveStatsUser(UserData *user,
+                             QString name,
+                             QString lastName,
+                             QString bdate,
+                             QString email,
+                             QString newPassword)
+{
+    if (name.isEmpty() || lastName.isEmpty() || bdate.isEmpty() || email.isEmpty()) {
+        QMessageBox::warning(this, "", "Все поля должны быть заполнены");
+        return;
+    }
+
+    static QRegularExpression dateRegex("^\\d{2}\\.\\d{2}\\.\\d{4}$");
+    if (!dateRegex.match(bdate).hasMatch()) {
+        QMessageBox::warning(this, "", "Формат даты должен быть 10.10.1000");
+        return;
+    }
+
+    static QRegularExpression emailRegex("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}");
+    if (!emailRegex.match(email).hasMatch()) {
+        QMessageBox::warning(this, "", "Некорректный адрес электронной почты");
+        return;
+    }
+
+    user->updateStats(name, lastName, bdate, email, [&](bool success) {
+        if (success) {
+            QMessageBox::information(this, "", "Данные успешно обновлены");
+            getAllUsers();
+        } else
+            QMessageBox::information(this, "Ошибка", "Данные не были обновлены");
+    });
+
+    if (newPassword.isEmpty())
+        return;
+
+    static QRegularExpression passwordRegex("^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$");
+    if (!passwordRegex.match(newPassword).hasMatch()) {
+        QMessageBox::warning(
+            this,
+            "",
+            "Некорректный пароль\nПароль должен состоять из:\n- Минимум 8 символов\n- Хотя бы "
+            "одной заглавной буквы\n- Хотя бы одного специального символа\n- Хотя бы одной цифры");
+        return;
+    }
+
+    user->updatePassword(newPassword, [&](bool success) {
+        if (success) {
+            QMessageBox::information(this, "", "Пароль успешно изменён");
+            getAllUsers();
+        } else
+            QMessageBox::information(this, "Ошибка", "Пароль не изменён");
+    });
+}
+
 QWidget *HomePage::createUserWidget(UserData *user)
 {
     QWidget *uWidget = new QWidget();
+
+    uWidget->setStyleSheet("QLineEdit { font: 14pt 'Montserrat'; height: 50px; border-radius: 5px; "
+                           "border: 2px solid #ccc; } "
+                           "QLineEdit:focus { border-bottom: 2px solid #28a2a2; }");
 
     QFrame *line = new QFrame();
     line->setFrameShape(QFrame::HLine);
@@ -551,34 +597,147 @@ QWidget *HomePage::createUserWidget(UserData *user)
     line->setMidLineWidth(0);
     line->setStyleSheet("QFrame{color: black;}");
 
+    QSpacerItem *spacer = new QSpacerItem(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QSpacerItem *spacer2 = new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Fixed);
+
     QHBoxLayout *textLayout = new QHBoxLayout();
 
     QLabel *mainText = new QLabel("Личные данные");
-
     mainText->setFixedSize(250, 40);
     mainText->setStyleSheet("font-size: 18px;");
-
     mainText->setAlignment(Qt::AlignHCenter);
 
-    QSpacerItem *spacer = new QSpacerItem(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QPushButton *saveButton = new QPushButton("Сохранить");
 
-    QSpacerItem *spacer2 = new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    saveButton->setStyleSheet("height:40px; font-size: 18px; color: black; background-color: "
+                              "rgb(185, 184, 184); border-radius: 10px;");
 
-    // QPushButton *saveButton = new QPushButton();
+    QHBoxLayout *hLayout1 = new QHBoxLayout();
+    hLayout1->setSpacing(55);
 
+    QVBoxLayout *vLayout1_1 = new QVBoxLayout();
+    vLayout1_1->setSpacing(9);
+    vLayout1_1->setContentsMargins(0, 0, 0, 0);
+
+    QLabel *userlbl = new QLabel("Имя");
+    userlbl->setStyleSheet("font-size: 24px");
+    QLineEdit *usertxt = new QLineEdit();
+
+    usertxt->setText(user->getUserName());
+
+    QVBoxLayout *vLayout1_2 = new QVBoxLayout();
+    vLayout1_2->setSpacing(9);
+    vLayout1_2->setContentsMargins(0, 0, 0, 0);
+
+    QLabel *lastNamelbl = new QLabel("Фамилия");
+    lastNamelbl->setStyleSheet("font-size: 24px");
+    QLineEdit *lastNametxt = new QLineEdit();
+    lastNametxt->setText(user->getLastName());
+
+    vLayout1_2->addWidget(lastNamelbl);
+    vLayout1_2->addWidget(lastNametxt);
+
+    vLayout1_1->addWidget(userlbl);
+    vLayout1_1->addWidget(usertxt);
+
+    hLayout1->addLayout(vLayout1_1);
+    hLayout1->addLayout(vLayout1_2);
+
+    QHBoxLayout *hLayout2 = new QHBoxLayout();
+    hLayout2->setSpacing(55);
+
+    QVBoxLayout *vLayout2_1 = new QVBoxLayout();
+    vLayout2_1->setSpacing(9);
+    vLayout2_1->setContentsMargins(0, 0, 0, 0);
+
+    QLabel *bDatelbl = new QLabel("Дата рождения");
+    bDatelbl->setStyleSheet("font-size: 24px");
+    QLineEdit *bDatetxt = new QLineEdit();
+    bDatetxt->setText(user->getBdate());
+
+    QVBoxLayout *vLayout2_2 = new QVBoxLayout();
+    vLayout2_2->setSpacing(9);
+    vLayout2_2->setContentsMargins(0, 0, 0, 0);
+
+    QLabel *emaillbl = new QLabel("Почта");
+    emaillbl->setStyleSheet("font-size: 24px");
+    QLineEdit *emailtxt = new QLineEdit();
+    emailtxt->setText(user->getEmail());
+
+    vLayout2_1->addWidget(bDatelbl);
+    vLayout2_1->addWidget(bDatetxt);
+
+    vLayout2_2->addWidget(emaillbl);
+    vLayout2_2->addWidget(emailtxt);
+
+    hLayout2->addLayout(vLayout2_1);
+    hLayout2->addLayout(vLayout2_2);
+
+    QHBoxLayout *hLayout3 = new QHBoxLayout();
+    hLayout3->setSpacing(55);
+
+    QVBoxLayout *vLayout3_1 = new QVBoxLayout();
+    vLayout3_1->setSpacing(9);
+    vLayout3_1->setContentsMargins(0, 0, 0, 0);
+
+    QLabel *passwordlbl = new QLabel("Пароль");
+    passwordlbl->setStyleSheet("font-size: 24px");
+    QLineEdit *passwordtxt = new QLineEdit();
+    passwordtxt->setReadOnly(true);
+    passwordtxt->setText(user->getPassword());
+
+    QVBoxLayout *vLayout3_2 = new QVBoxLayout();
+    vLayout3_2->setSpacing(9);
+    vLayout3_2->setContentsMargins(0, 0, 0, 0);
+
+    QLabel *newPasswordlbl = new QLabel("Новый пароль");
+    newPasswordlbl->setStyleSheet("font-size: 24px");
+    QLineEdit *newPasswordtxt = new QLineEdit();
+
+    vLayout3_1->addWidget(passwordlbl);
+    vLayout3_1->addWidget(passwordtxt);
+
+    vLayout3_2->addWidget(newPasswordlbl);
+    vLayout3_2->addWidget(newPasswordtxt);
+
+    hLayout3->addLayout(vLayout3_1);
+    hLayout3->addLayout(vLayout3_2);
+
+    QHBoxLayout *layoutChild = new QHBoxLayout();
+    QVBoxLayout *mainLayout = new QVBoxLayout();
     QVBoxLayout *layout = new QVBoxLayout();
+    layout->setSpacing(15);
 
     textLayout->addSpacerItem(spacer2);
     textLayout->addWidget(mainText);
     textLayout->addSpacerItem(spacer2);
 
-    layout->addLayout(textLayout);
-    layout->addWidget(line);
+    layout->addSpacerItem(spacer);
+    layout->addLayout(hLayout1);
+    layout->addLayout(hLayout2);
+    layout->addLayout(hLayout3);
+    layout->addWidget(saveButton);
     layout->addSpacerItem(spacer);
 
-    // layout->addWidget(saveButton);
+    layoutChild->addSpacerItem(spacer);
+    layoutChild->addLayout(layout);
+    layoutChild->addSpacerItem(spacer);
 
-    uWidget->setLayout(layout);
+    mainLayout->addLayout(textLayout);
+    mainLayout->addWidget(line);
+    mainLayout->addSpacerItem(spacer);
+    mainLayout->addLayout(layoutChild);
+    mainLayout->addSpacerItem(spacer);
+    uWidget->setLayout(mainLayout);
+
+    connect(saveButton, &QPushButton::clicked, this, [=]() {
+        saveStatsUser(user,
+                      usertxt->text().trimmed(),
+                      lastNamelbl->text().trimmed(),
+                      bDatetxt->text().trimmed(),
+                      emailtxt->text().trimmed(),
+                      newPasswordtxt->text().trimmed());
+    });
 
     return uWidget;
 }
@@ -612,6 +771,7 @@ void HomePage::createRecoveryWidget(UserData *user, QWidget *recoveryWidget)
     recoveryLayout->addSpacerItem(spacer);
 
     QHBoxLayout *recovery = new QHBoxLayout();
+    clearLayout(recovery);
 
     QVBoxLayout *recoveryList = new QVBoxLayout();
 
@@ -623,7 +783,8 @@ void HomePage::createRecoveryWidget(UserData *user, QWidget *recoveryWidget)
 
     user->getUserRecovery([=](bool success) {
         if (success) {
-            const QList<RecoveryData> recList = user->getListRecovery();
+            clearLayout(recoveryList);
+            QList<RecoveryData> recList = user->getListRecovery();
 
             for (const auto &recovery : recList) {
                 QWidget *recoveryItemWidget = new QWidget();

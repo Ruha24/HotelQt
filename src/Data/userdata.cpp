@@ -19,7 +19,7 @@ UserData::UserData(int idUser,
                    QString email)
 {
     this->idUser = idUser;
-    this->name = login;
+    this->user = login;
     this->password = password;
     this->bdate = bdate;
     this->userName = name;
@@ -138,13 +138,13 @@ void UserData::updateStats(
 
     QJsonObject json;
 
-    setName(userName);
+    setUserName(name);
     setLastName(lastName);
     setBdate(date);
     setEmail(email);
 
-    json["name"] = userName;
-    json["firstName"] = name;
+    json["name"] = user;
+    json["firstName"] = userName;
     json["lastName"] = lastName;
     json["date"] = date;
     json["email"] = email;
@@ -181,7 +181,7 @@ void UserData::updatePassword(QString pass, std::function<void(bool)> callback)
     QJsonObject json;
 
     json["password"] = pass;
-    json["name"] = userName;
+    json["name"] = user;
 
     QJsonDocument jsonDoc(json);
 
@@ -195,6 +195,7 @@ void UserData::updatePassword(QString pass, std::function<void(bool)> callback)
             QByteArray response = reply->readAll();
 
             if (response.contains("update")) {
+                setPassword(pass);
                 callback(true);
             } else {
                 callback(false);
@@ -593,12 +594,12 @@ QList<RecoveryData> UserData::getListRecovery() const
 
 QString UserData::getName() const
 {
-    return name;
+    return user;
 }
 
 void UserData::setName(const QString &newName)
 {
-    name = newName;
+    user = newName;
 }
 
 QString UserData::getLastName() const
