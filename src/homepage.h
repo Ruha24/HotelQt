@@ -118,6 +118,7 @@ private:
                        QString bdate,
                        QString email,
                        QString newPassword);
+    void clearTabsFromIndex(int startIndex);
 
     QWidget *createUserWidget(UserData *user);
     void createRecoveryWidget(UserData *user, QWidget *recoveryWidget);

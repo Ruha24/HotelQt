@@ -78,7 +78,6 @@ void HomePage::CreateElementMenu()
     widget->setStyleSheet("QLabel {color: black;}");
     QVBoxLayout *mainLayout = new QVBoxLayout(widget);
 
-    // Счётчик взрослых
     QLabel *titlelbl = new QLabel("Взрослые");
     titlelbl->setMinimumWidth(130);
     titlelbl->setMaximumWidth(130);
@@ -106,7 +105,6 @@ void HomePage::CreateElementMenu()
     layout->addWidget(addButton);
     layout->addSpacerItem(spacer);
 
-    // Счётчик детей
     QLabel *titlelbl2 = new QLabel("Дети");
     titlelbl2->setMinimumWidth(130);
     titlelbl2->setMaximumWidth(130);
@@ -178,7 +176,7 @@ void HomePage::initActionUser(QComboBox *cmb)
 
     bool isAdmin = userData->getRole() == "Админ";
     if (isAdmin) {
-        cmb->addItem("Просмотр");
+        cmb->addItem("Админ");
     }
     cmb->addItem("Выход");
 
@@ -473,9 +471,21 @@ void HomePage::initAction()
     initActionUser(ui->actionUser_6);
 }
 
+void HomePage::clearTabsFromIndex(int startIndex)
+{
+    while (ui->tabWidget->count() > startIndex) {
+        QWidget *widgetToRemove = ui->tabWidget->widget(startIndex);
+        if (widgetToRemove) {
+            ui->tabWidget->removeTab(startIndex);
+        } else {
+            ++startIndex;
+        }
+    }
+}
+
 void HomePage::getAllUsers()
 {
-    ui->tabWidget->clear();
+    clearTabsFromIndex(3);
 
     userData->getUsers([&](bool success) {
         if (success) {
@@ -662,6 +672,7 @@ QWidget *HomePage::createUserWidget(UserData *user)
     QLabel *emaillbl = new QLabel("Почта");
     emaillbl->setStyleSheet("font-size: 24px");
     QLineEdit *emailtxt = new QLineEdit();
+    emailtxt->setStyleSheet("font-size: 16px");
     emailtxt->setText(user->getEmail());
 
     vLayout2_1->addWidget(bDatelbl);
