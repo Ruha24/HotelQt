@@ -3770,7 +3770,7 @@ QLabel
                          <number>0</number>
                         </property>
                         <item>
-                         <widget class="QComboBox" name="comboBox">
+                         <widget class="QComboBox" name="indexCmb">
                           <property name="font">
                            <font>
                             <family>Montserrat</family>
@@ -3898,7 +3898,7 @@ QComboBox::down-arrow:on {
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="pushButton_3">
+                       <widget class="QPushButton" name="deleteRoombtn">
                         <property name="minimumSize">
                          <size>
                           <width>350</width>

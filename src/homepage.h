@@ -99,6 +99,10 @@ private slots:
 
     void on_Title_4_linkActivated(const QString &link);
 
+    void on_tabWidget_currentChanged(int index);
+
+    void on_deleteRoombtn_clicked();
+
 private:
     void connectionElement();
     void CreateElementMenu();
@@ -122,6 +126,8 @@ private:
 
     QWidget *createUserWidget(UserData *user);
     void createRecoveryWidget(UserData *user, QWidget *recoveryWidget);
+
+    void getIdRooms();
 
     CustomCalendar *customCalendar;
 

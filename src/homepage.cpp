@@ -854,6 +854,20 @@ void HomePage::createRecoveryWidget(UserData *user, QWidget *recoveryWidget)
     });
 }
 
+void HomePage::getIdRooms()
+{
+    ui->indexCmb->clear();
+
+    room->getRooms([=](bool success) {
+        if (success) {
+            QList<Roomdata> roomList = room->getListRooms();
+            for (const auto &room : roomList) {
+                ui->indexCmb->addItem(QString::number(room.getId()));
+            }
+        }
+    });
+}
+
 void HomePage::changedMinusChild()
 {
     int count = countChildlbl->text().toInt();
@@ -929,7 +943,7 @@ void HomePage::on_searchbtn_clicked()
         return;
     }
 
-    room->getRooms(countPlacesRoom, [=](bool success) {
+    room->getRoomsSearch(countPlacesRoom, [=](bool success) {
         if (success) {
             clearLayout(ui->verticalLayout_4);
 
@@ -1220,4 +1234,30 @@ void HomePage::on_bronlbl_4_linkActivated(const QString &link)
 void HomePage::on_Title_4_linkActivated(const QString &link)
 {
     ui->stackedWidget->setCurrentIndex(0);
+}
+
+void HomePage::on_tabWidget_currentChanged(int index)
+{
+    if (index == 1) {
+        getIdRooms();
+    }
+}
+
+void HomePage::on_deleteRoombtn_clicked()
+{
+    if (ui->plainTextEdit_2->toPlainText().isEmpty()) {
+        QMessageBox::information(this, "Ошибка", "Введите причину удаления комнаты");
+        return;
+    }
+
+    int idRoom = ui->indexCmb->currentText().toInt();
+
+    room->deleteRoom(idRoom, [=](bool success) {
+        if (success) {
+            QMessageBox::information(this, "Комната", "Комната успешно удалена");
+            getIdRooms();
+        } else {
+            QMessageBox::information(this, "Ошибка", "Возникла ошибка при удаление комнаты");
+        }
+    });
 }

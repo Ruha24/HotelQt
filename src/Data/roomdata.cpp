@@ -37,7 +37,7 @@ QString Roomdata::getDescription() const
     return description;
 }
 
-void Roomdata::getRooms(int countPlace, std::function<void(bool)> callback)
+void Roomdata::getRoomsSearch(int countPlace, std::function<void(bool)> callback)
 {
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
 
@@ -101,6 +101,78 @@ void Roomdata::getRooms(int countPlace, std::function<void(bool)> callback)
     });
 }
 
+void Roomdata::getRooms(std::function<void(bool)> callback)
+{
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    QNetworkRequest request(QUrl("http://localhost:555/getRooms"));
+
+    QNetworkReply *reply = networkManager->get(request);
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            QJsonDocument responseDoc = QJsonDocument::fromJson(responseData);
+
+            QJsonObject response = responseDoc.object();
+            QJsonArray jsonArray;
+
+            if (response.contains("data")) {
+                listRooms.clear();
+                jsonArray = response["data"].toArray();
+
+                for (const QJsonValue &room : qAsConst(jsonArray)) {
+                    QJsonObject roomObject = room.toObject();
+
+                    int idRoom = roomObject["idRoom"].toInt();
+
+                    Roomdata roomD = Roomdata();
+                    roomD.setId(idRoom);
+
+                    listRooms.append(roomD);
+                }
+
+                callback(true);
+            }
+
+        } else {
+            callback(false);
+        }
+
+        reply->deleteLater();
+        networkManager->deleteLater();
+    });
+}
+
+void Roomdata::deleteRoom(int idRoom, std::function<void(bool)> callback)
+{
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    QJsonObject json;
+
+    json["idRoom"] = idRoom;
+
+    QJsonDocument jsonDoc(json);
+
+    QNetworkRequest request(QUrl("http://localhost:555/deleteRoom"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = networkManager->post(request, jsonDoc.toJson());
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray response = reply->readAll();
+            if (response.contains("success")) {
+                callback(true);
+            }
+        } else {
+            callback(false);
+        }
+        reply->deleteLater();
+        networkManager->deleteLater();
+    });
+}
+
 QList<Roomdata> Roomdata::getListRooms() const
 {
     return listRooms;
@@ -109,4 +181,9 @@ QList<Roomdata> Roomdata::getListRooms() const
 QString Roomdata::getImage() const
 {
     return image;
+}
+
+void Roomdata::setId(int newId)
+{
+    id = newId;
 }
