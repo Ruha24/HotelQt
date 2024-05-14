@@ -327,8 +327,9 @@ void HomePage::cancelRecovery(const RecoveryData &recovery)
                                   QMessageBox::Ok | QMessageBox::Cancel);
 
     if (reply == QMessageBox::Ok) {
+        qDebug() << "Отмена";
+
         userData->deleteRecovery(recovery, [&](bool success) {
-     
             if (success) {
                 QMessageBox::information(this, "Успешно", "Вы успешно отменили бронь");
                 setRecovery();

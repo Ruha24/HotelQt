@@ -482,8 +482,8 @@ void UserData::getRooms(std::function<void(bool)> callback)
     });
 }
 
-
-void UserData::recoveryRoom(Roomdata *room, RecoveryData *data, std::function<void(bool)> callback)
+void UserData::recoveryRoom(
+    Roomdata *room, RecoveryData *data, QString card, int price, std::function<void(bool)> callback)
 {
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
 
@@ -493,6 +493,9 @@ void UserData::recoveryRoom(Roomdata *room, RecoveryData *data, std::function<vo
     json["idRoom"] = room->getId();
     json["startDate"] = data->getStartDate().toString();
     json["lastDate"] = data->getLastDate().toString();
+    json["card"] = card;
+    json["nowDate"] = QDate::currentDate().toString();
+    json["price"] = price;
 
     QJsonDocument jsonDoc(json);
 
@@ -504,15 +507,9 @@ void UserData::recoveryRoom(Roomdata *room, RecoveryData *data, std::function<vo
     QObject::connect(reply, &QNetworkReply::finished, [=]() {
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray response = reply->readAll();
-
             if (response.contains("success")) {
                 callback(true);
             }
-
-            if (response.contains("Booking")) {
-                callback(false);
-            }
-
         } else {
             callback(false);
         }

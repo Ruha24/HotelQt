@@ -25,9 +25,6 @@ set(PROJECT_SOURCES
         src/booking.cpp
         src/booking.h
         src/booking.ui
-        src/payment.h
-        src/payment.cpp
-        src/payment.ui
         src/inforeserv.cpp
         src/inforeserv.ui
         src/registration.h

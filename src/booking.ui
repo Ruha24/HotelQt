@@ -126,8 +126,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>356</width>
-              <height>177</height>
+              <width>318</width>
+              <height>84</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
@@ -249,7 +249,8 @@
           <widget class="QLabel" name="label">
            <property name="font">
             <font>
-             <pointsize>14</pointsize>
+             <family>Montserrat</family>
+             <pointsize>18</pointsize>
             </font>
            </property>
            <property name="text">
@@ -261,10 +262,27 @@
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="roomNamelbl">
+           <property name="font">
+            <font>
+             <family>Montserrat</family>
+             <pointsize>14</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label_3">
            <property name="font">
             <font>
-             <pointsize>11</pointsize>
+             <family>Montserrat</family>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
@@ -274,6 +292,22 @@
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>10</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -296,7 +330,8 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <family>Montserrat</family>
+               <pointsize>13</pointsize>
               </font>
              </property>
              <property name="styleSheet">
@@ -318,7 +353,8 @@ background-color: #DCDCDC;}</string>
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <family>Montserrat</family>
+               <pointsize>13</pointsize>
               </font>
              </property>
              <property name="styleSheet">
@@ -351,7 +387,8 @@ background-color: #DCDCDC;}</string>
           <widget class="QLabel" name="pricelbl">
            <property name="font">
             <font>
-             <pointsize>11</pointsize>
+             <family>Montserrat</family>
+             <pointsize>14</pointsize>
             </font>
            </property>
            <property name="text">
@@ -361,6 +398,55 @@ background-color: #DCDCDC;}</string>
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <property name="spacing">
+            <number>10</number>
+           </property>
+           <property name="leftMargin">
+            <number>20</number>
+           </property>
+           <property name="rightMargin">
+            <number>20</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="font">
+              <font>
+               <family>Montserrat</family>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Номер карты</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="numberCardtxt">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Montserrat</family>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit
+{
+	border: 1px solid black;
+	border-radius: 10px;
+}</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <spacer name="verticalSpacer_2">
@@ -390,7 +476,8 @@ background-color: #DCDCDC;}</string>
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <family>Montserrat</family>
+               <pointsize>12</pointsize>
               </font>
              </property>
              <property name="styleSheet">

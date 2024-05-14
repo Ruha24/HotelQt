@@ -32,6 +32,7 @@ private slots:
 
 private:
     void setPriceText(const QDate &startDate, const QDate &lastDate);
+    int totalPrice;
 
     Roomdata *m_room;
 
