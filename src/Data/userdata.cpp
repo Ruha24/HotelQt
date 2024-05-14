@@ -316,9 +316,11 @@ void UserData::getUserRecovery(std::function<void(bool)> callback)
                     QByteArray imageData = QByteArray::fromBase64(
                         roomValue["imageData"].toString().toUtf8());
 
+                    QString imageName = roomValue["imageName"].toString();
+
                     int idRec = roomValue["recoveryId"].toInt();
 
-                    QString imagePath = "src/" + QString::number(idRec) + ".jpg";
+                    QString imagePath = "src/" + imageName;
                     QFile imageFile(imagePath);
                     if (imageFile.open(QIODevice::WriteOnly)) {
                         imageFile.write(imageData);
