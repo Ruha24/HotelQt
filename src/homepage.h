@@ -12,6 +12,7 @@
 #include <QSpacerItem>
 #include <QWidgetAction>
 
+#include <QFileDialog>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QtNetwork>
@@ -103,6 +104,10 @@ private slots:
 
     void on_deleteRoombtn_clicked();
 
+    void on_addRoombtn_clicked();
+
+    void on_choiceImagebtn_clicked();
+
 private:
     void connectionElement();
     void CreateElementMenu();
@@ -136,6 +141,7 @@ private:
     QList<RecoveryData> recList;
 
     int countPlacesRoom = 2;
+    QString selectedImagePath = "";
 
     bool isVisible = false;
 

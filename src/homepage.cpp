@@ -1261,3 +1261,50 @@ void HomePage::on_deleteRoombtn_clicked()
         }
     });
 }
+
+void HomePage::on_addRoombtn_clicked()
+{
+    QString description = ui->plainTextEdit->toPlainText();
+    QString roomName = ui->roomtxt->text();
+    QString image = ui->imagelbl->text();
+
+    bool ok;
+    int price = ui->pricetxt->text().toInt(&ok);
+
+    if (!ok || price <= 0) {
+        QMessageBox::information(this, "Ошибка", "Введите корректную цену");
+        return;
+    }
+
+    if (description == "" || roomName == "") {
+        QMessageBox::information(this, "Ошибка", "Заполните все поля");
+        return;
+    }
+
+    if (selectedImagePath == "") {
+        QMessageBox::information(this, "Ошибка", "Выберите картинку");
+        return;
+    }
+
+    room->addRoom(roomName, price, description, selectedImagePath, [=](bool success) {
+        if (success) {
+            QMessageBox::information(this, "Успешно", "Комната была успешно добавлена");
+        } else {
+            QMessageBox::information(this, "Ошибка", "Возникла ошибка при добавление комнаты");
+        }
+    });
+}
+
+void HomePage::on_choiceImagebtn_clicked()
+{
+    QString imagePath = QFileDialog::getOpenFileName(this,
+                                                     tr("Выберите изображение"),
+                                                     "",
+                                                     tr("Изображения (*.png *.jpg)"));
+
+    if (!imagePath.isEmpty()) {
+        ui->imagelbl->setPixmap(QPixmap(imagePath));
+
+        selectedImagePath = imagePath;
+    }
+}

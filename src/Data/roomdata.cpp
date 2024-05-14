@@ -72,11 +72,14 @@ void Roomdata::getRoomsSearch(int countPlace, std::function<void(bool)> callback
                     int price = roomObject["price"].toInt();
                     int count = roomObject["count"].toInt();
                     QString description = roomObject["description"].toString();
+                    QString imageName = roomObject["imageName"].toString();
 
                     QByteArray imageData = QByteArray::fromBase64(
                         roomObject["imageData"].toString().toUtf8());
 
-                    QString imagePath = "src/" + QString::number(idRoom) + ".jpg";
+                    qDebug() << imageName;
+
+                    QString imagePath = "src/" + imageName;
                     QFile imageFile(imagePath);
                     if (imageFile.open(QIODevice::WriteOnly)) {
                         imageFile.write(imageData);
@@ -166,6 +169,68 @@ void Roomdata::deleteRoom(int idRoom, std::function<void(bool)> callback)
                 callback(true);
             }
         } else {
+            callback(false);
+        }
+        reply->deleteLater();
+        networkManager->deleteLater();
+    });
+}
+
+void Roomdata::addRoom(QString roomName,
+                       int price,
+                       QString description,
+                       QString imagePath,
+                       std::function<void(bool)> callback)
+{
+    QFile file(imagePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "Ошибка открытия файла изображения";
+        callback(false);
+        return;
+    }
+
+    QFileInfo fileInfo(file.fileName());
+    QString imageName = fileInfo.fileName();
+
+    QJsonObject json;
+
+    QByteArray imageData = file.readAll();
+    file.close();
+
+    if (imageData.isEmpty()) {
+        qDebug() << "Ошибка чтения данных изображения";
+        callback(false);
+        return;
+    }
+
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager();
+
+    json["imageName"] = imageName;
+    json["roomName"] = roomName;
+    json["price"] = price;
+    json["description"] = description;
+    json["image"] = QString(imageData.toBase64());
+
+    QJsonDocument jsonDoc(json);
+
+    QNetworkRequest request(QUrl("http://localhost:555/addRoom"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
+
+    QNetworkReply *reply = networkManager->post(request, jsonDoc.toJson());
+
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray response = reply->readAll();
+            if (response.contains("success")) {
+                qDebug() << "Данные успешно отправлены на сервер";
+                callback(true);
+            } else {
+                qDebug() << "Ошибка: Некорректный ответ от сервера";
+                callback(false);
+            }
+        } else {
+            qDebug() << "Ошибка при отправке данных на сервер:" << reply->errorString();
             callback(false);
         }
         reply->deleteLater();

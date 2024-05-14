@@ -3194,7 +3194,7 @@ QComboBox::down-arrow:on {
               <item>
                <widget class="QTabWidget" name="tabWidget">
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="widget">
                  <property name="styleSheet">
@@ -3410,6 +3410,12 @@ QLabel
                             </item>
                             <item>
                              <widget class="QLabel" name="imagelbl">
+                              <property name="maximumSize">
+                               <size>
+                                <width>500</width>
+                                <height>450</height>
+                               </size>
+                              </property>
                               <property name="text">
                                <string/>
                               </property>
@@ -3419,7 +3425,7 @@ QLabel
                              </widget>
                             </item>
                             <item>
-                             <widget class="QPushButton" name="pushButton_2">
+                             <widget class="QPushButton" name="choiceImagebtn">
                               <property name="minimumSize">
                                <size>
                                 <width>0</width>
@@ -3461,6 +3467,12 @@ QLabel
                             </item>
                             <item>
                              <widget class="QPlainTextEdit" name="plainTextEdit">
+                              <property name="minimumSize">
+                               <size>
+                                <width>200</width>
+                                <height>0</height>
+                               </size>
+                              </property>
                               <property name="font">
                                <font>
                                 <family>Montserrat</family>
@@ -3526,7 +3538,7 @@ QLabel
                            </spacer>
                           </item>
                           <item>
-                           <widget class="QPushButton" name="pushButton">
+                           <widget class="QPushButton" name="addRoombtn">
                             <property name="minimumSize">
                              <size>
                               <width>350</width>

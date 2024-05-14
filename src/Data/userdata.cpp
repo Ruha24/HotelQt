@@ -268,10 +268,10 @@ void UserData::checkEmail(std::function<void(bool)> callback)
             if (response.contains("success")) {
                 callback(true);
             } else {
-                callback(true);
+                callback(false);
             }
         } else {
-            callback(true);
+            callback(false);
         }
 
         reply->deleteLater();
@@ -448,11 +448,12 @@ void UserData::getRooms(std::function<void(bool)> callback)
                     int price = roomObject["price"].toInt();
                     int count = roomObject["count"].toInt();
                     QString description = roomObject["description"].toString();
+                    QString imageName = roomObject["imageName"].toString();
 
                     QByteArray imageData = QByteArray::fromBase64(
                         roomObject["imageData"].toString().toUtf8());
 
-                    QString imagePath = "src/" + QString::number(idRoom) + ".jpg";
+                    QString imagePath = "src/" + imageName;
                     QFile imageFile(imagePath);
 
                     if (!imageFile.exists()) {

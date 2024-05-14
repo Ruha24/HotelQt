@@ -2,6 +2,7 @@
 #define ROOMDATA_H
 
 #include <QFile>
+#include <QFileInfo>
 #include <QImage>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -35,6 +36,12 @@ public:
     void getRooms(std::function<void(bool)> callback);
 
     void deleteRoom(int idRoom, std::function<void(bool)> callback);
+
+    void addRoom(QString roomName,
+                 int price,
+                 QString description,
+                 QString imagePath,
+                 std::function<void(bool)> callback);
 
     QList<Roomdata> getListRooms() const;
 
