@@ -30,7 +30,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_4">
@@ -329,7 +329,7 @@
                   <property name="styleSheet">
                    <string notr="true">QComboBox {
     border: 1px solid gray;
-    border-radius: 5px;
+    border-radius: 3px;
     padding: 1px 18px 1px 3px;
     min-width: 7em;
 }
@@ -2022,7 +2022,7 @@ QComboBox::down-arrow:on {
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>-243</y>
+             <y>0</y>
              <width>1335</width>
              <height>957</height>
             </rect>
@@ -3117,7 +3117,7 @@ QComboBox::down-arrow:on {
                 <property name="styleSheet">
                  <string notr="true">QComboBox {
     border: 1px solid gray;
-    border-radius: 5px;
+    border-radius: 3px;
     padding: 1px 18px 1px 3px;
     min-width: 7em;
 }
@@ -3194,7 +3194,7 @@ QComboBox::down-arrow:on {
               <item>
                <widget class="QTabWidget" name="tabWidget">
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="widget">
                  <property name="styleSheet">

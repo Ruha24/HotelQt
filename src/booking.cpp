@@ -90,9 +90,6 @@ void Booking::setPriceText(const QDate &startDate, const QDate &lastDate)
     else
         dayWord = "дней";
 
-    qDebug() << startDate;
-    qDebug() << lastDate;
-
     m_recovery = new RecoveryData(1,
                                   m_room->getTypeRoom(),
                                   m_room->getDescription(),

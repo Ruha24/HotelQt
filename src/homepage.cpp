@@ -484,7 +484,7 @@ void HomePage::clearTabsFromIndex(int startIndex)
 
 void HomePage::getAllUsers()
 {
-    clearTabsFromIndex(3);
+    clearTabsFromIndex(2);
 
     userData->getUsers([&](bool success) {
         if (success) {
@@ -562,13 +562,16 @@ void HomePage::saveStatsUser(UserData *user,
         return;
     }
 
-    user->updateStats(name, lastName, bdate, email, [&](bool success) {
-        if (success) {
-            QMessageBox::information(this, "", "Данные успешно обновлены");
-            getAllUsers();
-        } else
-            QMessageBox::information(this, "Ошибка", "Данные не были обновлены");
-    });
+    if (user->getUserName() != name && user->getLastName() != lastName && user->getBdate() != bdate
+        && user->getEmail() != email) {
+        user->updateStats(name, lastName, bdate, email, [&](bool success) {
+            if (success) {
+                QMessageBox::information(this, "", "Данные успешно обновлены");
+                getAllUsers();
+            } else
+                QMessageBox::information(this, "Ошибка", "Данные не были обновлены");
+        });
+    }
 
     if (newPassword.isEmpty())
         return;
@@ -613,7 +616,7 @@ QWidget *HomePage::createUserWidget(UserData *user)
 
     QLabel *mainText = new QLabel("Личные данные");
     mainText->setFixedSize(250, 40);
-    mainText->setStyleSheet("font-size: 18px;");
+    mainText->setStyleSheet("font-size: 22px;");
     mainText->setAlignment(Qt::AlignHCenter);
 
     QPushButton *saveButton = new QPushButton("Сохранить");
@@ -743,7 +746,7 @@ QWidget *HomePage::createUserWidget(UserData *user)
     connect(saveButton, &QPushButton::clicked, this, [=]() {
         saveStatsUser(user,
                       usertxt->text().trimmed(),
-                      lastNamelbl->text().trimmed(),
+                      lastNametxt->text().trimmed(),
                       bDatetxt->text().trimmed(),
                       emailtxt->text().trimmed(),
                       newPasswordtxt->text().trimmed());
@@ -767,7 +770,7 @@ void HomePage::createRecoveryWidget(UserData *user, QWidget *recoveryWidget)
     QLabel *mainText = new QLabel("Бронирования");
     mainText->setFixedSize(250, 40);
     mainText->setAlignment(Qt::AlignHCenter);
-    mainText->setStyleSheet("font-size: 18px;");
+    mainText->setStyleSheet("font-size: 22px;");
 
     QSpacerItem *spacer2 = new QSpacerItem(20, 40, QSizePolicy::Fixed, QSizePolicy::Fixed);
     QSpacerItem *spacer = new QSpacerItem(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
