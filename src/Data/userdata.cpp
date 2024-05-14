@@ -50,7 +50,10 @@ void UserData::getIdUser(QString userName, std::function<void(bool)> callback)
             if (response.contains("data")) {
                 QJsonObject data = response["data"].toObject();
                 if (data.contains("id") && data.contains("nameRole")) {
+                    qDebug() << data["id"].toInt();
+
                     setUserId(data["id"].toInt());
+
                     setRole(data["nameRole"].toString());
                     callback(true);
                 } else {
@@ -142,6 +145,9 @@ void UserData::updateStats(
     setLastName(lastName);
     setBdate(date);
     setEmail(email);
+
+    qDebug() << user;
+    qDebug() << userName;
 
     json["name"] = user;
     json["firstName"] = userName;
@@ -377,7 +383,7 @@ void UserData::getUserStats(QString userName, std::function<void(bool)> callback
                 QString lastname = dataList[2];
                 QString bdate = dataList[3];
 
-                setName(name);
+                setUserName(name);
                 setEmail(email);
                 setLastName(lastname);
                 setBdate(bdate);

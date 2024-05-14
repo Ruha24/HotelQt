@@ -26,7 +26,6 @@ Registration::~Registration()
 void Registration::on_buttonReg_clicked()
 {
     if (!m_userData) {
-        qDebug() << "UserData is not initialized!";
         return;
     }
 

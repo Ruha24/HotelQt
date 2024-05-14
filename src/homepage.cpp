@@ -31,8 +31,8 @@ void HomePage::setUserData(UserData *data)
 
     userData = data;
 
-    if (userData->getUserName() != "") {
-        userData->getIdUser(userData->getUserName(), [&](bool success) {
+    if (userData->getName() != "") {
+        userData->getIdUser(userData->getName(), [&](bool success) {
             if (success) {
                 initAction();
                 SetVisibleUser();
@@ -327,8 +327,6 @@ void HomePage::cancelRecovery(const RecoveryData &recovery)
                                   QMessageBox::Ok | QMessageBox::Cancel);
 
     if (reply == QMessageBox::Ok) {
-        qDebug() << "Отмена";
-
         userData->deleteRecovery(recovery, [&](bool success) {
             if (success) {
                 QMessageBox::information(this, "Успешно", "Вы успешно отменили бронь");
@@ -361,9 +359,9 @@ void HomePage::cancelAdminRecovery(const RecoveryData &recovery,
 
 void HomePage::getUserData()
 {
-    userData->getUserStats(userData->getUserName(), [&](bool success) {
+    userData->getUserStats(userData->getName(), [&](bool success) {
         if (success) {
-            ui->userNametxt->setText(userData->getName());
+            ui->userNametxt->setText(userData->getUserName());
             ui->lastnametxt->setText(userData->getLastName());
             ui->birthdaytxt->setText(userData->getBdate());
             ui->emailtxt->setText(userData->getEmail());
@@ -1205,7 +1203,7 @@ void HomePage::on_Title_6_linkActivated(const QString &link)
 
 void HomePage::registerRoom(const Roomdata &room)
 {
-    if (userData->getUserName() == "") {
+    if (userData->getName() == "") {
         QMessageBox::information(this, "Ошибка", "Чтобы забронировать, войдите в свой аккаунт");
         return;
     }
