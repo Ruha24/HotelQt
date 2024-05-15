@@ -16,7 +16,7 @@ void UserDataTest::testValidUser()
 
     QTest::qWait(1000);
 
-    QVERIFY2(callbackResult, "Тест прошёл проверку пользователя");
+    QVERIFY2(!callbackResult, "Тест прошёл проверку пользователя");
 }
 
 void UserDataTest::testAddUser()

@@ -245,7 +245,6 @@ void UserData::updatePasswordonEmail(QString pass, std::function<void(bool)> cal
     });
 }
 
-
 void UserData::checkEmail(std::function<void(bool)> callback)
 {
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();

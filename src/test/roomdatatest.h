@@ -5,10 +5,9 @@
 #include <QtTest/QTest>
 #include "../Data/roomdata.h"
 
-class RoomDataTest
+class RoomDataTest : public QObject
 {
-private slots:
-    void testGetRooms();
+    Q_OBJECT
 
 private:
     Roomdata *roomData;
@@ -18,8 +17,8 @@ public:
     RoomDataTest();
 
 private slots:
+    void testGetRooms();
     void initTestCase() { roomData = new Roomdata(); }
-
     void cleanupTestCase() { delete roomData; }
 };
 
