@@ -22,6 +22,11 @@
     <height>1080</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <family>Montserrat</family>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>HomePage</string>
   </property>
@@ -80,8 +85,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1348</width>
-             <height>728</height>
+             <width>1335</width>
+             <height>418</height>
             </rect>
            </property>
            <property name="maximumSize">
@@ -735,8 +740,8 @@ QToolButton::menu-indicator
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1348</width>
-             <height>728</height>
+             <width>1333</width>
+             <height>410</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_11">
@@ -1618,8 +1623,8 @@ QComboBox::down-arrow:on {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1348</width>
-             <height>728</height>
+             <width>1335</width>
+             <height>333</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_6">
@@ -3193,8 +3198,13 @@ QComboBox::down-arrow:on {
               </property>
               <item>
                <widget class="QTabWidget" name="tabWidget">
+                <property name="font">
+                 <font>
+                  <family>Montserrat</family>
+                 </font>
+                </property>
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>2</number>
                 </property>
                 <widget class="QWidget" name="widget">
                  <property name="styleSheet">
@@ -3957,6 +3967,16 @@ QComboBox::down-arrow:on {
                      </spacer>
                     </item>
                    </layout>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="tab_2">
+                 <attribute name="title">
+                  <string>Отчёты с бд</string>
+                 </attribute>
+                 <layout class="QGridLayout" name="gridLayout_17">
+                  <item row="0" column="0">
+                   <layout class="QVBoxLayout" name="verticalLayout_25"/>
                   </item>
                  </layout>
                 </widget>

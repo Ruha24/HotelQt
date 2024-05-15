@@ -484,7 +484,7 @@ void HomePage::clearTabsFromIndex(int startIndex)
 
 void HomePage::getAllUsers()
 {
-    clearTabsFromIndex(2);
+    clearTabsFromIndex(3);
 
     userData->getUsers([&](bool success) {
         if (success) {
