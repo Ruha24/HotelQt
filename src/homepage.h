@@ -13,8 +13,10 @@
 #include <QWidgetAction>
 
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
+#include <QTextStream>
 #include <QtNetwork>
 
 #include "CustomWidget/customcalendar.h"
@@ -107,6 +109,10 @@ private slots:
     void on_addRoombtn_clicked();
 
     void on_choiceImagebtn_clicked();
+
+    void on_getUserbtn_clicked();
+
+    void on_getRoombtn_clicked();
 
 private:
     void connectionElement();

@@ -1310,3 +1310,83 @@ void HomePage::on_choiceImagebtn_clicked()
         selectedImagePath = imagePath;
     }
 }
+
+void HomePage::on_getUserbtn_clicked()
+{
+    userData->getUsers([=](bool success) {
+        if (success) {
+            QString filePath = QFileDialog::getSaveFileName(this,
+                                                            tr("Сохранить CSV файл"),
+                                                            QDir::homePath(),
+                                                            tr("Файлы CSV (*.csv)"));
+
+            if (!filePath.isEmpty()) {
+                QFile file(filePath);
+
+                if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                    QTextStream out(&file);
+
+                    out.setEncoding(QStringConverter::Utf8);
+
+                    out << "id, Имя пользователя, Фамилия, Логин, Пароль, Почта, Дата рождения\n";
+
+                    for (const auto &user : userData->getListUsers()) {
+                        out << user->getUserId() << ", " << user->getUserName() << ", "
+                            << user->getLastName() << ", " << user->getName() << ", "
+                            << user->getPassword() << ", " << user->getEmail() << ", "
+                            << user->getBdate() << "\n";
+                    }
+                    file.close();
+
+                    QMessageBox::information(this, tr("Успех"), tr("Файл успешно сохранен"));
+                } else {
+                    QMessageBox::critical(this,
+                                          tr("Ошибка"),
+                                          tr("Ошибка при открытии файла для записи"));
+                }
+            }
+        } else {
+            QMessageBox::critical(this, tr("Ошибка"), tr("Ошибка получения данных"));
+        }
+    });
+}
+
+void HomePage::on_getRoombtn_clicked()
+{
+    userData->getRooms([=](bool success) {
+        if (success) {
+            QString filePath = QFileDialog::getSaveFileName(this,
+                                                            tr("Сохранить CSV файл"),
+                                                            QDir::homePath(),
+                                                            tr("Файлы CSV (*.csv)"));
+
+            if (!filePath.isEmpty()) {
+                QFile file(filePath);
+
+                if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                    QTextStream out(&file);
+
+                    out.setEncoding(QStringConverter::Utf8);
+
+                    out << "id, Тип комнаты, Начальная цена, Кол-во мест, Описание\n";
+
+                    for (const auto &room : userData->getListRooms()) {
+                        out << room.getId() << ", " << room.getTypeRoom() << ", "
+                            << room.getCountRoom() << ", " << room.getDescription() << ", "
+                            << "\n";
+                    }
+                    file.close();
+
+                    QMessageBox::information(this, tr("Успех"), tr("Файл успешно сохранен"));
+                } else {
+                    QMessageBox::critical(this,
+                                          tr("Ошибка"),
+                                          tr("Ошибка при открытии файла для записи"));
+                }
+            }
+
+        } else {
+            QMessageBox::critical(this, tr("Ошибка"), tr("Ошибка получения данных"));
+        }
+    });
+}
