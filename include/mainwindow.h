@@ -5,10 +5,11 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 
+#include <QCryptographicHash>
+#include <QFile>
 #include <QJsonArray>
-#include <QJsonObject>
 #include <QJsonDocument>
-
+#include <QJsonObject>
 
 #include "include/databases.h"
 
@@ -38,22 +39,29 @@ private slots:
     void addNewClient(QTcpSocket* socket);
 
 private:
-    void getInformation(const QString& name);
     void sendHttpResponse(int statusCode, const QString &statusText);
-    void handleSelectUserRequest();
-    void addUser(const QString& postData);
-    void sendHttpData(const QString& data);
-    void getRole(const QString& name);
-    void getType();
-    void uploadData(const QByteArray& requestData);
-    bool InsertData(const QByteArray& fileData, const QString& fileName);
-    void searchRoom(const QString& data);
-    void search_room(const QString& data);
-    QVector <QTcpSocket*> Sockets;
+    void sendHttpData(const QString &data);
+    void getUserStats(const QString &name);
+    bool checkUser(const QString &name, const QString &password);
+    void handleCheckUser(const QString &data);
+    void handleAddUser(const QString &data);
+    void handleUpdateStats(const QString &data);
+    void handleUpdatePass(const QString &data);
+    void handleUpdateEmailPass(const QString &data);
+    void handleCheckEmail(const QString &data);
+    void handleUserRecovery(const QString &data);
+    void handleUserId(const QString &data);
+    void handleDeleteRecovery(const QString &data);
+    void handleGetRooms();
+    void handleDeleteRoom(const QString &data);
+    void handleAddRoom(const QString &data);
+    void handleSearchRooms(const QString &data);
+    void handleAddRecovery(const QString &data);
+    void handleGetUsers();
+
+    QSet<QTcpSocket *> Sockets;
     QByteArray data;
     QTcpServer* server;
-
-    void SentToClient();
 
     bool connecting();
     QSqlDatabase db;

@@ -20,10 +20,9 @@ HEADERS += \
 FORMS += \
     design/mainwindow.ui
 
-INCLUDEPATH += \
-    "D:/PostgreSQL/include/"
+INCLUDEPATH += "Postgres/"
 
-LIBS += -L"D:/PostgreSQL/bin" -llibpq
+LIBS += -L"dll/" -llibpq
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

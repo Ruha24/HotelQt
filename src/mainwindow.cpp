@@ -26,11 +26,34 @@ MainWindow::MainWindow(QWidget *parent)
     {
         ui->label->setText("");
     }
-
 }
 
+bool MainWindow::connecting()
+{
+    if (db.isValid() && db.isOpen()) {
+        return true;
+    }
 
+    QString appDir = QCoreApplication::applicationDirPath();
 
+    QCoreApplication::addLibraryPath(appDir);
+
+    db = QSqlDatabase::addDatabase("QPSQL");
+    db.setDatabaseName("Hotels");
+    db.setHostName("172.20.7.8");
+    db.setPort(5432);
+    db.setUserName("st1991");
+    db.setPassword("pwd1991");
+
+    if (db.open()) {
+        return true;
+    } else {
+        QMessageBox::information(this,
+                                 "",
+                                 "Failed to connect to the database: " + db.lastError().text());
+        return false;
+    }
+}
 
 MainWindow::~MainWindow()
 {
@@ -39,9 +62,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::incommingconnection()
 {
-
-    while(server->hasPendingConnections())
-    {
+    while (server->hasPendingConnections()) {
         qDebug() << "New client connected";
         addNewClient(server->nextPendingConnection());
     }
@@ -49,12 +70,12 @@ void MainWindow::incommingconnection()
 
 void MainWindow::clientDisconnected()
 {
-    QTcpSocket *disconnectedSocket = qobject_cast<QTcpSocket*>(sender());
+    QTcpSocket *disconnectedSocket = qobject_cast<QTcpSocket *>(sender());
 
     if (disconnectedSocket) {
         qDebug() << "Client disconnected";
 
-        Sockets.removeOne(disconnectedSocket);
+        Sockets.remove(disconnectedSocket);
 
         disconnectedSocket->disconnect();
         disconnectedSocket->deleteLater();
@@ -63,16 +84,14 @@ void MainWindow::clientDisconnected()
 
 void MainWindow::addNewClient(QTcpSocket *socket)
 {
-    Sockets.append(socket);
+    Sockets.insert(socket);
     connect(socket, &QTcpSocket::readyRead, this, &MainWindow::slotReadyRead);
     connect(socket, &QTcpSocket::disconnected, this, &MainWindow::clientDisconnected);
 }
 
-
-
 void MainWindow::slotReadyRead()
 {
-    socket = qobject_cast<QTcpSocket*>(sender());
+    socket = qobject_cast<QTcpSocket *>(sender());
     qDebug() << socket;
     QByteArray requestData = socket->readAll();
 
@@ -84,518 +103,48 @@ void MainWindow::slotReadyRead()
         QStringList requestParts = requestLines[0].split(" ");
 
         if (requestParts.size() == 3) {
-            qDebug() << requestParts;
             QString path = requestParts[1];
-            if (path == "/select_user") handleSelectUserRequest();
-            else if(path == "/add_user") addUser(requestLines.last());
-            else if(path == "/get_role") getRole(requestLines.last());
-            else if(path == "/getInformationUser") getInformation(requestLines.last());
-            else if(path == "/searchRoom") searchRoom(requestLines.last());
-            else if(path == "/search_room") search_room(requestLines.last());
-            else if(path == "/uploadData") uploadData(requestData);
-            else if(path == "/getType") getType();
-            else sendHttpResponse(404, "Not found");
+
+            if (path == "/getUserStats")
+                getUserStats(requestLines.last());
+            else if (path == "/checkUser")
+                handleCheckUser(requestLines.last());
+            else if (path == "/addUser")
+                handleAddUser(requestLines.last());
+            else if (path == "/updateStats")
+                handleUpdateStats(requestLines.last());
+            else if (path == "/updatePass")
+                handleUpdatePass(requestLines.last());
+            else if (path == "/checkEmail")
+                handleCheckEmail(requestLines.last());
+            else if (path == "/getRecovery")
+                handleUserRecovery(requestLines.last());
+            else if (path == "/get_userId")
+                handleUserId(requestLines.last());
+            else if (path == "/deleteRecovery")
+                handleDeleteRecovery(requestLines.last());
+            else if (path == "/getRooms")
+                handleGetRooms();
+            else if (path == "/addRecovery")
+                handleAddRecovery(requestLines.last());
+            else if (path == "/updatePassOnEmail")
+                handleUpdateEmailPass(requestLines.last());
+            else if (path == "/getSearchRooms")
+                handleSearchRooms(requestLines.last());
+            else if (path == "/getUsers")
+                handleGetUsers();
+            else if (path == "/deleteRoom")
+                handleDeleteRoom(requestLines.last());
+            else if (path == "/addRoom")
+                handleAddRoom(requestLines.last());
+            else {
+                sendHttpResponse(404, "Not found");
+            }
         }
-    }
-    else {
+    } else {
         qDebug() << "Data error";
     }
 }
-
-
-void MainWindow::uploadData(const QByteArray& requestData)
-{
-    QString fileName;
-
-    QList<QByteArray> headers = requestData.split('\r\n');
-    for (const QByteArray& header : headers) {
-        if (header.startsWith("Content-Disposition: form-data") && header.contains("filename=")) {
-            QList<QByteArray> parts = header.split(';');
-            for (const QByteArray& part : parts) {
-                if (part.trimmed().startsWith("filename=")) {
-                    fileName = QString(part.split('"')[1]);
-                    break;
-                }
-            }
-            break;
-        }
-    }
-
-    qDebug() << fileName;
-
-    if (fileName.isEmpty()) {
-        qDebug() << "Error: Unable to extract filename from request.";
-        sendHttpResponse(400, "Bad Request");
-        return;
-    }
-
-    if (InsertData(requestData, fileName)) {
-        sendHttpResponse(200, "OK");
-    } else {
-        sendHttpResponse(500, "Internal Server Error");
-    }
-}
-
-
-bool MainWindow::InsertData(const QByteArray& fileData, const QString& fileName)
-{
-    QString fileContent(fileData);
-
-    QStringList lines = fileContent.split('\n');
-
-    QSqlQuery query;
-
-    if (fileName.contains("users", Qt::CaseInsensitive)) {
-
-        foreach (const QString& line, lines) {
-            QStringList values = line.split(',');
-
-            if (values.size() == 6) {
-                QString id = values[0].trimmed();
-                QString name = values[1].trimmed();
-                QString surname = values[2].trimmed();
-                QString login = values[3].trimmed();
-                QString password = values[4].trimmed();
-                QString roleidStr = values[5].trimmed();
-
-                bool ok;
-                int roleid = roleidStr.toInt(&ok);
-
-                if (ok) {
-                    query.prepare("INSERT INTO Customers (name, surname, login, password, roleid) "
-                                  "VALUES (:name, :surname, :login, :password, :roleid)");
-                    query.bindValue(":name", name);
-                    query.bindValue(":surname", surname);
-                    query.bindValue(":login", login);
-                    query.bindValue(":password", password);
-                    query.bindValue(":roleid", roleid);
-
-                    if (!query.exec()) {
-                        qDebug() << "Error inserting data into the database:" << query.lastError().text();
-                        return false;
-                    }
-                } else {
-                    qDebug() << "Skipping invalid roleid:" << roleidStr;
-                }
-            }
-        }
-    } else if (fileName.contains("role", Qt::CaseInsensitive)) {
-
-        foreach (const QString& line, lines) {
-            QStringList values = line.split(',');
-
-            if (values.size() == 2) {
-                QString roleIdStr = values[0].trimmed();
-                QString roleName = values[1].trimmed();
-
-                bool ok;
-                int roleid = roleIdStr.toInt(&ok);
-                if (ok) {
-                    query.prepare("INSERT INTO Role (name) VALUES (:name)");
-                    query.bindValue(":name", roleName);
-
-                    if (!query.exec()) {
-                        qDebug() << "Error inserting data into the database:" << query.lastError().text();
-                        return false;
-                    }
-                }else{
-                    qDebug() << "Skipping invalid roleid:" << roleid;
-                }
-
-
-            }
-        }
-    }else if (fileName.contains("rooms", Qt::CaseInsensitive)) {
-        foreach (const QString& line, lines) {
-            QStringList values = line.split(',');
-
-            if (values.size() == 6) {
-                QString roomsId = values[0].trimmed();
-                QString name = values[1].trimmed();
-                QString typeroom = values[2].trimmed();
-                double startprice = values[3].trimmed().toDouble();
-                bool occupied = values[4].trimmed().toInt();
-                QString image = values[5].trimmed();
-
-                query.prepare("INSERT INTO rooms (name, typeroom, startprice, occupied, image) "
-                              "VALUES (:name, :typeroom, :startprice, :occupied, :image)");
-                query.bindValue(":name", name);
-                query.bindValue(":typeroom", typeroom);
-                query.bindValue(":startprice", startprice);
-                query.bindValue(":occupied", occupied);
-                query.bindValue(":image", image);
-
-                if (!query.exec()) {
-                    qDebug() << "Error inserting data into the database:" << query.lastError().text();
-                    return false;
-                }
-            } else {
-                qDebug() << "Skipping invalid data for rooms table:" << line;
-            }
-        }
-    }
-
-    else {
-        qDebug() << "Unknown file type. Skipping file: " << fileName;
-        return false;
-    }
-
-    qDebug() << "Data inserted into the database successfully!";
-    return true;
-}
-
-void MainWindow::searchRoom(const QString &data)
-{
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
-
-    if (!jsonDoc.isNull() && jsonDoc.isObject())
-    {
-        QJsonObject jsonObject = jsonDoc.object();
-        if (jsonObject.contains("name"))
-        {
-            QString roomName = jsonObject["name"].toString();
-
-            QSqlQuery query;
-            query.prepare("SELECT * FROM rooms WHERE name = :name");
-            query.bindValue(":name", roomName);
-
-            if (query.exec())
-            {
-                QJsonArray roomsArray;
-
-                while (query.next())
-                {
-                    QJsonObject roomObject;
-                    roomObject["name"] = query.value("name").toString();
-                    roomObject["typeroom"] = query.value("typeroom").toString();
-                    roomObject["startprice"] = query.value("startprice").toDouble();
-                    roomObject["occupied"] = query.value("occupied").toBool();
-                    roomObject["image"] = query.value("image").toString();
-
-                    roomsArray.append(roomObject);
-                }
-
-                QJsonObject jsonResponse;
-                jsonResponse["status"] = "success";
-                jsonResponse["data"] = roomsArray;
-
-                QJsonDocument jsonDoc(jsonResponse);
-                QString httpResponse = "HTTP/1.1 200 OK\r\n";
-                httpResponse += "Content-Type: application/json\r\n\r\n";
-                httpResponse += jsonDoc.toJson(QJsonDocument::Compact);
-
-                sendHttpData(httpResponse);
-            }
-            else
-            {
-                qDebug() << "Query error: " << query.lastError().text();
-                sendHttpResponse(500, "500 Internal Server Error");
-            }
-        }
-        else
-        {
-            sendHttpResponse(400, "400 Bad Request");
-        }
-    }
-    else
-    {
-        sendHttpResponse(400, "400 Bad Request");
-    }
-}
-
-
-void MainWindow::search_room(const QString& searchData)
-{
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(searchData.toUtf8());
-
-    if (!jsonDoc.isNull() && jsonDoc.isObject())
-    {
-        QJsonObject jsonObject = jsonDoc.object();
-
-        if (jsonObject.contains("search_text") && jsonObject.contains("type") && jsonObject.contains("isOccupied"))
-        {
-            QString searchText = jsonObject["search_text"].toString();
-            QString type = jsonObject["type"].toString();
-            bool isOccupied = jsonObject["isOccupied"].toBool();
-
-            QSqlQuery query;
-
-            QString queryString = "SELECT * FROM rooms WHERE name LIKE :searchText AND typeroom LIKE :type AND occupied = :isOccupied";
-            query.prepare(queryString);
-            query.bindValue(":searchText", "%" + searchText + "%");
-            query.bindValue(":type", "%" + type + "%");
-            query.bindValue(":isOccupied", isOccupied);
-
-            if (query.exec())
-            {
-                QJsonArray roomsArray;
-
-                while (query.next())
-                {
-                    QJsonObject roomObject;
-                    roomObject["name"] = query.value("name").toString();
-                    roomObject["typeroom"] = query.value("typeroom").toString();
-                    roomObject["startprice"] = query.value("startprice").toDouble();
-                    roomObject["occupied"] = query.value("occupied").toBool();
-
-                    roomsArray.append(roomObject);
-                }
-
-                QJsonObject jsonResponse;
-                jsonResponse["status"] = "success";
-                jsonResponse["data"] = roomsArray;
-
-                QJsonDocument jsonDoc(jsonResponse);
-                QString httpResponse = "HTTP/1.1 200 OK\r\n";
-                httpResponse += "Content-Type: application/json\r\n\r\n";
-                httpResponse += jsonDoc.toJson(QJsonDocument::Compact);
-
-                sendHttpData(httpResponse);
-            }
-            else
-            {
-                qDebug() << "Query error: " << query.lastError().text();
-                sendHttpResponse(500, "Internal Server Error");
-            }
-        }
-        else
-        {
-            sendHttpResponse(400, "Bad Request");
-        }
-    }
-    else
-    {
-        sendHttpResponse(400, "Bad Request");
-    }
-}
-
-
-#include <QDir>
-
-bool MainWindow::connecting()
-{
-    if (db.isValid() && db.isOpen()) {
-        return true;
-    }
-
-    QString appDir = QCoreApplication::applicationDirPath();
-
-
-    QCoreApplication::addLibraryPath(appDir);
-
-    db = QSqlDatabase::addDatabase("QPSQL");
-    db.setDatabaseName("Hotels");
-    db.setHostName("172.20.7.8");
-    db.setPort(5432);
-    db.setUserName("st1991");
-    db.setPassword("pwd1991");
-
-
-    if (db.open()) {
-        return true;
-    } else {
-        QMessageBox::information(this, "", "Failed to connect to the database: " + db.lastError().text());
-        return false;
-    }
-}
-
-
-void MainWindow::getInformation(const QString &name)
-{
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(name.toUtf8());
-
-    if (!jsonDoc.isNull() && jsonDoc.isObject())
-    {
-        QJsonObject jsonObject = jsonDoc.object();
-        if (jsonObject.contains("name")) {
-            QString actualName = jsonObject["name"].toString();
-
-            QSqlQuery query;
-            query.prepare("SELECT name, surname, login, password FROM Customers WHERE login = :name");
-            query.bindValue(":name", actualName);
-
-            if (query.exec()) {
-                if (query.next()) {
-                    QJsonObject userObject;
-                    userObject["name"] = query.value("name").toString();
-                    userObject["surname"] = query.value("surname").toString();
-                    userObject["login"] = query.value("login").toString();
-                    userObject["password"] = query.value("password").toString();
-
-                    QJsonObject jsonResponse;
-                    jsonResponse["status"] = "success";
-                    jsonResponse["data"] = userObject;
-
-                    QJsonDocument jsonDoc(jsonResponse);
-                    QString httpResponse = "HTTP/1.1 200 OK\r\n";
-                    httpResponse += "Content-Type: application/json\r\n\r\n";
-                    httpResponse += jsonDoc.toJson(QJsonDocument::Compact);
-
-                    sendHttpData(httpResponse);
-                } else {
-                    sendHttpResponse(404, "User not found");
-                }
-            } else {
-                qDebug() << "Query error: " << query.lastError().text();
-                sendHttpResponse(500, "Internal Server Error");
-            }
-        }
-    } else {
-        sendHttpResponse(400, "Bad Request");
-    }
-}
-
-
-
-void MainWindow::getRole(const QString& name)
-{
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(name.toUtf8());
-
-    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
-        QJsonObject jsonObject = jsonDoc.object();
-        if (jsonObject.contains("name")) {
-            QString actualName = jsonObject["name"].toString();
-
-            QSqlQuery query;
-
-            if (query.exec("SELECT GetRoleName('" + actualName + "') AS role")) {
-                if (query.next()) {
-                    QString role = query.value("role").toString();
-
-                    QJsonObject jsonResponse;
-                    jsonResponse["status"] = "success";
-                    jsonResponse["role"] = role;
-
-                    QJsonDocument jsonDoc(jsonResponse);
-                    QString httpResponse = "HTTP/1.1 200 OK\r\n";
-                    httpResponse += "Content-Type: application/json\r\n\r\n";
-                    httpResponse += jsonDoc.toJson(QJsonDocument::Compact);
-
-                    sendHttpData(httpResponse);
-                } else {
-                    sendHttpResponse(404, "Role not found");
-                }
-            } else {
-                qDebug() << "Query error: " << query.lastError().text();
-            }
-        } else {
-            qDebug() << "Error: JSON does not contain 'name' field.";
-        }
-    } else {
-        qDebug() << "Error: Invalid JSON format.";
-    }
-}
-
-void MainWindow::getType()
-{
-    QSqlQuery query("SELECT DISTINCT typeroom FROM rooms");
-
-    QJsonArray roomTypesArray;
-
-    while (query.next()) {
-        QString roomType = query.value("typeroom").toString();
-        roomTypesArray.append(roomType);
-    }
-
-    QJsonObject responseObject;
-    responseObject["room_types"] = roomTypesArray;
-
-    QJsonDocument jsonResponse(responseObject);
-
-    QString httpResponse = "HTTP/1.1 200 OK\r\n";
-    httpResponse += "Content-Type: application/json\r\n\r\n";
-    httpResponse += jsonResponse.toJson(QJsonDocument::Compact);
-
-    sendHttpData(httpResponse);
-}
-
-
-
-void MainWindow::handleSelectUserRequest()
-{
-    QSqlQuery query;
-
-    if (query.exec("SELECT login, password FROM Customers")) {
-        if (query.size() > 0) {
-            QJsonArray jsonArray;
-
-            while (query.next()) {
-                QString name = query.value(0).toString();
-                QString password = query.value(1).toString();
-                QJsonObject jsonObject;
-                jsonObject["name"] = name;
-                jsonObject["password"] = password;
-                jsonArray.append(jsonObject);
-            }
-
-            QJsonObject jsonResponse;
-            jsonResponse["status"] = "success";
-            jsonResponse["data"] = jsonArray;
-
-            QJsonDocument jsonDoc(jsonResponse);
-            QString httpResponse = "HTTP/1.1 200 OK\r\n";
-            httpResponse += "Content-Type: application/json\r\n\r\n";
-            httpResponse += jsonDoc.toJson(QJsonDocument::Compact);
-
-            sendHttpData(httpResponse);
-        } else {
-            sendHttpResponse(404, "Not found");
-        }
-    } else {
-        qDebug() << "Query error: " << query.lastError().text();
-
-    }
-}
-
-void MainWindow::addUser(const QString& postData)
-{
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(postData.toUtf8());
-    if (jsonDoc.isNull() || !jsonDoc.isObject()) {
-        sendHttpResponse(400, "Bad request");
-        return;
-    }
-
-    QJsonObject jsonObject = jsonDoc.object();
-
-    QString login;
-    QString password;
-
-    if (jsonObject.contains("name")) {
-        login = jsonObject["name"].toString();
-    }
-
-    if (jsonObject.contains("password")) {
-        password = jsonObject["password"].toString();
-    }
-
-    QSqlQuery query;
-
-    if (query.exec("Select login, password from Customers"))
-    {
-        while (query.next())
-        {
-            QString user = query.value(0).toString();
-            if (login == user)
-            {
-                sendHttpData("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nUser already exists");
-                return;
-            }
-        }
-
-        if (query.prepare("INSERT INTO Customers (login, password) VALUES (:login, :password)")) {
-            query.bindValue(":login", login);
-            query.bindValue(":password", password);
-            if (query.exec()) {
-                 sendHttpData("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nUser registered successfully");
-            } else {
-                 sendHttpResponse(400, "Bad Reques");
-            }
-        }
-
-
-    }
-}
-
 void MainWindow::sendHttpResponse(int statusCode, const QString &statusText)
 {
     QString httpResponse = QString("HTTP/1.1 %1 %2\r\n").arg(statusCode).arg(statusText);
@@ -605,14 +154,778 @@ void MainWindow::sendHttpResponse(int statusCode, const QString &statusText)
     sendHttpData(httpResponse);
 }
 
+void MainWindow::getUserStats(const QString &data)
+{
+    QString userName;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+        if (jsonObject.contains("name")) {
+            userName = jsonObject["name"].toString();
+        }
+    }
 
-void MainWindow::sendHttpData(const QString& data)
+    QSqlQuery query;
+    query.prepare("SELECT firstName, email, lastname, bdate FROM users WHERE login = :name");
+    query.bindValue(":name", userName);
+
+    if (query.exec()) {
+        if (query.next()) {
+            QString name = query.value(0).toString();
+            QString email = query.value(1).toString();
+            QString lastname = query.value(2).toString();
+            QString bdate = query.value(3).toString();
+            QString response
+                = QString("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n%1, %2, %3, %4")
+                      .arg(name, email, lastname, bdate);
+            sendHttpData(response);
+        } else {
+            sendHttpResponse(404, "User not found");
+        }
+    } else {
+        sendHttpResponse(500, "Internal Server Error");
+    }
+}
+
+void MainWindow::handleCheckUser(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    QString userName, password;
+
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (jsonObject.contains("name") && jsonObject.contains("password")) {
+            userName = jsonObject["name"].toString();
+            password = jsonObject["password"].toString();
+        }
+        QByteArray passwordHash
+            = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
+
+        QString hashPassword = QString::fromUtf8(passwordHash);
+
+        QSqlQuery query;
+        query.prepare("SELECT COUNT(*) FROM users WHERE login = :name AND password = :pass");
+        query.bindValue(":name", userName);
+        query.bindValue(":pass", hashPassword);
+
+        QString isValidUser = "false";
+
+        if (query.exec() && query.next()) {
+            int userCount = query.value(0).toInt();
+            if (userCount > 0)
+                isValidUser = "true";
+        } else {
+            sendHttpResponse(500, "Internal Server Error");
+            return;
+        }
+
+        sendHttpResponse(200, isValidUser);
+    } else
+        sendHttpResponse(404, "User not found");
+}
+
+void MainWindow::handleAddUser(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    QString userName, password, email;
+
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (jsonObject.contains("name") && jsonObject.contains("password")
+            && jsonObject.contains("email")) {
+            userName = jsonObject["name"].toString();
+            password = jsonObject["password"].toString();
+            email = jsonObject["email"].toString();
+        }
+        QByteArray passwordHash = QCryptographicHash::hash(password.toUtf8(),
+                                                           QCryptographicHash::Sha256)
+                                      .toHex(); // Шифрование SHA256
+
+        QString hashPassword = QString::fromUtf8(passwordHash);
+
+        QSqlQuery query;
+        query.prepare("insert into users(login, password, email) values(:name, :pass, :em)");
+        query.bindValue(":name", userName);
+        query.bindValue(":pass", hashPassword);
+        query.bindValue(":em", email);
+
+        if (query.exec()) {
+            sendHttpResponse(200, "User registered successfully");
+        } else
+            sendHttpResponse(400, "Bad request");
+    }
+}
+
+void MainWindow::handleUpdateStats(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    QString userName, firstName, lastName, bDate, email;
+
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (jsonObject.contains("name") && jsonObject.contains("firstName")
+            && jsonObject.contains("lastName") && jsonObject.contains("date")
+            && jsonObject.contains("email")) {
+            userName = jsonObject["name"].toString();
+            firstName = jsonObject["firstName"].toString();
+            lastName = jsonObject["lastName"].toString();
+            bDate = jsonObject["date"].toString();
+            email = jsonObject["email"].toString();
+        }
+
+        QString queryStr = QString("UPDATE users SET firstname = :firstName, lastname = :lastName, "
+                                   "bdate = :bDate, email = :email WHERE login = :userName");
+
+        QSqlQuery query;
+        query.prepare(queryStr);
+        query.bindValue(":firstName", firstName);
+        query.bindValue(":lastName", lastName);
+        query.bindValue(":bDate", bDate);
+        query.bindValue(":email", email);
+        query.bindValue(":userName", userName);
+
+        if (query.exec()) {
+            sendHttpResponse(200, "User stats update");
+        } else {
+            sendHttpResponse(400, "Bad request");
+        }
+    } else
+        sendHttpResponse(404, "User not found");
+}
+
+void MainWindow::handleUpdatePass(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    QString userName, password;
+
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (jsonObject.contains("name") && jsonObject.contains("password")) {
+            userName = jsonObject["name"].toString();
+            password = jsonObject["password"].toString();
+
+            QByteArray passwordHash
+                = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
+
+            QString hashPassword = QString::fromUtf8(passwordHash);
+
+            QSqlQuery query;
+
+            query.prepare("Update users set password = :pass where login = :name");
+            query.bindValue(":name", userName);
+            query.bindValue(":pass", hashPassword);
+
+            if (query.exec())
+                sendHttpResponse(200, "User password update");
+            else
+                sendHttpResponse(400, "Bad request");
+        }
+    } else
+        sendHttpResponse(404, "User not found");
+}
+
+void MainWindow::handleUpdateEmailPass(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    QString email, password;
+
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (jsonObject.contains("email") && jsonObject.contains("password")) {
+            email = jsonObject["email"].toString();
+            password = jsonObject["password"].toString();
+
+            QByteArray passwordHash
+                = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
+
+            QString hashPassword = QString::fromUtf8(passwordHash);
+
+            QSqlQuery query;
+
+            query.prepare("Update users set password = :pass where email = :email");
+            query.bindValue(":email", email);
+            query.bindValue(":pass", hashPassword);
+
+            if (query.exec())
+                sendHttpResponse(200, "success");
+            else
+                sendHttpResponse(400, "Bad request");
+        }
+    } else
+        sendHttpResponse(404, "User not found");
+}
+
+void MainWindow::handleCheckEmail(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    QString email;
+
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (jsonObject.contains("email")) {
+            email = jsonObject["email"].toString();
+
+            QSqlQuery query;
+            query.prepare("SELECT COUNT(*) FROM users WHERE email = :email");
+            query.bindValue(":email", email);
+
+            if (query.exec()) {
+                if (query.next()) {
+                    int count = query.value(0).toInt();
+                    if (count > 0) {
+                        sendHttpResponse(200, "success");
+                    } else {
+                        sendHttpResponse(404, "Email not found");
+                    }
+                } else {
+                    sendHttpResponse(500, "Database error");
+                }
+            } else {
+                sendHttpResponse(500, "Query execution error");
+            }
+        }
+    }
+}
+
+void MainWindow::handleUserRecovery(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    int idUser;
+
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (jsonObject.contains("userId")) {
+            idUser = jsonObject["userId"].toInt();
+
+            QSqlQuery query;
+
+            query.prepare("SELECT rooms.typeroom, rooms.description, booking.*, image.imagename "
+                          "FROM booking JOIN "
+                          "rooms ON booking.idroom "
+                          "= rooms.id inner join image on rooms.image = image.id WHERE "
+                          "booking.\"idUser\" = :id");
+
+            query.bindValue(":id", idUser);
+
+            if (query.exec()) {
+                QJsonArray recoveryArr;
+
+                while (query.next()) {
+                    QJsonObject recoveryObj;
+
+                    QDate startDate = query.value("booking.startDate").toDate();
+                    QDate lastDate = query.value("booking.lastDate").toDate();
+
+                    recoveryObj["recoveryId"] = query.value("booking.id").toInt();
+                    recoveryObj["roomName"] = query.value("rooms.typeroom").toString();
+                    recoveryObj["startDate"] = startDate.toString(Qt::ISODate);
+                    recoveryObj["lastDate"] = lastDate.toString(Qt::ISODate);
+                    recoveryObj["description"] = query.value("rooms.description").toString();
+
+                    QString imageName = query.value("imagename").toString();
+                    recoveryObj["imageName"] = imageName;
+                    QString imagePath = "image/" + imageName;
+
+                    QFile imageFile(imagePath);
+                    if (imageFile.open(QIODevice::ReadOnly)) {
+                        QByteArray imageData = imageFile.readAll();
+                        recoveryObj["imageData"] = QString(imageData.toBase64());
+                        imageFile.close();
+                    } else {
+                        qDebug() << "Failed to open image: " << imageName;
+                        continue;
+                    }
+
+                    recoveryArr.append(recoveryObj);
+                }
+
+                QJsonObject jsonResponse;
+                jsonResponse["status"] = "success";
+                jsonResponse["data"] = recoveryArr;
+
+                QJsonDocument jsonDoc(jsonResponse);
+                QString httpResponse = "HTTP/1.1 200 OK\r\n";
+                httpResponse += "Content-Type: application/json\r\n\r\n";
+                httpResponse += jsonDoc.toJson(QJsonDocument::Compact);
+
+                sendHttpData(httpResponse);
+            }
+        }
+    }
+}
+
+void MainWindow::handleUserId(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    QString name;
+
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (jsonObject.contains("name")) {
+            name = jsonObject["name"].toString();
+
+            QSqlQuery query;
+
+            query.prepare(
+                "select users.id,  role.name  from users inner join role on users.\"idRole\" = "
+                "role.id where login = :user");
+            query.bindValue(":user", name);
+
+            if (query.exec()) {
+                if (query.next()) {
+                    QJsonObject object;
+
+                    object["id"] = query.value(0).toInt();
+                    object["nameRole"] = query.value(1).toString();
+
+                    QJsonObject jsonResponse;
+                    jsonResponse["status"] = "success";
+                    jsonResponse["data"] = object;
+
+                    QJsonDocument jsonDoc(jsonResponse);
+                    QString httpResponse = "HTTP/1.1 200 OK\r\n";
+                    httpResponse += "Content-Type: application/json\r\n\r\n";
+                    httpResponse += jsonDoc.toJson(QJsonDocument::Compact);
+
+                    sendHttpData(httpResponse);
+                } else {
+                    sendHttpResponse(400, "Bad request");
+                }
+            }
+        }
+    }
+}
+
+void MainWindow::handleDeleteRecovery(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    int idRec;
+
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (jsonObject.contains("idRecovery")) {
+            idRec = jsonObject["idRecovery"].toInt();
+
+            QSqlQuery paymentQuery;
+
+            paymentQuery.prepare("delete from payment where idbooking = :idRec");
+            paymentQuery.bindValue(":idRec", idRec);
+
+            if (paymentQuery.exec()) {
+                QSqlQuery query;
+
+                query.prepare("delete from booking where id = :idRec");
+                query.bindValue(":idRec", idRec);
+
+                if (query.exec()) {
+                    sendHttpResponse(200, "success");
+                } else {
+                    sendHttpResponse(400, "Bad request");
+                }
+            } else
+                sendHttpResponse(400, "Bad request");
+        }
+    }
+}
+
+void MainWindow::handleGetRooms()
+{
+    QSqlQuery query;
+
+    query.prepare(
+        "select  rooms.*, image.imagename from rooms inner join image on rooms.image = image.id");
+
+    if (query.exec()) {
+        QJsonArray roomsArr;
+
+        while (query.next()) {
+            QJsonObject roomObj;
+
+            roomObj["idRoom"] = query.value(0).toInt();
+            roomObj["typeRoom"] = query.value(1).toString();
+            roomObj["price"] = query.value(2).toInt();
+            roomObj["description"] = query.value(4).toString();
+            roomObj["count"] = query.value(5).toInt();
+
+            QString imageName = query.value(6).toString();
+            roomObj["imageName"] = imageName;
+            QString imagePath = "image/" + imageName;
+
+            QFile imageFile(imagePath);
+            if (imageFile.open(QIODevice::ReadOnly)) {
+                QByteArray imageData = imageFile.readAll();
+                roomObj["imageData"] = QString(imageData.toBase64());
+                imageFile.close();
+            } else {
+                continue;
+            }
+
+            roomsArr.append(roomObj);
+        }
+
+        QJsonObject jsonResponse;
+        jsonResponse["status"] = "success";
+        jsonResponse["data"] = roomsArr;
+
+        QJsonDocument jsonDoc(jsonResponse);
+        QString httpResponse = "HTTP/1.1 200 OK\r\n";
+        httpResponse += "Content-Type: application/json\r\n\r\n";
+        httpResponse += jsonDoc.toJson(QJsonDocument::Compact);
+
+        sendHttpData(httpResponse);
+    }
+}
+
+void MainWindow::handleDeleteRoom(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    int idRoom;
+
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (jsonObject.contains("idRoom")) {
+            idRoom = jsonObject["idRoom"].toInt();
+
+            QSqlQuery getBookId;
+            getBookId.prepare("select id from booking where idroom = :id");
+            getBookId.bindValue(":id", idRoom);
+
+            if (!getBookId.exec()) {
+                sendHttpResponse(400, "Bad request");
+                return;
+            }
+
+            int idBooking = 0;
+
+            if (getBookId.next()) {
+                idBooking = getBookId.value(0).toInt();
+            }
+
+            QSqlQuery deletePayment;
+            deletePayment.prepare("delete from payment where idbooking = :id");
+            deletePayment.bindValue(":id", idBooking);
+
+            if (!deletePayment.exec()) {
+                sendHttpResponse(400, "Bad request");
+                return;
+            }
+
+            QSqlQuery deleteBooking;
+            deleteBooking.prepare("delete from booking where idroom = :id");
+            deleteBooking.bindValue(":id", idRoom);
+
+            if (!deleteBooking.exec()) {
+                sendHttpResponse(400, "Bad request");
+                return;
+            }
+
+            QSqlQuery roomQuery;
+            roomQuery.prepare("Delete from rooms where id = :idRoom");
+            roomQuery.bindValue(":idRoom", idRoom);
+
+            if (roomQuery.exec()) {
+                sendHttpResponse(200, "success");
+            } else {
+                sendHttpResponse(400, "Bad request");
+            }
+        }
+    } else {
+        sendHttpResponse(503, "Server error");
+    }
+}
+
+void MainWindow::handleAddRoom(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    if (!jsonDoc.isObject()) {
+        qDebug() << "Invalid JSON data:" << data;
+        sendHttpResponse(400, "Bad request: Invalid JSON data");
+        return;
+    }
+
+    QJsonObject jsonObject = jsonDoc.object();
+
+    if (!jsonObject.contains("roomName") || !jsonObject.contains("price")
+        || !jsonObject.contains("description") || !jsonObject.contains("image")
+        || !jsonObject.contains("imageName")) {
+        qDebug() << "Missing or invalid JSON fields:" << data;
+        sendHttpResponse(400, "Bad request: Missing or invalid JSON fields");
+        return;
+    }
+
+    QString roomName = jsonObject["roomName"].toString();
+    QString description = jsonObject["description"].toString();
+    int price = jsonObject["price"].toInt();
+    QString imageName = jsonObject["imageName"].toString();
+    QString imageBase64 = jsonObject["image"].toString();
+
+    qDebug() << "Room Name:" << roomName;
+    qDebug() << "Description:" << description;
+    qDebug() << "Price:" << price;
+    qDebug() << "Image Name:" << imageName;
+
+    QByteArray imageData = QByteArray::fromBase64(imageBase64.toUtf8());
+
+    QString imagePath = "image/" + imageName;
+    QFile file(imagePath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        qDebug() << "Failed to save image:" << imagePath;
+        sendHttpResponse(500, "Internal server error: Failed to save image");
+        return;
+    }
+    file.write(imageData);
+    file.close();
+
+    qDebug() << "Image saved to:" << imagePath;
+
+    QSqlQuery query;
+
+    query.prepare("INSERT INTO image (imagename) VALUES (:image)");
+    query.bindValue(":image", imageName);
+    if (!query.exec()) {
+        qDebug() << "Failed to insert image into database:" << query.lastError().text();
+        sendHttpResponse(500, "Internal server error: Failed to insert image into database");
+        return;
+    }
+    int idImage = query.lastInsertId().toInt();
+
+    qDebug() << "Image inserted into database with ID:" << idImage;
+
+    query.prepare("INSERT INTO rooms (typeroom, startprice, image, description) "
+                  "VALUES (:name, :price, :image, :desc)");
+    query.bindValue(":name", roomName);
+    query.bindValue(":price", price);
+    query.bindValue(":image", idImage);
+    query.bindValue(":desc", description);
+    if (!query.exec()) {
+        qDebug() << "Failed to insert room into database:" << query.lastError().text();
+        sendHttpResponse(500, "Internal server error: Failed to insert room into database");
+        return;
+    }
+
+    qDebug() << "Room added successfully";
+    sendHttpResponse(200, "Success: Room added successfully");
+}
+
+void MainWindow::handleSearchRooms(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    int count;
+
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (jsonObject.contains("count")) {
+            count = jsonObject["count"].toInt();
+
+            QSqlQuery query;
+
+            query.prepare("select  rooms.*, image.imagename from rooms inner join image on "
+                          "rooms.image = image.id  where \"countPlace\" <= :countP");
+            query.bindValue(":countP", count);
+
+            if (query.exec()) {
+                QJsonArray roomsArr;
+
+                while (query.next()) {
+                    QJsonObject roomObj;
+
+                    roomObj["idRoom"] = query.value(0).toInt();
+                    roomObj["typeRoom"] = query.value(1).toString();
+                    roomObj["price"] = query.value(2).toInt();
+                    roomObj["description"] = query.value(4).toString();
+                    roomObj["count"] = query.value(5).toInt();
+
+                    QString imageName = query.value(6).toString();
+
+                    roomObj["imageName"] = imageName;
+                    QString imagePath = "image/" + imageName;
+
+                    QFile imageFile(imagePath);
+                    if (imageFile.open(QIODevice::ReadOnly)) {
+                        QByteArray imageData = imageFile.readAll();
+                        roomObj["imageData"] = QString(imageData.toBase64());
+                        imageFile.close();
+                    } else {
+                        qDebug() << "Failed to open image: " << imagePath;
+                    }
+
+                    roomsArr.append(roomObj);
+                }
+
+                QJsonObject jsonResponse;
+                jsonResponse["status"] = "success";
+                jsonResponse["data"] = roomsArr;
+
+                QJsonDocument jsonDoc(jsonResponse);
+                QString httpResponse = "HTTP/1.1 200 OK\r\n";
+                httpResponse += "Content-Type: application/json\r\n\r\n";
+                httpResponse += jsonDoc.toJson(QJsonDocument::Compact);
+
+                sendHttpData(httpResponse);
+            }
+        }
+    }
+}
+
+void MainWindow::handleAddRecovery(const QString &data)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    QDate startDate, lastDate, nowDate;
+
+    QString card;
+
+    int idUser, idRoom, price;
+
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObject = jsonDoc.object();
+
+        if (jsonObject.contains("idUser") && jsonObject.contains("idRoom")
+            && jsonObject.contains("startDate") && jsonObject.contains("lastDate")
+            && jsonObject.contains("card") && jsonObject.contains("nowDate")
+            && jsonObject.contains("price")) {
+            idUser = jsonObject["idUser"].toInt();
+            idRoom = jsonObject["idRoom"].toInt();
+            price = jsonObject["price"].toInt();
+
+            qDebug() << idUser;
+            qDebug() << idRoom;
+
+            QString inputStartDate = jsonObject["startDate"].toString();
+            QString inputLastDate = jsonObject["lastDate"].toString();
+            QString inputNowDate = jsonObject["nowDate"].toString();
+
+            startDate = QDate::fromString(inputStartDate, "ddd MMM dd yyyy");
+            lastDate = QDate::fromString(inputLastDate, "ddd MMM dd yyyy");
+            nowDate = QDate::fromString(inputNowDate, "ddd MMM dd yyyy");
+
+            card = jsonObject["card"].toString();
+
+            QSqlQuery checkQuery;
+            checkQuery.prepare(
+                "SELECT COUNT(*) FROM booking WHERE \"idUser\" = :user AND idroom = :room");
+            checkQuery.bindValue(":user", idUser);
+            checkQuery.bindValue(":room", idRoom);
+            if (checkQuery.exec() && checkQuery.next()) {
+                int existingCount = checkQuery.value(0).toInt();
+
+                if (existingCount >= 1) {
+                    sendHttpResponse(400, "Booking already exists for this user and room");
+                    return;
+                }
+            } else {
+                qDebug() << "Error";
+                sendHttpResponse(500, "Internal server error");
+                return;
+            }
+
+            QSqlQuery bookingQuery;
+
+            bookingQuery.prepare(
+                "INSERT INTO booking(\"idUser\", idroom, startDate, lastDate) VALUES(:user, "
+                ":room, :start, :last);");
+
+            bookingQuery.bindValue(":user", idUser);
+            bookingQuery.bindValue(":room", idRoom);
+            bookingQuery.bindValue(":start", startDate);
+            bookingQuery.bindValue(":last", lastDate);
+
+            if (bookingQuery.exec()) {
+                int idBook = bookingQuery.lastInsertId().toInt();
+
+                qDebug() << "Дата: " << nowDate;
+                qDebug() << "ид бро: " << idBook;
+                qDebug() << "цена: " << price;
+                qDebug() << "card: " << card;
+
+                QSqlQuery paymentQuery;
+                paymentQuery.prepare("insert into payment(idbooking, price, datepayment, card) "
+                                     "values(:idBook, :price, :now, :card);");
+                paymentQuery.bindValue(":idBook", idBook);
+                paymentQuery.bindValue(":price", price);
+                paymentQuery.bindValue(":now", nowDate);
+                paymentQuery.bindValue(":card", card);
+
+                if (paymentQuery.exec()) {
+                    QJsonObject jsonResponse;
+                    jsonResponse["status"] = "success";
+
+                    QJsonDocument jsonDoc(jsonResponse);
+                    QString httpResponse = "HTTP/1.1 200 OK\r\n";
+                    httpResponse += "Content-Type: application/json\r\n\r\n";
+                    httpResponse += jsonDoc.toJson(QJsonDocument::Compact);
+
+                    sendHttpData(httpResponse);
+                } else
+                    sendHttpResponse(400, "Bad request");
+            } else {
+                sendHttpResponse(400, "Bad request");
+            }
+        }
+    }
+}
+
+void MainWindow::handleGetUsers()
+{
+    QSqlQuery query("SELECT * FROM users");
+
+    QJsonArray usersArr;
+
+    while (query.next()) {
+        QJsonObject user;
+
+        user["id"] = query.value("id").toInt();
+        user["name"] = query.value("firstname").toString();
+        user["lastName"] = query.value("lastname").toString();
+        user["login"] = query.value("login").toString();
+        user["password"] = query.value("password").toString();
+        user["email"] = query.value("email").toString();
+        user["date"] = query.value("bdate").toString();
+
+        usersArr.append(user);
+    }
+
+    QJsonObject jsonResponse;
+    jsonResponse["status"] = "success";
+    jsonResponse["data"] = usersArr;
+
+    QJsonDocument jsonDoc(jsonResponse);
+    QString httpResponse = "HTTP/1.1 200 OK\r\n";
+    httpResponse += "Content-Type: application/json\r\n\r\n";
+    httpResponse += jsonDoc.toJson(QJsonDocument::Compact);
+
+    sendHttpData(httpResponse);
+}
+
+void MainWindow::sendHttpData(const QString &data)
 {
     socket->write(data.toUtf8());
     socket->waitForBytesWritten();
     socket->close();
 }
-
 
 void MainWindow::sendToClient(QString str)
 {
@@ -622,5 +935,3 @@ void MainWindow::sendToClient(QString str)
     out << str;
     socket->write(data);
 }
-
-
