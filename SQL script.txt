@@ -1,0 +1,6 @@
+CREATE TABLE Users (id SERIAL PRIMARY KEY, name TEXT, surname TEXT, login TEXT, password TEXT, roleId INTEGER REFERENCES Role(id));
+CREATE TABLE Rooms (id SERIAL PRIMARY KEY, typeRoom TEXT, startPrice INTEGER, description TEXT, Image INTEGER REFERENCES Image(id));
+CREATE TABLE Payment (id SERIAL PRIMARY KEY, idBooking INTEGER REFERENCES Booking(id), price INTEGER, datePayment DATE, card TEXT);
+CREATE TABLE Booking (id SERIAL PRIMARY KEY, idUsers INTEGER REFERENCES Users(id), idRoom INTEGER REFERENCES Rooms(id), startDate DATE, lastDate DATE, countPlace INTEGER);
+CREATE TABLE Role (id SERIAL PRIMARY KEY, name TEXT);
+CREATE TABLE Image (id SERIAL PRIMARY KEY, ImageName TEXT);

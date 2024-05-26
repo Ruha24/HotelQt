@@ -40,10 +40,10 @@ bool MainWindow::connecting()
 
     db = QSqlDatabase::addDatabase("QPSQL");
     db.setDatabaseName("Hotels");
-    db.setHostName("172.20.7.8");
-    db.setPort(5432);
-    db.setUserName("st1991");
-    db.setPassword("pwd1991");
+    db.setHostName("");
+    db.setPort();
+    db.setUserName("");
+    db.setPassword("");
 
     if (db.open()) {
         return true;
