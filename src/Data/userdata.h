@@ -79,7 +79,11 @@ public:
 
     QList<Roomdata> getListRooms() const;
 
-    void recoveryRoom(Roomdata *room, RecoveryData *data, std::function<void(bool)> callback);
+    void recoveryRoom(Roomdata *room,
+                      RecoveryData *data,
+                      QString card,
+                      int price,
+                      std::function<void(bool)> callback);
 
     void updatePasswordonEmail(QString pass, std::function<void(bool)> callback);
 
@@ -93,7 +97,7 @@ public:
 private:
     bool isValidUser = false;
 
-    QString name = "";
+    QString user = "";
     QString lastName = " ";
     QString bdate = "";
     QString userName = "";

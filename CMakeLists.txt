@@ -9,8 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network   Test)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network Test)
 
 
 set(PROJECT_SOURCES
@@ -25,9 +25,6 @@ set(PROJECT_SOURCES
         src/booking.cpp
         src/booking.h
         src/booking.ui
-        src/payment.h
-        src/payment.cpp
-        src/payment.ui
         src/inforeserv.cpp
         src/inforeserv.ui
         src/registration.h
@@ -47,6 +44,10 @@ set(PROJECT_SOURCES
         src/smtp.cpp
         src/Data/roomdata.h
         src/Data/roomdata.cpp
+        src/test/userdatatest.h
+        src/test/userdatatest.cpp
+        src/test/roomdatatest.h
+        src/test/roomdatatest.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -72,7 +73,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(Client PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
+target_link_libraries(Client PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Test)
 
 set_target_properties(Client PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

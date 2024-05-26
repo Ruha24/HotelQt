@@ -12,8 +12,11 @@
 #include <QSpacerItem>
 #include <QWidgetAction>
 
+#include <QFileDialog>
+#include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
+#include <QTextStream>
 #include <QtNetwork>
 
 #include "CustomWidget/customcalendar.h"
@@ -99,6 +102,18 @@ private slots:
 
     void on_Title_4_linkActivated(const QString &link);
 
+    void on_tabWidget_currentChanged(int index);
+
+    void on_deleteRoombtn_clicked();
+
+    void on_addRoombtn_clicked();
+
+    void on_choiceImagebtn_clicked();
+
+    void on_getUserbtn_clicked();
+
+    void on_getRoombtn_clicked();
+
 private:
     void connectionElement();
     void CreateElementMenu();
@@ -112,9 +127,18 @@ private:
     void setInformationRoom();
     void initAction();
     void getAllUsers();
+    void saveStatsUser(UserData *user,
+                       QString name,
+                       QString lastName,
+                       QString bdate,
+                       QString email,
+                       QString newPassword);
+    void clearTabsFromIndex(int startIndex);
 
     QWidget *createUserWidget(UserData *user);
     void createRecoveryWidget(UserData *user, QWidget *recoveryWidget);
+
+    void getIdRooms();
 
     CustomCalendar *customCalendar;
 
@@ -123,6 +147,7 @@ private:
     QList<RecoveryData> recList;
 
     int countPlacesRoom = 2;
+    QString selectedImagePath = "";
 
     bool isVisible = false;
 

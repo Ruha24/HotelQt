@@ -40,7 +40,7 @@ void Authorization::on_login_2_clicked()
 
     m_userData->checkUser(userName, password, [&, userName, password](bool isValidUser) {
         if (isValidUser) {
-            m_userData->setUserName(userName);
+            m_userData->setName(userName);
             m_userData->setPassword(password);
             emit userAuthenticated(m_userData);
             QMessageBox::information(this, "", "Данные успешны");

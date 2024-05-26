@@ -19,7 +19,7 @@ UserData::UserData(int idUser,
                    QString email)
 {
     this->idUser = idUser;
-    this->name = login;
+    this->user = login;
     this->password = password;
     this->bdate = bdate;
     this->userName = name;
@@ -138,12 +138,12 @@ void UserData::updateStats(
 
     QJsonObject json;
 
-    setName(userName);
+    setUserName(name);
     setLastName(lastName);
     setBdate(date);
     setEmail(email);
 
-    json["name"] = userName;
+    json["name"] = user;
     json["firstName"] = name;
     json["lastName"] = lastName;
     json["date"] = date;
@@ -181,7 +181,7 @@ void UserData::updatePassword(QString pass, std::function<void(bool)> callback)
     QJsonObject json;
 
     json["password"] = pass;
-    json["name"] = userName;
+    json["name"] = user;
 
     QJsonDocument jsonDoc(json);
 
@@ -195,6 +195,7 @@ void UserData::updatePassword(QString pass, std::function<void(bool)> callback)
             QByteArray response = reply->readAll();
 
             if (response.contains("update")) {
+                setPassword(pass);
                 callback(true);
             } else {
                 callback(false);
@@ -244,7 +245,6 @@ void UserData::updatePasswordonEmail(QString pass, std::function<void(bool)> cal
     });
 }
 
-
 void UserData::checkEmail(std::function<void(bool)> callback)
 {
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
@@ -267,10 +267,10 @@ void UserData::checkEmail(std::function<void(bool)> callback)
             if (response.contains("success")) {
                 callback(true);
             } else {
-                callback(true);
+                callback(false);
             }
         } else {
-            callback(true);
+            callback(false);
         }
 
         reply->deleteLater();
@@ -310,14 +310,16 @@ void UserData::getUserRecovery(std::function<void(bool)> callback)
                     QDate startDate = QDate::fromString(startDateString, "yyyy-MM-dd");
 
                     QString lastDateString = roomValue["lastDate"].toString();
-                    QDate lastDate = QDate::fromString(startDateString, "yyyy-MM-dd");
+                    QDate lastDate = QDate::fromString(lastDateString, "yyyy-MM-dd");
 
                     QByteArray imageData = QByteArray::fromBase64(
                         roomValue["imageData"].toString().toUtf8());
 
+                    QString imageName = roomValue["imageName"].toString();
+
                     int idRec = roomValue["recoveryId"].toInt();
 
-                    QString imagePath = "src/" + QString::number(idRec) + ".jpg";
+                    QString imagePath = "src/" + imageName;
                     QFile imageFile(imagePath);
                     if (imageFile.open(QIODevice::WriteOnly)) {
                         imageFile.write(imageData);
@@ -374,7 +376,7 @@ void UserData::getUserStats(QString userName, std::function<void(bool)> callback
                 QString lastname = dataList[2];
                 QString bdate = dataList[3];
 
-                setName(name);
+                setUserName(name);
                 setEmail(email);
                 setLastName(lastname);
                 setBdate(bdate);
@@ -447,11 +449,12 @@ void UserData::getRooms(std::function<void(bool)> callback)
                     int price = roomObject["price"].toInt();
                     int count = roomObject["count"].toInt();
                     QString description = roomObject["description"].toString();
+                    QString imageName = roomObject["imageName"].toString();
 
                     QByteArray imageData = QByteArray::fromBase64(
                         roomObject["imageData"].toString().toUtf8());
 
-                    QString imagePath = "src/" + QString::number(idRoom) + ".jpg";
+                    QString imagePath = "src/" + imageName;
                     QFile imageFile(imagePath);
 
                     if (!imageFile.exists()) {
@@ -478,8 +481,8 @@ void UserData::getRooms(std::function<void(bool)> callback)
     });
 }
 
-
-void UserData::recoveryRoom(Roomdata *room, RecoveryData *data, std::function<void(bool)> callback)
+void UserData::recoveryRoom(
+    Roomdata *room, RecoveryData *data, QString card, int price, std::function<void(bool)> callback)
 {
     QNetworkAccessManager *networkManager = new QNetworkAccessManager();
 
@@ -489,6 +492,9 @@ void UserData::recoveryRoom(Roomdata *room, RecoveryData *data, std::function<vo
     json["idRoom"] = room->getId();
     json["startDate"] = data->getStartDate().toString();
     json["lastDate"] = data->getLastDate().toString();
+    json["card"] = card;
+    json["nowDate"] = QDate::currentDate().toString();
+    json["price"] = price;
 
     QJsonDocument jsonDoc(json);
 
@@ -500,15 +506,9 @@ void UserData::recoveryRoom(Roomdata *room, RecoveryData *data, std::function<vo
     QObject::connect(reply, &QNetworkReply::finished, [=]() {
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray response = reply->readAll();
-
             if (response.contains("success")) {
                 callback(true);
             }
-
-            if (response.contains("Booking")) {
-                callback(false);
-            }
-
         } else {
             callback(false);
         }
@@ -593,12 +593,12 @@ QList<RecoveryData> UserData::getListRecovery() const
 
 QString UserData::getName() const
 {
-    return name;
+    return user;
 }
 
 void UserData::setName(const QString &newName)
 {
-    name = newName;
+    user = newName;
 }
 
 QString UserData::getLastName() const

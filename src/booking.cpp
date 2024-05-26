@@ -18,6 +18,7 @@ Booking::Booking(QWidget *parent, Roomdata *data, UserData *user)
     move(screenGeometry.center() - rect().center());
 
     ui->infolbl->setText(data->getDescription());
+    ui->roomNamelbl->setText(data->getTypeRoom());
 
     QPixmap pixmap(data->getImage());
 
@@ -69,9 +70,17 @@ void Booking::setPriceText(const QDate &startDate, const QDate &lastDate)
     if (!startDate.isValid() || !lastDate.isValid() || startDate > lastDate) {
         return;
     }
-    int daysDifference = startDate.daysTo(lastDate);
 
-    int totalPrice = m_room->getStartPrice() * daysDifference;
+    int daysDifference = startDate.daysTo(lastDate);
+    int monthsDifference = lastDate.month() - startDate.month();
+    int daysInMonth = startDate.daysInMonth();
+
+    if (startDate.year() == lastDate.year() && lastDate.month() > startDate.month()) {
+        monthsDifference++;
+        daysDifference += daysInMonth - startDate.day();
+    }
+
+    totalPrice = m_room->getStartPrice() * (monthsDifference * daysInMonth + daysDifference);
 
     QString dayWord;
     if (daysDifference == 1)
@@ -104,7 +113,20 @@ void Booking::on_pushButton_clicked()
         return;
     }
 
-    m_userData->recoveryRoom(m_room, m_recovery, [&](bool success) {
+    if (ui->numberCardtxt->text().isEmpty()) {
+        QMessageBox::information(this, "Ошибка", "Введите номер карты");
+        return;
+    }
+
+    QString card = ui->numberCardtxt->text();
+
+    static QRegularExpression cardRegex("^\\d{4}-\\d{4}-\\d{4}-\\d{4}$");
+    if (!cardRegex.match(card).hasMatch()) {
+        QMessageBox::warning(this, "", "Неправильно введены данные (XXXX-XXXX-XXXX-XXXX)");
+        return;
+    }
+
+    m_userData->recoveryRoom(m_room, m_recovery, card, totalPrice, [&](bool success) {
         if (success) {
             QMessageBox::information(this, "Бронь", "Вы забронировали место");
             this->close();

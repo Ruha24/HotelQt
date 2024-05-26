@@ -54,7 +54,7 @@ void RecoveryPassword::on_sendEmailbtn_clicked()
 
     QString email = ui->emailtxt_2->text();
 
-    QRegularExpression emailRegex("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}");
+    static QRegularExpression emailRegex("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}");
     if (!emailRegex.match(email).hasMatch()) {
         QMessageBox::warning(this, "", "Некорректный адрес электронной почты");
         return;
